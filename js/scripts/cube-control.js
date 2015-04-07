@@ -3,15 +3,15 @@
 // (function() {
 console.log(document.getElementById('traqballStage'));
 var options = {   
-    stage:              "traqballStage",        // id of block element. String, default value: <body>
+    stage:              "traqballStage", // id of block element. String, default value: <body>
     axis:               [0.5,1,0.25],    // X,Y,Z values of initial rotation vector. Array, default value: [1,0,0]
-    angle:              0.12,            // Initial rotation angle in radian. Float, default value: 0.
+    angle:              0.60,            // Initial rotation angle in radian. Float, default value: 0.
     perspective:        700,             // Perspective. Integer, default value 700.
     perspectiveOrigin:  "50% 50%",       // Perspective Origin. String, default value "50% 50%".
-    impulse:            true,            // Defines if object receives an impulse after relesing mouse/touchend. Default value: true.
-    limitAxxis:         "x" | "y"        //limits the rotation to only one axxis.
+    impulse:            true             // Defines if object receives an impulse after relesing mouse/touchend. Default value: true.
+    // limitAxxis:         "x" | "y"        //limits the rotation to only one axxis.
     };
-// 
+
 var mytraqball = new Traqball(options);
 
 // button control panel starts here 
