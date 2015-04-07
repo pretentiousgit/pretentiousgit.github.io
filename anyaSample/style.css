@@ -1,0 +1,385 @@
+* {
+border: 1px solid black;
+}
+
+/* Background section begins */
+#purplebackground {
+	background-color:#86509c; 
+	height:594px; 
+	width:1200px;
+	position:relative;
+}
+#pinkbackground {
+	background-color:#d74681;
+	height:895px; 
+	width: 1200px;
+	position:relative;
+}
+#bluebackground {
+	background-color:#3d549a; 
+	height:820px; 
+	width:1200px;
+	position:relative;
+}
+#indigobackground {
+	background-color:#344b8f; 
+	height:113px; 
+	width:1200px;
+	position:relative;
+}
+/* Backgrounds section ends*/
+
+#cuda {
+	margin-top: 58px;
+	margin-left: 92px;
+	font-family:Impact;
+	font-size: 45px;
+	float:left;
+}
+
+/* Top navigation bar stuff begins */
+#navbartop {
+    list-style-type: none;
+    margin-top: 58px;
+    margin-right:60px;
+    padding: 0;
+    float: right;
+    font-family:Verdana;
+}
+#navbartop li {
+	float:left;
+	}
+#navbartop li a {
+    display: inline-block;
+    width: 77px;
+    height:14px;
+    font-family:Verdana;
+    font-size:12px;
+    color: #edf1e2;
+    background-color: #86509c;
+    text-align: center;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    margin-left: 10px;
+    text-decoration: none;
+}
+#navbartop li a:hover {
+    display: inline-block;
+    width: 77px;
+    height:14px;
+    font-family:Verdana;
+    font-size:12px;
+    color: #edf1e2;
+    background-color: #643a7a;
+    text-align: center;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    margin-left: 10px;
+    text-decoration: none;
+}
+a {
+	display:inline-block;
+	font-family:Verdana;
+	text-align:center;
+	text-decoration:none;
+	font-family:Verdana
+    }
+/* Top navigation bar stuff ends*/
+
+h1 {
+    color:#f1f4ed;
+    font-family:Verdana;
+    text-align:center;
+    display:block;
+    clear:both;
+}
+#hithere {
+	display:block;
+	color:#f1f4ed;
+    font-family:Verdana;
+    text-align:center;
+    margin-top:240px;
+    margin-left:auto;
+    margin-right:auto;
+    clear:both;
+    }
+#workwithusbutton {
+    display: block;
+    margin-left:auto;
+    margin-right:auto; 
+    margin-top:64px;
+    }
+
+#whatpeoplesay {
+	display:block;
+	color:#f1f4ed;
+    font-family:Verdana;
+    text-align:center;
+    clear:both;
+    margin-top:120px;
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+/* This section is for the orange button, but it was too hard to make, so I'm using the image instead.
+orangebutton {
+	display: block;
+    margin: 0 auto;
+    height:70px;
+    width:293px;
+    background-color:#ec7e4d;
+    font-family:Verdana;
+    font-size:15px;
+    border-bottom: 4px #c76a41;
+    border-radius:5%;
+    padding: auto;
+    color:#f1f4ed;
+    }
+*/
+
+/* Little separator bars begin*/
+#pinkhr {
+	display: block;
+    margin-left:auto;
+    margin-right:auto; 
+    height:4px;
+    width:87px;
+    background-color:#ba3a6b;
+    }
+#bluehr {
+	display: block;
+    margin-left:auto;
+    margin-right:auto; 
+    height:4px;
+    width:87px;
+    background-color:#233871;
+    }
+/* Little separator bars end*/
+
+p {
+    font-family:Verdana;
+    color:#f1f4ed;
+    text-align:center;
+}
+
+/* Here are some elements to break up sections*/
+.break {
+	display:block;
+	height:0px;
+	}
+.gap {
+	display:block;
+	height:20px;
+	}
+/*End of section break elements*/
+
+/* Testimonials begin*/
+.greycircle1 {
+	background-color: #787878;
+	border-radius:100%;
+	height:96px;
+	width:96px;
+	display:inline-block;
+	margin-left: 50px;
+	margin-top:60px;
+}
+.greycircle2 {
+	background-color: #787878;
+	border-radius:100%;
+	height:96px;
+	width:96px;
+	display:inline-block;
+	margin-left: 50px;
+	margin-top:60px;
+}
+.greycircle3 {
+	background-color: #787878;
+	border-radius:100%;
+	height:96px;
+	width:96px;
+	display:inline-block;
+	margin-left: 50px;
+	margin-top:90px;
+}
+.greycircle4 {
+	background-color: #787878;
+	border-radius:100%;
+	height:96px;
+	width:96px;
+	display:inline-block;
+	margin-left: 50px;
+	margin-top:90px;
+}
+.latin1  {
+    text-align:left;
+    font-size:17px;
+    font-style:italic;
+    height:96px;
+	width:375px;
+	color:#fefffa;
+    font-family:Verdana;
+    display:inline-block;
+    margin-left:50px;
+    margin-top:50px;
+    line-height:200%;
+    }
+.latin2 {
+	text-align:left;
+    font-size:17px;
+    font-style:italic;
+    height:96px;
+	width:375px;
+	color:#fefffa;
+    font-family:Verdana;
+    display:inline-block;
+    margin-left:50px;
+    margin-top:50px;
+    line-height:200%;
+}
+.latin3{
+	text-align:left;
+    font-size:17px;
+    font-style:italic;
+    height:96px;
+	width:375px;
+	color:#fefffa;
+    font-family:Verdana;
+    display:inline-block;
+    margin-left:50px;
+    margin-top:60px;
+    line-height:200%;
+}
+.latin4 {
+	text-align:left;
+    font-size:17px;
+    font-style:italic;
+    height:96px;
+	width:375px;
+	color:#fefffa;
+    font-family:Verdana;
+    display:inline-block;
+    margin-left:50px;
+    margin-top:60px;
+    line-height:200%;
+}
+.names1 {
+    display:inline-block;
+    font-family:Verdana;
+    width:400px;
+    color:#fdfffa;
+    font-size:20px;
+    margin-left:202px;
+}
+.names2 {
+    display:inline-block;
+    font-family:Verdana;
+    color:#fdfffa;
+    width:400px;
+    font-size:20px;
+    margin-left:177px;
+}
+.companyrole1 {
+	font-family:Verdana;
+    color:#f7da9e;
+    width:400px;
+    display:inline-block;
+    margin-left:202px;
+    }
+.companyrole2 {
+	font-family:Verdana;
+    color:#f7da9e;
+    width:400px;
+    display:inline-block;
+    margin-left:177px;
+    }
+/* Testimontials end*/
+
+#getintouch {
+	display:block;
+	color:#f1f4ed;
+    font-family:Verdana;
+    text-align:center;
+	margin-top:120px;
+	margin-left: 0 auto;
+	margin-right: 0 auto;
+	clear:both;
+	}
+	
+/* Contact form begins */
+input[type="text"]{
+    background-color: #273a72;
+    border: 1px solid #273a72;
+    border-radius:5px;
+    width: 414px;
+    height: 54px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom:0px;
+}
+input[type="get"]{
+    background-color: #273a72;
+    border: 1px solid #273a72;
+    border-radius:5px;
+    width: 860px;
+    height: 200px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:27px;
+    margin-bottom:59px;
+}
+form {
+ 	display: inline-block;
+    text-align: center;
+	margin-left:auto;
+	margin-right:auto;
+	}
+	
+/* Contact form ends*/
+
+#sendmessagebutton {
+	display: block;
+    margin-left:auto;
+    margin-right:auto; 
+    }
+    
+/* Bottom navigation bar begins*/
+#bottomnavbar {
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+#bottomnavbar li {
+	display:inline-block;
+	list-style-type: none;
+	margin-left: 15px;
+	margin-right: 15px;
+    padding: 0px;
+    font-family:Verdana;
+    font-size:20px;
+    float:center;
+    text-align:center;
+    color:#fafdf6;
+	}
+#bottomnavbar li a {
+	display:inline-block;
+	list-style-type: none;
+	margin-left: 15px;
+	margin-right: 15px;
+    padding: 0px;
+    font-family:Verdana;
+    font-size:20px;
+    float:center;
+    text-align:center;
+    color:#fafdf6;
+	}
+#bottomnavbar li a:hover {
+	display:inline-block;
+	list-style-type: none;
+	margin-left: 15px;
+	margin-right: 15px;
+    padding: 0px;
+    font-family:Verdana;
+    font-size:20px;
+    float:center;
+    color:#45b9ea;
+    }
+/* Bottom navigation bar ends */
