@@ -31,27 +31,79 @@
         switch(val){
             case 'lc': // left
                 h_click++;
-                console.log('h_click', h_click);
+                console.log('lc', h_click);
                 rotation = h_click * 90;
-                cube.css('-webkit-transform', 'rotateY('+rotation+'deg)');
+
+                if(h_click === 5 || h_click === -5){ 
+                    h_click = 0;
+                    cube.css('-webkit-transition', 'none');
+                    cube.css('-moz-transition', 'none');
+                    cube.css('-o-transition', 'none');
+                    cube.css('-webkit-transform', 'rotateY(0deg)');
+                } else {
+                    cube.css('-webkit-transition', 'all 0.5s linear');
+                    cube.css('-moz-transition', 'all 0.5s linear');
+                    cube.css('-o-transition', 'all 0.5s linear');
+                    cube.css('-webkit-transform', 'rotateY('+rotation+'deg)');
+                }
+
+                rotation = 0;
                 break;
             case 'tc': // up
                 v_click++;
-                console.log('v_click', v_click);
+                console.log('tc', v_click);
                 rotation = v_click * 90;
-                cube.css('-webkit-transform', 'rotateX('+rotation+'deg)');
+                
+                if(v_click === 5 || v_click === -5){ 
+                    v_click = 0;
+                    cube.css('-webkit-transition', 'none');
+                    cube.css('-moz-transition', 'none');
+                    cube.css('-o-transition', 'none');
+                    cube.css('-webkit-transform', 'rotateX(0deg)');
+                } else {
+                    cube.css('-webkit-transition', 'all 0.5s linear');
+                    cube.css('-moz-transition', 'all 0.5s linear');
+                    cube.css('-o-transition', 'all 0.5s linear');
+                    cube.css('-webkit-transform', 'rotateX('+rotation+'deg)');
+                }
+                rotation = 0;
                 break;
             case 'rc': // right
                 h_click--;
-                console.log('h_click', h_click);
+                console.log('rc', h_click);
                 rotation = h_click * 90;
-                cube.css('-webkit-transform', 'rotateY('+rotation+'deg)');
+
+                if(h_click === 5 || h_click === -5){ 
+                    h_click = 0;
+                    cube.css('-webkit-transition', 'none');
+                    cube.css('-moz-transition', 'none');
+                    cube.css('-o-transition', 'none');
+                    cube.css('-webkit-transform', 'rotateY(0deg)');
+                } else {
+                    cube.css('-webkit-transition', 'all 0.5s linear');
+                    cube.css('-moz-transition', 'all 0.5s linear');
+                    cube.css('-o-transition', 'all 0.5s linear');
+                    cube.css('-webkit-transform', 'rotateY('+rotation+'deg)');
+                }
+                rotation = 0;
                 break;
             case 'bc': // down
                 v_click--;
-                console.log('v_click', v_click);
+                console.log('bc', v_click);
                 rotation = v_click * 90;
-                cube.css('-webkit-transform', 'rotateX('+rotation+'deg)');
+                 if(v_click === 5 || v_click === -5){ 
+                    v_click = 0;
+                    cube.css('-webkit-transition', 'none');
+                    cube.css('-moz-transition', 'none');
+                    cube.css('-o-transition', 'none');
+                    cube.css('-webkit-transform', 'rotateX(0deg)');
+                } else {
+                    cube.css('-webkit-transition', 'all 0.5s linear');
+                    cube.css('-moz-transition', 'all 0.5s linear');
+                    cube.css('-o-transition', 'all 0.5s linear');
+                    cube.css('-webkit-transform', 'rotateX('+rotation+'deg)');
+                }
+                rotation = 0;
                 break;
         }
         return false;

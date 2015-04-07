@@ -63,9 +63,9 @@
             -moz-transform-origin: 50% 50%;
             transform-origin: 50% 50%;
             
-            -webkit-transition: all 0.5s linear;
+            /*-webkit-transition: all 0.5s linear;
             -moz-transition: all 0.5s linear;
-            -o-transition: all 0.5s linear;
+            -o-transition: all 0.5s linear;*/
 
             left: 30px;
             top: 50px;
