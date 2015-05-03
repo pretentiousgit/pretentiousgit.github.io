@@ -1,19 +1,62 @@
 // cube-control.js
-// 'use strict';
-// (function() {
-console.log(document.getElementById('traqballStage'));
-var options = {   
-    stage:              "traqballStage", // id of block element. String, default value: <body>
-    axis:               [0.5,1,0.25],    // X,Y,Z values of initial rotation vector. Array, default value: [1,0,0]
-    angle:              0.60,            // Initial rotation angle in radian. Float, default value: 0.
-    perspective:        700,             // Perspective. Integer, default value 700.
-    perspectiveOrigin:  "50% 50%",       // Perspective Origin. String, default value "50% 50%".
-    impulse:            true             // Defines if object receives an impulse after relesing mouse/touchend. Default value: true.
-    // limitAxxis:         "x" | "y"        //limits the rotation to only one axxis.
+'use strict';
+
+(function() {
+
+    console.log(document.getElementById('traqballStage'));
+    var options = {   
+        stage:              "traqballStage", // id of block element. String, default value: <body>
+        axis:               [0.5,1,0.25],    // X,Y,Z values of initial rotation vector. Array, default value: [1,0,0]
+        angle:              0.60,            // Initial rotation angle in radian. Float, default value: 0.
+        perspective:        700,             // Perspective. Integer, default value 700.
+        perspectiveOrigin:  "50% 50%",       // Perspective Origin. String, default value "50% 50%".
+        impulse:            true             // Defines if object receives an impulse after relesing mouse/touchend. Default value: true.
+        // limitAxxis:         "x" | "y"        //limits the rotation to only one axxis.
+        };
+
+    var mytraqball = new Traqball(options);
+
+
+    // Here we list the URL for our images, which I like to host on Imgur
+    // sometimes we put descriptions in.
+    var randImg = [
+        {src : 'http://i.imgur.com/SaXDQoJ.gif', desc : 'Cruella Laughing' },
+        {src : 'http://i.imgur.com/p1ZHYXb.gif', desc : 'Daria Flames' },
+        {src : 'http://i.imgur.com/LaZcUoQ.gif', desc : 'Glasses' },
+        {src : 'http://i.imgur.com/Hyaq1bq.gif', desc : 'Hocus Pocus Pullback' },
+        {src : 'http://i.imgur.com/avANnu7.gif', desc : 'Louise Laughing' },
+        {src : 'http://i.imgur.com/pj1xrYu.gif', desc : 'Meryl Deal With It' },
+        {src : 'http://i.imgur.com/qRVxmZc.gif', desc : 'Not Pregnant' },
+        {src : 'http://i.imgur.com/0xaqay3.gif', desc : 'Yay Internet' },
+        {src : 'http://i.imgur.com/RaqNJTh.gif', desc : 'Yay Internet Again' }
+        ];
+
+     // var randImg = [
+     //    {src : './js/gifPicker/gifs/Cruella_laughing.gif', desc : 'Cruella Laughing' },
+     //    {src : './js/gifPicker/gifs/Daria_Flames.gif', desc : 'Daria Flames' },
+     //    {src : './js/gifPicker/gifs/glasses.gif', desc : 'Glasses' },
+     //    {src : './js/gifPicker/gifs/HocusPocus_retreat.gif', desc : 'Hocus Pocus Pullback' },
+     //    {src : './js/gifPicker/gifs/louise_laughing.gif', desc : 'Louise Laughing' },
+     //    {src : './js/gifPicker/gifs/Meryl_dealwithit.gif', desc : 'Meryl Deal With It' },
+     //    {src : './js/gifPicker/gifs/not-pregnant.gif', desc : 'Not Pregnant' },
+     //    {src : './js/gifPicker/gifs/yayInternet.gif', desc : 'Yay Internet' },
+     //    {src : './js/gifPicker/gifs/yayInternet2.gif', desc : 'Yay Internet Again' },
+     //    ];
+
+
+    var getRandomImage = function(imgAr){
+        var num = Math.floor( Math.random() * imgAr.length );
+        var img = imgAr[ num ];
+        var imgStr = '<img src="' + img.src + '" alt = "'+img.desc+'">';
+        
+        return imgStr;
     };
+    
+    $('.back').append(getRandomImage(randImg));
 
-var mytraqball = new Traqball(options);
-
+    $('.panel').on('click', function(e){
+        // In here put a lightbox function that loads an image and a description into the main browser frame
+    });
 // button control panel starts here 
     // var scale = 1;
     // var h_click=0;
@@ -121,4 +164,4 @@ var mytraqball = new Traqball(options);
     //     return false;
     // });
 
-// })();
+})();

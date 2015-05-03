@@ -98,6 +98,9 @@
           backface-visibility: hidden;
           
         }
+        .cube .panel img{
+          z-index: 0;
+        }
   
   /* Eight-way cube controls for spinning the cube, which everyone will ignore. */
         .cube .panel .corner{
@@ -239,6 +242,12 @@
             -o-transform: rotateX(-90deg) translate3d(0px, 0px, 100px);
             transform: rotateX(-90deg) translate3d(0px, 0px, 100px);
         }
+.cube img {
+  max-height : 200px;
+  max-width : 200px;
+  vertical-align: middle;
+}
+
 /* Style */
 /* Field Guide */
 .circle {
