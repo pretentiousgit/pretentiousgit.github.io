@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Medical Theams">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>Stroud Vet Hospital</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/jquery.selectbox.css">
+    <link rel="stylesheet" href="css/custom-variation2.css">
+    <link rel="stylesheet" href="css/responsive.css"> 
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:500,600,700,800,900,400,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,400italic' rel='stylesheet' type='text/css'>
+    
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="js/vendor/html5shiv.min.js"></script>
+      <script src="js/vendor/respond.min.js"></script>
+    <![endif]-->
+    
+	
+	<script type="text/javascript" src="validation.js"></script>
+	<script type="text/javascript">
+	"use strict";
+function sendContact() {
+    var valid;	
+    valid = validateContactpage();
+    if(valid) {
+		var name = $("#apname").val();
+        var email = $("#apemail").val();
+        var tel = $("#aptel").val();
+       
+        var comment = $("#apcomment").val();
+        var dataString = 'apname='+ name + '&apemail=' + email + '&aptel=' + tel + '&apcomment=' + comment;
+        
+        jQuery.ajax({
+            url: "email.php",
+            data:dataString,
+            type: "POST",
+            success:function(data){
+                $(".success").html(data);
+            },
+            error:function (){}
+        });
+    }
+}
+
+</script>
+
+
+</head>
+<body>
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="outer-sync var2">
+      <!--==================================
+       		 Header parts starts here
+        ==================================-->
+	<header>
+    	<div class="container">
+        <div class="row">
+        <div class="col-sm-12 top-strip">
+            <h2 class="delt-bord">Email :<a href="#">info@stroudvethospital.com</a></h2>
+            <h2>Call :<a href="#">+1 705-436-9838</a></h2>
+            <h2 class="delt-bord" style="float:left; font-weight:bold;"><a href="index.html">Stroud Veterinary Hospital</a></h2>
+        </div><!-- /.col-sm-12 -->
+        <div class="col-sm-12 bottom-strip p-both">
+        <!-- <div class="col-sm-3 logo">
+        	<a href="#"><img src="images/logo-var2.png" alt="medical theams" />Stroud Vet Hospital</a>
+        </div><!-- /.col-sm-3  -->
+        <div class="col-sm-9 navigation">
+        	<nav class="navbar navbar-default">
+              <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                </div>
+            
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                    <li class="dropdown active drop">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Home</a>
+                      <ul class="dropdown-menu" role="menu">
+                      <li class="drop-down-bg"></li>
+                        <li><a href="index.html">Home</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="about.html">about us</a></li>
+                    <li><a href="doctor.html">doctors</a></li>
+                    <!-- <li><a href="service.html">services</a></li> -->
+                    <!-- <li><a href="news.html">news</a></li> -->
+
+                    <li><a href="contact.html" class="p-r">contact us</a></li>
+                    <li><a href="appointments.html" class="lst-head">Appointment</a></li>
+                  </ul>
+                </div><!-- /.navbar-collapse -->
+              </div><!-- /.container-fluid -->
+            </nav>
+        </div><!-- /.col-sm-9 -->
+        </div><!-- /.col-sm-12 -->
+        </div><!-- /.row -->
+        </div><!-- /.container -->
+    </header><!-- #header -->                                            
+
+      <!--==================================
+       		 Header parts ends here
+       	  ==================================-->
+      <!--==================================
+       		Banner parts starts here
+          ==================================-->
+	<div class="inner-banner">
+    	<img src="images/contact-us.jpg" alt="banner" />
+        <div class="container">
+        <div class="row">
+         <h2>contact us</h2>
+        </div>
+        </div>
+    </div><!-- /.banner -->
+    
+      <!--==================================
+       		Banner parts ends here
+          ==================================-->
+      <!--==================================
+       		news parts starts here
+          ==================================-->    
+    <div class="first-section p82-topbot">
+    <div class="container">
+    <div class="row">
+       	<div class="col-sm-5 contact">
+			<form>
+        	<h2 class="title-grp"><span>send us</span>message</h2>
+            <input type="text" placeholder="Name*" id="apname" />
+            <input type="text" placeholder="Email*" id="apemail" />
+            <input type="text" placeholder="Phone*" id="aptel" />
+            <textarea placeholder="Comment*" id="apcomment"></textarea>
+            <div id="ferror"></div>
+            <div class="success"></div>
+            <button type="button" id="apbutton" onclick="sendContact();">Submit</button>
+            </form>
+        </div><!-- /col-sm-6 -->
+        <div class="col-sm-6 map">
+        	<h2 class="title-grp"><span>our</span>location</h2>
+            <div class="map-cov" >
+            
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11416.98088719753!2d-79.620013!3d44.325465!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xd3dadf164746eab3!2sStroud+Veterinary+Hospital!5e0!3m2!1sen!2sca!4v1434651706398" width="600" height="450" frameborder="0" style="border:0"></iframe>
+            </div>
+            <div class="col-lg-5 col-md-6 ids">
+            	<h2 class="location">Health Center Name Here
+					<span>Address line number</span> 
+					<span>Place Po. 885</span></h2>
+            </div>
+            <div class="col-lg-4 col-md-6 ids">
+            	<h2 class="message">info@healthplus.com
+					<span>career@healthplus.cm</span></h2>
+            </div>
+            <div class="col-lg-3 col-md-6 ids">
+            	<h2 class="phone">+225 48566 885
+					<span>9965 6662 333</span></h2>
+            </div>
+        </div><!-- /col-sm-6 -->       
+    </div><!-- /.row -->
+    </div><!-- /.container -->  
+    </div><!-- /.service-section --> 
+    
+     <!--==================================
+       		servieceection parts ends here
+          ==================================-->
+
+     <!--==================================
+       		footer parts starts here
+          ==================================-->     
+          
+    <footer class="footer p82-topbot">
+    <div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-3 col-lg-3 all-need">
+            <h2>Address</h2>
+                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                <div class="faddress">
+               <span>Address :</span> Medical Theme<br>
+                22, North Avenue post here<br>
+                New York city 55862<br>
+               <span>Call :</span> +8856 9984 222<br>
+               <span>Email :</span> <a href="mailto:info@medicaltheme.com">info@medicaltheme.com</a>
+            </div>
+        </div><!-- col-sm-3 -->
+        <div class="col-sm-6 col-md-3 col-lg-3 all-need list-styles">
+    		<h2>Service</h2>
+            <ul>
+                <li><a href="#">Cardiology</a></li>
+                <li><a href="#">Neurology</a></li>
+                <li><a href="#">Cardiac Clinic</a></li>
+                <li><a href="#">Laboratory Analysis</a></li>
+                <li><a href="#">Dental Clinic</a></li>
+                <li><a href="#">Gynecological Clinic</a></li>
+                <li><a href="#">Psychological Counseling</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-6 col-md-3 col-lg-3 all-need list-styles">
+    		<h2>Our Doctors</h2>
+            <ul>
+                <li><a href="#">Dr. Vasudevayyar</a></li>
+                <li><a href="#">Dr. Yardley Rahman</a></li>
+                <li><a href="#">Dr. sanusha nair</a></li>
+                <li><a href="#">Dr. Rajagopalachari</a></li>
+                <li><a href="#">Dr. Samvritha sunil</a></li>
+                <li><a href="#">Dr. Krishnayyar Vasudev</a></li>
+                <li><a href="#">Dr. Narahari</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-6 col-md-3 col-lg-3 all-need list-styles">
+    		<h2>news letter</h2>
+            <div class="news-letter">
+            <form>
+            	<input type="text" placeholder="Enter Email Address" name="EMAIL" id="mce-EMAIL"/>
+<div id="mce-responses" class="clear">
+		<div class="block-hide response" id="mce-error-response"></div>
+		<div class="block-hide response" id="mce-success-response"></div>
+	</div>   
+
+                <button type="submit" name="subscribe" id="mc-embedded-subscribe">go</button>
+                </form>
+            </div><!-- /.new-letter -->
+        </div><!-- col-sm-3 -->
+    </div><!-- ./row -->
+    </div><!-- /.container --> 
+           
+    </footer>
+    <div class="copyrights">
+    	<p>Medical Theme © 2015 | All Rights Reserved</p>
+    </div><!-- /.copy-rights -->
+                   
+</div><!-- /.outer-sync -->
+
+
+    <script src="js/vendor/jquery-min.js"></script>
+    <script src="js/vendor/modernizr.custom.68477.js"></script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/plugins.js"></script>
+
+	
+</body>
+</html>
