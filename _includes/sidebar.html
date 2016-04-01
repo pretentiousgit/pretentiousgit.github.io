@@ -2,9 +2,9 @@
 
 <div class="cover-card table-cell table-bottom">
   {% if author.avatar %}
-  <img src="{{ site.github.url }}/img/{{ author.avatar }}" alt="" class="avatar">
+  <img src="{{ site.baseurl }}/img/{{ author.avatar }}" alt="" class="avatar">
   {% endif %}
-  <a href="{{ site.baseurl }}/" class="author_name">{{ author.name }}</a>
+  <a href="{{ site.github.url }}/" class="author_name">{{ author.name }}</a>
   <span class="author_job">{{ author.job }}</span>
   <nav class="nav">
     <ul class="nav-list">
