@@ -1,11 +1,9 @@
-{% assign author = site.owner %}
-
 <div class="cover-card table-cell table-bottom">
-  {% if author.avatar %}
-  <img src="{{ site.url }}/img/{{ author.avatar }}" alt="" class="avatar">
+  {% if site.owner.avatar %}
+  <img src="{{ site.url }}/img/{{ site.owner.avatar }}" alt="" class="avatar">
   {% endif %}
-  <a href="{{ site.url }}/" class="author_name">{{ author.name }}</a>
-  <span class="author_job">{{ author.job }}</span>
+  <a href="{{ site.url }}/" class="author_name">{{ site.owner.name }}</a>
+  <span class="author_job">{{ site.owner.job }}</span>
   <nav class="nav">
     <ul class="nav-list">
       {% for page in site.pages %} {% if page.title %}
