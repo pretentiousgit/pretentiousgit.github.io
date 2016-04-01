@@ -1,4 +1,4 @@
-{% if page.author %} {% assign author = site.data.authors[page.author] %}{% else %}{% assign author = site.owner %} {% endif %}
+{% assign author = site.owner %}
 
 <div class="cover-card table-cell table-bottom">
   {% if author.avatar %}
