@@ -8,8 +8,6 @@ date: 2014-03-31
 comments: true
 ---
 
-Monday, March 31, 2014
-
 NodeJS - HTML5 video and sockets.io using an iframe with node-webkit
 Node-webkit is a pretty great package. It's optimised to boot node and open a webkit window with no toolbars by default. It is nice! It works easily and is reasonably well-documented. Unfortunately, it also assumes you want to write desktop applications that use web code.
 

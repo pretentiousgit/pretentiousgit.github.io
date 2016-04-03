@@ -33,12 +33,12 @@ blockquote {
 //
 
 a {
-   text-decoration: none;
+   text-decoration: underline;
    color: $primary;
    &:hover,
    &:focus {
      color: lighten($primary, 14%);
-     text-decoration: none;
+     text-decoration: underline;
    }
 }
 

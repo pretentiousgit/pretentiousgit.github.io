@@ -1,0 +1,53 @@
+#
+###################################
+# Site wide configuration
+####################################
+#
+
+title:       "Alex Leitch: Connected Kinetic Art"
+description: "Portfolio of practice for Alex Leitch"
+url:         # '/pretentiousgit.github.io' #"http://www.alexleitch.com" # the base hostname & protocol for your site
+
+github:
+  url: "http://pretentiousgit.github.io"
+
+#
+###################################
+# Jekyll configuration
+####################################
+#
+timezone:          America/Toronto
+markdown:          kramdown
+highlighter:       rouge
+excerpt_separator: <!--more-->
+permalink:         /articles/:year-:month/:title
+
+kramdown:
+  auto_ids:       true
+  footnote_nr:    1
+  entity_output:  as_char
+  toc_levels:     1..6
+  enable_coderay: false
+
+
+#
+####################################
+# Author Config
+####################################
+#
+
+author:
+  name: Alex Leitch
+  avatar: 2016Avatar.jpg
+  job: "Creative Development & Innovation Design"
+  bio: "Alex Leitch is a systems developer and creative technologist in Toronto, ON. Co-founder of Site 3 coLaboratory and Dames Making Games, Alex is well-known in the Toronto “maker” community for organizing makerspaces. She is a member of the Banff Centre’s 2016 Lougheed Leadership program, and has won a variety of scholarships and awards for her work in the weird future of contemporary art and system design. She has presented on the topics of rapid prototyping, video game design, group management, the internet of things, and commercial/retail logistics in Canada."
+  email: "alex.leitch@gmail.com"
+  twitter: "aeleitch"
+  github: "pretentiousgit"
+  instagram: "bustedsneakers"
+
+#
+###################################
+# Site Owner configuration
+####################################
+#
