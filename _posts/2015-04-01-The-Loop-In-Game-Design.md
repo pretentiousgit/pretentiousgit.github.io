@@ -9,7 +9,7 @@ tags: [games, design, public essays]
 
 <iframe src="https://docs.google.com/presentation/d/1p7xKNGk8wWPHjSVVq1xIL9lMnc_FpGPCPH3U6GsgTS0/embed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
-###Slide Content
+<h3>Slide Content</h3>
 
 ####Slide 1
 Today we are looking at what makes an interaction - any interaction, pretty well - tick. This theory can probably be applied to automata and car engines and your day job, but it is at least slightly about games.
