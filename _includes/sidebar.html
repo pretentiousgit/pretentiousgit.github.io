@@ -1,6 +1,4 @@
----
-layout: sidebar
----
+{% if page.author %} {% assign author = site.data.authors[page.author] %}{% else %}{% assign author = site.owner %} {% endif %}
 
 <div class="cover-card table-cell table-bottom">
   <img src="http://pretentiousgit.github.io/img/2016Avatar.jpg" alt="" class="avatar">
