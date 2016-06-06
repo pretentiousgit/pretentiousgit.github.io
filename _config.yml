@@ -48,6 +48,8 @@ author:
 
 #
 ###################################
-# Site Owner configuration
+# Collections
 ####################################
 #
+# collections:
+# - images
