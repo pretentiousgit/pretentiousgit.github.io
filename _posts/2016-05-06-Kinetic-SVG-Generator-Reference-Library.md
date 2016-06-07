@@ -28,6 +28,8 @@ Got a project? You're gonna need a box. This is the best of the box generators o
 ##### Iris Calculator
 (Iris Calculator)[http://iris-calculator.com/basic.php] Need an aperture motion? Want it to be fancy? Bad at math? Here is a new friend, it is for calculating mechanical iris, also called apertures. Now is when you should get all your GlasOS jokes out of your system.
 
+This post is derived from a talk I did at ITP Camp 2016.
+
 ##### 507 Movements
 [507 Movements](http://507movements.com/)
 So, I am very enthusiastic and I work really hard, and also, I can be a bit of a stubborn goose about not using what has already been invented, with the net result that I've personally recreated about 50 of these movements and felt momentarily brilliant. Perhaps using this reference site will spare you that effort, if you're interested in making automata! 

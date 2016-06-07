@@ -7,7 +7,6 @@ excerpt: "Designing the logo for Toronto's first Makerspace"
 categories: Design Presentations
 ---
 
-
 Recently, I was approached to talk about the Site 3 logo by a designer who was having a look over our branding. This is an important exercise, because before branding becomes classic, it goes through a phase of familiarity that breeds the usual contempt. It's good to check during this period if the logo is stale, and if so, to do something about it. 
 
 A good logo redesign project will include a review of the initial project cope, and then some redirection to carry the good feelings from the original design forward.

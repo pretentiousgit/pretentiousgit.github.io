@@ -3,7 +3,7 @@ layout: post
 title: CAD/CAM Software for OSX
 excerpt: "A survey of CAD software available for OSX"
 tags: [software, sculpture, CAD, automata]
-categories: Tools
+categories: Tools Presentations
 modified: 2016-05-06
 comments: false
 ---
@@ -98,3 +98,5 @@ This is the tool I use most often to design small solid parts for 3D printing.
 _______
 
 There's a lot more to be said on this topic, and the next post you should read is about _generators_, which are LIKE CAD software... but for making things in a generic way that you can then customize using 2D vector drawing software. [Here is that post](http://www.alexleitch.com/articles/2016-05/Kinetic-SVG-Generator-Reference-Library)
+
+This post is derived from a talk I did at ITP Camp 2016

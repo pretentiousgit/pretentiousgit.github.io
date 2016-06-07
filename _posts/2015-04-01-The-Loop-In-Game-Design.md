@@ -8,6 +8,7 @@ tags: [games, design, public essays]
 ---
 
 <iframe src="https://docs.google.com/presentation/d/1p7xKNGk8wWPHjSVVq1xIL9lMnc_FpGPCPH3U6GsgTS0/embed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+This post is derived from a series I taught on game design at the Art Gallery of Ontario in 2014.
 
 <h3>Slide Content</h3>
 
