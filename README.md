@@ -1,30 +1,10 @@
-# Leonids Jekyll Themes
+# pretentiousgit.github.io
 
-**[Leonids](http://renyuanz.github.io/leonids)** is a clean Jekyll theme perfect for powering your GitHub hosted blog.
+This site is based on the **[Leonids](http://renyuanz.github.io/leonids)** theme.
 
-## What is Leonids?
+It is the personal/project site of Alex Leitch, who doesn't really have time to update or maintain it.
+Such is life.
 
-* Responsive templates. Looking good on mobile, tablet, and desktop.
-* Simple and clear permalink structure.
-* Support for Disqus Comments.
-* Support for multi-authors.
-* **And** the Leonids (/ˈliːənɪdz/ lee-ə-nidz) are a prolific meteor shower associated with the comet [Tempel-Tuttle](https://en.wikipedia.org/wiki/55P/Tempel%E2%80%93Tuttle).
+The site is built using Jekyll, a Ruby-based static site generator that plays nicely with GitHub.
 
-See a [demo](http://renyuanz.github.io/leonids/) hosted on GitHub.
-
-## Quick setup
-
-`git clone https://github.com/renyunz/leonids`
-
-`cd leonids`
-
-`jekyll server`
-
-Check out your awesome blog at `http://localhost:4000` and Cheers!
-
-## TODO
-
-- [ ] Build a timeline page.
-- [ ] Build a portfolio page.
-- [ ] Redesign categories page. Ref: [dribbble: blog category section By Ilja Miskov](https://dribbble.com/shots/2274792-Blog-Category-Selection)
-- [ ] Multi languages support.
+[About Alex](http://alexleitch.com/about/)

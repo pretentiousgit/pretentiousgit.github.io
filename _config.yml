@@ -46,10 +46,13 @@ author:
   github: "pretentiousgit"
   instagram: "bustedsneakers"
 
-#
-###################################
-# Collections
-####################################
-#
-# collections:
-# - images
+# Mini Magick Config
+mini_magick:
+    thumbnail:
+        source: img/portfolio/
+        destination: portfolio/thumbnail
+        resize: "250x250"
+    medium:
+        source: img/portfolio/
+        destination: portfolio/
+        resize: "250x250"
