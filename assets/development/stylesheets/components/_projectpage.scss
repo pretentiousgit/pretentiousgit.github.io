@@ -1,0 +1,130 @@
+/* project page
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+
+.project-post {
+
+  padding-top: 3rem;
+
+  hr {
+  opacity: 0.25;
+  max-width: 60rem;
+  margin: 3rem 0;
+}
+
+}
+
+.post-title {
+  margin: 0 0 1rem 0;
+  padding: 0;
+  font-family: $font-sans;
+  font-weight: $font-weight-sans-book;
+  font-size: 3rem;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.1px;
+}
+
+.post-category { 
+  margin: 0;
+
+  dd, dt {
+    padding: 0;
+    margin: 0 1rem 0 0;
+    display: inline-block;
+    font-family: $font-mono;
+    font-weight: $font-weight-mono-bold;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.1px;
+  }
+}
+
+.inner-container {
+  display: block;
+  margin-bottom: 3rem;
+}
+
+.post-content {
+  max-width: 60rem;
+  // margin-right: 4em;
+  // display: inline-block;
+  p {
+    line-height: 2.2rem;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+  img {
+    max-width: 100%;
+    display: block;
+    margin: 0;
+  }
+}
+
+.caption {
+  font-family: $font-mono;
+  font-weight: $font-weight-mono-light;
+  letter-spacing: 0.1px;
+  margin-bottom: 2rem;
+  margin-top: -1rem;
+  display: block;
+  font-size: 1.2rem;
+}
+
+.bottom-images {
+   display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox;      /* TWEENER - IE 10 */
+  display: -webkit-flex;     /* NEW - Chrome */
+  display: flex; 
+  // flex-direction: row;
+  // flex-wrap: wrap;
+  // justify-content: flex-start;
+  margin-bottom: 3rem;
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
+
+  .imgbox {
+    width: 40%;               /* For old syntax, otherwise collapses. */
+     -webkit-box-flex: 1;      /* OLD - iOS 6-, Safari 3.1-6 */
+    -moz-box-flex: 1;         /* OLD - Firefox 19- */
+    -webkit-flex: 1;          /* Chrome */
+    -ms-flex: 1;              /* IE 10 */
+    flex: 1;                 /* NEW, Spec - Opera 12.1, Firefox 20+ */
+    margin-right: 2rem;
+
+    @media (max-width: 800px) {
+      width: 100%;
+    }
+  }
+
+  img{ 
+    max-width: 100%;
+  }
+}
+
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li:before {
+    margin-left: -0.5rem;
+    content: '□';
+    padding-right: 0.5rem;
+  }
+
+  li {
+    margin-bottom: 1rem;
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

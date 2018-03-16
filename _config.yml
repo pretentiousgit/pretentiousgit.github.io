@@ -1,58 +1,48 @@
 #
-###################################
-# Site wide configuration
-####################################
+#  Config file
 #
+#  If you make changes to this file while your Jekyll server is running,
+#  You'll need to restart your server.
+# ---------------------------------------------------------------------
 
-title:       "Alex Leitch: Connected Kinetic Art"
-description: "Portfolio of practice for Alex Leitch"
-url:         # '/pretentiousgit.github.io' #"http://www.alexleitch.com" # the base hostname & protocol for your site
+# Permalinks
+permalink:        pretty
 
-github:
-  url: "http://pretentiousgit.github.io"
+# Your site's full URL, e.g. "https://my-site.com" - leave this empty
+# until you have/own a domain and a CNAME file.
+# url:
 
-#
-###################################
-# Jekyll configuration
-####################################
-#
-timezone:          America/Toronto
-markdown:          kramdown
-highlighter:       rouge
-excerpt_separator: <!--more-->
-permalink:         /articles/:year-:month/:title
+# Set to '' in case of hosting on `http://<your-github-name>.github.io`
+baseurl:          ''
 
-kramdown:
-  auto_ids:       true
-  footnote_nr:    1
-  entity_output:  as_char
-  toc_levels:     1..6
-  enable_coderay: false
+# Site settings
+title: Artifact Digital – Strategic Design Consultancy – Alex Leitch
 
+description: > # this means to ignore newlines until "baseurl:"
+  Future problems solved, fires put out
 
-#
-####################################
-# Author Config
-####################################
-#
+collections:
+  projects:
+    output: true
+  
+portfolio-categories:
+  - Code
+  - Exhibits
+  - Speaking
+  - Writing
 
 author:
-  name: Alex Leitch
-  avatar: 2016Avatar.jpg
-  job: "Art & Technology Researcher"
-  bio: "Alex Leitch is a systems developer and creative technologist in Toronto, ON. Co-founder of Site 3 coLaboratory and Dames Making Games, Alex is well-known in the Toronto “maker” community for organizing makerspaces. She is a member of the Banff Centre’s 2016 Lougheed Leadership program, and has won a variety of scholarships and awards for her work in the weird future of contemporary art and system design. She has presented on the topics of rapid prototyping, video game design, group management, the internet of things, and commercial/retail logistics in Canada."
-  email: "alex.leitch@gmail.com"
-  twitter: "aeleitch"
-  github: "pretentiousgit"
-  instagram: "bustedsneakers"
+  name:    'Alex Leitch'
+  twitter: aeleitch
+  github:  pretentiousgit
 
-# Mini Magick Config
-mini_magick:
-    thumbnail:
-        source: img/portfolio/
-        destination: portfolio/thumbnail
-        resize: "250x250"
-    medium:
-        source: img/portfolio/
-        destination: portfolio/
-        resize: "250x250"
+# Build settings
+markdown: kramdown
+
+kramdown:
+  math_engine: mathjax
+  math_engine_opts:
+    preview: true
+
+# Adding static pages through `_static/` folder
+include: ['_static']

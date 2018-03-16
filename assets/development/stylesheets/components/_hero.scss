@@ -1,0 +1,48 @@
+/* hero
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.hero {
+  background: $dark-color url('/assets/production/images/bg.jpg') center center no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  padding-bottom: 6rem;
+  padding-top: 6rem;
+}
+
+.logomark {
+  width: 7rem;
+}
+
+.slogan, .hero .dek {
+  max-width: 70rem;
+  margin-top: 4rem;
+}
+
+.slogan {
+  padding: 0;
+  font-size: 3.2rem;
+  font-family: $font-sans;
+  font-weight: $font-weight-sans-light;
+  line-height: 1.2;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: $dark-color;
+
+  span {
+      display: inline-block;
+      background: $brand-color;
+      margin: 0 1rem 1rem 0;
+      padding: 0.7rem 1rem 0 1rem;
+  }
+
+  @media (min-width: 761px) {
+    font-size: 4.6rem;
+  }
+}
+
+.hero .dek {
+  font-weight: $font-weight-sans-book;
+  font-size: 1.8rem;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+}

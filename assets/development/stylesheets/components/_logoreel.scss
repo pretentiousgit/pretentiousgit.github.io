@@ -1,0 +1,43 @@
+/* logoreel
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.logoreel {
+  background-color: #ddd;
+  padding-top: 3rem;
+  padding-bottom: 1rem;
+
+
+  div.centered {
+    display: flex;
+    align-items: center;
+    padding-bottom: 2rem;
+    justify-content: space-between;
+  }
+
+  .internalFlex {
+    width: 100px;
+    flex: 0 1 auto;
+    padding: 0 2rem;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    &.faded {
+      opacity: 0.5;
+    }
+  }
+}
+
+@media (max-width: 960px) {
+  .logoreel div.centered {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 540px) {
+  .logoreel .internalFlex {
+    width: 80px;
+  }
+}

@@ -1,3 +1,25 @@
-<footer>
-  &copy; {{ site.time | date: '%Y' }} {{ site.owner.name }}
+<footer class="contact" id="got-your-email">
+
+	<h2>Contact</h2>
+
+	<form class="contactform" accept-charset="UTF-8" action="https://formspree.io/alex@artifact.digital" method="POST">
+	  
+	  <div class="contactform-container">
+	  	<input class="flex-2up" type="email" name="email" placeholder="Email">
+		  <input class="flex-2up" type="text" name="name" placeholder="Name">
+	  </div>
+	
+	  <input type="hidden" name="utf8" value="✓">
+	  <input type="hidden" name="_next" value="#got-your-email">
+
+		<div class="contactform-container">
+		  <textarea class="flex-1up" name="message" placeholder="Message"></textarea>
+		</div>
+	  
+	  <button type="submit">Send</button>
+	
+	</form>
+
+	<p class="email-confirmation">Thanks! We got your message.</p>
+
 </footer>

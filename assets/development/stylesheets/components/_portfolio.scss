@@ -1,0 +1,152 @@
+/* portfolio
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.portfolio {
+  background-color: #fff;
+  padding: 2rem;
+
+  @media (min-width: 700px) {
+    padding: 4rem 8rem;
+  }
+}
+  .category-menu {
+    margin: 0 0 3rem;
+    padding: 0;
+    font-size: 0;
+  }
+
+    .category-item {
+      display: inline-block;
+      padding: 0.8rem;
+      margin: 0 1rem 1rem 0;
+      line-height: 1rem;
+      border-radius: 2px;
+
+      font-family: $font-mono;
+      font-weight: $font-weight-mono-light;
+      font-size: 1.4rem;
+      text-transform: uppercase;
+
+      &.active {
+        background-color: $brand-color;
+      }
+    }
+
+  .portfolio .flexcontain {
+    @include flexbox();
+    @include flexdirection(column);
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    
+    @media (min-width: 700px) {
+      @include flexdirection(row);
+      justify-content: space-between;
+    }
+  }
+
+    .project {
+      // width: 46%;
+      // min-width: 26rem;
+      margin-bottom: 4rem;
+
+      @media (min-width: 980px) {
+        // width: 30%;
+      }
+    }
+
+      .project-thumb {
+        width: 100%;
+      } 
+
+      .project a {
+
+        color: $darkest-color;
+        text-decoration: none;
+
+        &:hover, &:focus, &:active {
+          font-style: italic;
+
+          img {
+            outline: 0.5rem solid $brand-color;
+          }
+        }
+      }
+
+      .project-title {
+        margin: 1rem 0 0 0;
+        padding: 0;
+
+        font-family: $font-mono;
+        font-weight: $font-weight-mono-light;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        color: $darkest-color;
+      }
+
+
+
+.derp {
+    width: 100%;
+    &.content {
+        background: yellow;
+        height: 40vh;
+    }
+    &.sort-section {
+        padding: 40px 0;
+        // transition: height 1s ease-in-out;
+        .tag-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        button {
+            outline: none;
+            background: whitesmoke;
+            border: none;
+            padding: 1% 2%;
+            margin: 0 1%;
+            text-transform: uppercase;
+            &.selected {
+                background: $brand-color;
+            }
+        }
+        .boxes {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .box {
+            opacity: 1;
+            visibility: visible;
+            width: 20vw;
+            height: 20vw;
+            margin: 1% 1% 6rem;
+
+            @media (max-width: 700px) {
+              width: 40vw;
+              height: 40vw;
+            }
+
+            @media (max-width: 1024px) {
+              width: 40vw;
+              height: 40vw;
+              margin-bottom: 7rem;
+            }
+
+            &.pink {
+                background: pink;
+            }
+            &.blue {
+                background: dodgerblue;
+            }
+            &.green {
+                background: springgreen;
+            }
+            &.orange {
+                background: darkorange;
+            }
+        }
+    }
+}

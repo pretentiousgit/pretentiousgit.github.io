@@ -1,0 +1,42 @@
+/* services
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.services {
+  @include flexbox();
+  @include flexdirection(column);
+
+  @media (min-width: 761px) {
+      @include flexdirection(row);
+  }
+}
+
+  .service-alpha, .service-beta {
+    @include flex(1);
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .service-alpha {
+    background-color: $lighter-middle-color;
+  }
+
+  .service-beta {
+    background-color: $middle-color;
+  }
+
+    .service-icon {
+      width: 5.5rem;
+      height: auto;
+      display: inline-block;
+      padding: 0 0 1rem 0;
+    }
+
+    .services p, .services h2 {
+      color: #fff;
+      
+    }
+
+    .services p {
+      font-size: 1.4rem;
+      line-height: 2.2rem;
+    }

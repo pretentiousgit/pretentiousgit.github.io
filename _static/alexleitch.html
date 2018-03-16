@@ -1,0 +1,43 @@
+---
+layout: page
+title: Alex Leitch – Strategic Design
+static-page: true
+permalink: /alex-leitch/
+active: alexleitch
+---
+
+<section class="container bio">
+	
+	<img src="{{ site.url }}/assets/production/images/headshot.jpg" alt="A portrait of Alex Leitch" class="headshot">
+
+	<h1 class="slogan2"><span>Machine</span><span>Art,</span><span>Speculative</span><span>Futures,</span><span>Technical</span><span>Design.</span></h1>
+
+	<p class="dek">Alex Leitch (B.A.hon, M.Des) is an award-winning technology consultant who lives and works in Toronto, Canada. Alex is a writer, game designer, and software developer who runs a strategic design consultancy, Artifact Digital.</p>
+
+</section>
+
+<section class="portfolio container">
+
+	<h2>Selected work</h2>
+
+<div class="derp sort-section">
+    <div class="tag-container">
+        <button class="selected" data-filter="all">all</button>
+	    	{% for category in site.portfolio-categories %}
+				<button data-filter="{{ category }}">{{ category }}</button>
+				{% endfor %}
+    </div>
+    <div class="boxes">
+    			{% assign sorted = (site.projects | sort: 'date') | reverse %}
+				{% for project in sorted %}
+			  <div class="project box {{ project.category }}">
+			    <a class="tapme" href="{{ site.baseurl }}{{ project.url }}#project">
+						<img class="project-thumb" src="{{ project.thumb }}" alt="{{ project.thumbdescription }}">
+						<h3 class="project-title">{{ project.title }}</h3>
+			    </a>
+			  </div>
+			  {% endfor %}
+    </div>
+</div>
+
+</section>

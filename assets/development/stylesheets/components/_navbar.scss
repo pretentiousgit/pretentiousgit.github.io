@@ -1,0 +1,65 @@
+/* navbar
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.navbar {
+  color: #fff;
+  height: 6rem;
+  overflow: hidden;
+
+  &.container {
+    padding-left: 0;
+
+    @media (min-width: 761px) {
+      padding-left: 6rem;
+    }
+  }
+  
+  background-color: $middle-color;
+
+  &.homepage {
+    background-color: $darkest-color;
+  }
+
+}
+
+  .navbar-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0;
+  }
+
+    .navbar-item {
+      display: inline-block;
+    }
+
+      .navbar-link {
+        display: inline-block;
+        padding: 0 2rem;
+
+        font-family: $font-mono;
+        font-weight: $font-weight-mono-bold;
+        font-size: 1.6rem;
+        line-height: 6.2rem;
+        letter-spacing: 0.1px;
+        -webkit-font-smoothing: antialiased;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #fff;
+
+        &:visited {
+          color: #fff;
+        }
+        
+        &:hover {
+          font-style: italic;
+        }
+
+        &.active {
+          color: $brand-color;
+        }
+        
+        .alexleitch &.active {
+          background-color: $dark-color;
+        }
+      }

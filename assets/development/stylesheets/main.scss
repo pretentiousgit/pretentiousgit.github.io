@@ -1,0 +1,168 @@
+@charset "utf-8";
+
+/* variables
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+$font-sans: "Fira Sans", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-mono: "Fira Mono", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$base-font-size:      16px;
+$base-font-weight:    400;
+  $font-weight-mono-light:  500;
+  $font-weight-mono-bold:   700;
+  $font-weight-sans-light:  100;
+  $font-weight-sans-book:   400;
+$base-line-height:    1.4;
+
+$spacing-unit:        2rem;
+
+$text-color:          #111;
+$background-color:    #fff;
+$brand-color:         #ffd503;
+$middle-color:        #536670;
+$lighter-middle-color: #6D838F;
+$darker-middle-color: #2e434e;
+$dark-color:       #19242a;
+$darkest-color: #10171b;
+
+$active-link-color:   #33C3F0;
+
+$grey-color:          #828282;
+$grey-color-light:    lighten($grey-color, 40%);
+$grey-color-dark:     darken($grey-color, 25%);
+
+// Width of the content area
+$content-width:       800px;
+
+$on-palm:             600px;
+$on-laptop:           800px;
+
+
+/* mixins
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+@mixin flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin flex($values) {
+  -webkit-box-flex: $values;
+  -moz-box-flex:  $values;
+  -webkit-flex:  $values;
+  -ms-flex:  $values;
+  flex:  $values;
+}
+
+@mixin flexorder($val) {
+  -webkit-box-ordinal-group: $val;  
+  -moz-box-ordinal-group: $val;     
+  -ms-flex-order: $val;     
+  -webkit-order: $val;  
+  order: $val;
+}
+
+@mixin flexdirection($val) {
+  -webkit-flex-direction: $val;  
+  -moz-flex-direction: $val;     
+  -ms-flex-direction: $val;     
+  flex-direction: $val;
+}
+
+@mixin flex($val) {
+  -webkit-flex: $val;  
+  -moz-flex: $val;
+  -ms-flex: $val;     
+  flex: $val;
+}
+
+
+/* base stylin
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+@import "components/normalize";
+
+// html is set to 62.5% so REMs look like pixels (1.5rem = 15px)
+html {
+  font-size: 62.5%;
+  width: 100%;
+}
+
+body {
+  font-family: $font-sans;
+  font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
+  line-height: $base-line-height;
+  font-weight: $base-font-weight;
+  color: $text-color;
+  margin-left: 0;
+  margin-top: 0;
+  width: 100%;
+}
+
+::-webkit-input-placeholder {
+  text-transform: uppercase;
+  color: #eee;
+  letter-spacing: 0.1px;
+}
+::-moz-placeholder {
+  text-transform: uppercase;
+  color: #eee;
+  letter-spacing: 0.1px;
+}
+:-ms-input-placeholder {
+  text-transform: uppercase;
+  color: #eee;
+  letter-spacing: 0.1px;
+}
+:-moz-placeholder {
+  text-transform: uppercase;
+  color: #eee;
+  letter-spacing: 0.1px;
+}
+
+.container {
+  padding-left: 2rem;
+  padding-right: 2rem;
+
+  @media (min-width: 761px) {
+    padding-left: 8rem;
+    padding-right: 4rem;
+  }
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  margin: 0 0 2rem 0;
+  padding: 0;
+  font-family: $font-mono;
+  font-weight: $font-weight-mono-bold;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.1px;
+}
+
+/* components
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+@import "components/navbar";
+@import "components/hero";
+@import "components/services";
+@import "components/logoreel";
+@import "components/contact";
+@import "components/bio";
+@import "components/portfolio";
+@import "components/projectpage";
+
+/* one-off stylin
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.tightkern {
+  letter-spacing: -3px;
+  padding-right: 1.5px;
+}
+
+.hiddenmodal {
+  display: none;
+}
