@@ -26,9 +26,3 @@ Hothouse is an interactive installation of mechanical flowers, produced for Come
 Hothouse was produced with the support of the City of Toronto through the Toronto Arts Council.
 
 <img style="max-width: 150px;" src="/assets/production/images/TAC_FCOT_logo.jpg" alt="">
-
-<img style="max-width: 350px;" src="/assets/production/images/projects/hothouse/hothouse1V.jpg" alt="">
-
-<img style="max-width: 350px;" src="https://pbs.twimg.com/media/C2O6Mz_XEAEUOHo.jpg" alt="">
-
-<img style="max-width: 350px;" src="https://pbs.twimg.com/media/C2JSxQ6WEAAlpIP.jpg" alt="">
