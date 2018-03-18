@@ -23,4 +23,10 @@ Hothouse is a walled garden of mechanical flowers that respond to users as they 
 
 Hothouse is an interactive installation of mechanical flowers, produced for Come Up To My Room at the Gladstone Hotel as part of Toronto Design Offsite Festival 2017. The flowers are controlled by gesture and proximity, made entirely of laser-cut plywood and cardboard. 
 
+Hothouse was produced with the support of the City of Toronto through the Toronto Arts Council.
+
 <img style="max-width: 350px;" src="/assets/production/images/projects/hothouse/hothouse1V.jpg" alt="">
+
+<img style="max-width: 350px;" src="https://pbs.twimg.com/media/C2O6Mz_XEAEUOHo.jpg" alt="">
+
+<img style="max-width: 350px;" src="https://pbs.twimg.com/media/C2JSxQ6WEAAlpIP.jpg" alt="">
