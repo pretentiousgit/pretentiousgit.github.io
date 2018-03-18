@@ -16,12 +16,9 @@ active: homepage
 </section>
 
 <section class="portfolio container">
-
-	<h2>Selected work</h2>
-
 <div class="derp sort-section">
     <div class="tag-container">
-        <button class="selected" data-filter="all">all</button>
+        <button class="selected" data-filter="all">all work</button>
 	    	{% for category in site.portfolio-categories %}
 				<button data-filter="{{ category }}">{{ category }}</button>
 				{% endfor %}
