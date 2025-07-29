@@ -50,6 +50,29 @@
         <button id="loadSample">Load Sample</button>
         <div id="loadingIndicator" class="hidden">Loading model...</div>
         <div id="error" class="hidden" style="color: red; margin-top: 10px;"></div>
+        
+        <div id="debugControls" style="margin-top: 15px; border-top: 1px solid #444; padding-top: 10px;">
+            <h4 style="margin: 5px 0;">Debug Controls</h4>
+            
+            <div style="margin: 5px 0;">
+                <label>Position X: </label>
+                <input type="number" id="posX" value="0" step="0.1" style="width: 60px;">
+                <label style="margin-left: 10px;">Y: </label>
+                <input type="number" id="posY" value="0" step="0.1" style="width: 60px;">
+                <label style="margin-left: 10px;">Z: </label>
+                <input type="number" id="posZ" value="0" step="0.1" style="width: 60px;">
+            </div>
+            
+            <div style="margin: 5px 0;">
+                <label>Scale: </label>
+                <input type="number" id="scale" value="1" step="0.1" min="0.1" style="width: 60px;">
+                <button id="resetModel" style="margin-left: 10px;">Reset</button>
+            </div>
+            
+            <div style="margin: 5px 0; font-size: 12px; color: #ccc;">
+                <div id="modelStats">No model loaded</div>
+            </div>
+        </div>
     </div>
 
     <script type="importmap">
@@ -65,7 +88,7 @@
         import { STLLoader } from 'three/addons/loaders/STLLoader.js';
         // Scene setup
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 450);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -75,18 +98,18 @@
         document.body.appendChild(renderer.domElement);
 
         // Lighting - Multiple lights for better illumination
-        const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.9);
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
         scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
         directionalLight.position.set(1, 1, 1);
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = 2048;
         directionalLight.shadow.mapSize.height = 2048;
         scene.add(directionalLight);
-        
+
         // Add point light for better illumination
-        const pointLight = new THREE.PointLight(0xffffff, 1.5, 100);
+        const pointLight = new THREE.PointLight(0xffffff, 0.8, 100);
         pointLight.position.set(2, 3, 2);
         pointLight.castShadow = true;
         scene.add(pointLight);
@@ -122,6 +145,43 @@
 
         // Model loading
         let currentModel = null;
+        let originalGeometry = null;
+
+        function updateModelStats() {
+            const statsDiv = document.getElementById('modelStats');
+            if (currentModel) {
+                const pos = currentModel.position;
+                const scale = currentModel.scale.x;
+                statsDiv.textContent = `Pos: (${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)}) Scale: ${scale.toFixed(2)}`;
+            } else {
+                statsDiv.textContent = 'No model loaded';
+            }
+        }
+
+        function updateModelTransform() {
+            if (!currentModel) return;
+            
+            const posX = parseFloat(document.getElementById('posX').value) || 0;
+            const posY = parseFloat(document.getElementById('posY').value) || 0;
+            const posZ = parseFloat(document.getElementById('posZ').value) || 0;
+            const scale = parseFloat(document.getElementById('scale').value) || 1;
+            
+            currentModel.position.set(posX, posY, posZ);
+            currentModel.scale.setScalar(scale);
+            
+            updateModelStats();
+        }
+
+        function updateDebugControls() {
+            if (!currentModel) return;
+            
+            document.getElementById('posX').value = currentModel.position.x.toFixed(2);
+            document.getElementById('posY').value = currentModel.position.y.toFixed(2);
+            document.getElementById('posZ').value = currentModel.position.z.toFixed(2);
+            document.getElementById('scale').value = currentModel.scale.x.toFixed(2);
+            
+            updateModelStats();
+        }
 
         function showLoading() {
             document.getElementById('loadingIndicator').classList.remove('hidden');
@@ -155,7 +215,7 @@
             console.log('Before centering - Size:', size);
             
             // FORCE move to origin first - set position directly to negative center
-            object.position.copy(center).negate();
+            object.position.set(0,0,0);
             
             // Then scale to fit nicely in view (target size of 2 units)
             const maxDim = Math.max(size.x, size.y, size.z);
@@ -212,6 +272,9 @@
 
                     centerAndScaleModel(currentModel);
                     scene.add(currentModel);
+                    
+                    // Update debug controls to show current values
+                    updateDebugControls();
                 },
                 function (progress) {
                     console.log('Loading progress:', progress);
@@ -232,6 +295,19 @@
             }
         });
 
+        // Debug control event listeners
+        document.getElementById('posX').addEventListener('input', updateModelTransform);
+        document.getElementById('posY').addEventListener('input', updateModelTransform);
+        document.getElementById('posZ').addEventListener('input', updateModelTransform);
+        document.getElementById('scale').addEventListener('input', updateModelTransform);
+        
+        document.getElementById('resetModel').addEventListener('click', function() {
+            if (currentModel) {
+                centerAndScaleModel(currentModel);
+                updateDebugControls();
+            }
+        });
+
         // Sample model loader
         document.getElementById('loadSample').addEventListener('click', function() {
             // Using a sample STL model URL
@@ -240,13 +316,13 @@
         });
 
         // Ground plane - smaller and lighter
-        // const groundGeometry = new THREE.PlaneGeometry(6, 6);
-        // const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
-        // const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-        // ground.rotation.x = -Math.PI / 2;
-        // ground.position.y = -1;
-        // ground.receiveShadow = true;
-        // scene.add(ground);
+        const groundGeometry = new THREE.PlaneGeometry(6, 6);
+        const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = -1;
+        ground.receiveShadow = true;
+        scene.add(ground);
 
         // Animation loop
         function animate() {
