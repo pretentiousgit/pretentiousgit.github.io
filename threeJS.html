@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js Model Loader</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: Arial, sans-serif;
+        }
+        
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            z-index: 100;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        #fileInput {
+            margin: 10px 0;
+            color: white;
+        }
+        
+        #loadingIndicator {
+            color: #4a9eff;
+            margin-top: 10px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h3>Three.js Model Loader</h3>
+        <input type="file" id="fileInput" accept=".stl" />
+        <button id="loadSample">Load Sample</button>
+        <div id="loadingIndicator" class="hidden">Loading model...</div>
+        <div id="error" class="hidden" style="color: red; margin-top: 10px;"></div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.166.1/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.166.1/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 450);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x222222);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        // Lighting - Multiple lights for better illumination
+        const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.9);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        directionalLight.position.set(1, 1, 1);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        scene.add(directionalLight);
+        
+        // Add point light for better illumination
+        const pointLight = new THREE.PointLight(0xffffff, 1.5, 100);
+        pointLight.position.set(2, 3, 2);
+        pointLight.castShadow = true;
+        scene.add(pointLight);
+
+        // Add second point light from opposite side
+        const pointLight2 = new THREE.PointLight(0xffffff, 0.5, 100);
+        pointLight2.position.set(-2, 2, -2);
+        scene.add(pointLight2);
+
+        // Camera position
+        camera.position.set(0, 2, 5);
+        camera.lookAt(0, 0, 0);
+
+        // Controls (simple mouse rotation)
+        let mouseX = 0, mouseY = 0;
+        let isMouseDown = false;
+
+        document.addEventListener('mousedown', (e) => { isMouseDown = true; });
+        document.addEventListener('mouseup', (e) => { isMouseDown = false; });
+        document.addEventListener('mousemove', (e) => {
+            if (isMouseDown) {
+                const deltaX = e.clientX - mouseX;
+                const deltaY = e.clientY - mouseY;
+                
+                camera.position.x = Math.sin(deltaX * 0.01) * 5;
+                camera.position.z = Math.cos(deltaX * 0.01) * 5;
+                camera.position.y = Math.max(0.5, Math.min(4, camera.position.y + deltaY * 0.01));
+                camera.lookAt(0, 0, 0);
+            }
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Model loading
+        let currentModel = null;
+
+        function showLoading() {
+            document.getElementById('loadingIndicator').classList.remove('hidden');
+            document.getElementById('error').classList.add('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingIndicator').classList.add('hidden');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+            hideLoading();
+        }
+
+        function clearScene() {
+            if (currentModel) {
+                scene.remove(currentModel);
+                currentModel = null;
+            }
+        }
+
+        function centerAndScaleModel(object) {
+            const box = new THREE.Box3().setFromObject(object);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+            
+            console.log('Before centering - Center:', center);
+            console.log('Before centering - Size:', size);
+            
+            // FORCE move to origin first - set position directly to negative center
+            object.position.copy(center).negate();
+            
+            // Then scale to fit nicely in view (target size of 2 units)
+            const maxDim = Math.max(size.x, size.y, size.z);
+            if (maxDim > 0) {
+                const scale = 2 / maxDim;
+                const finalScale = Math.min(scale, 10); // Cap scale to prevent tiny models becoming huge
+                object.scale.setScalar(finalScale);
+                console.log('Applied scale:', finalScale);
+            }
+            
+            // Final position check
+            console.log('Final position:', object.position);
+            console.log('Final scale:', object.scale);
+        }
+
+        // STL Loader
+        const loader = new STLLoader();
+
+        function loadModel(url) {
+            showLoading();
+            clearScene();
+
+            loader.load(
+                url,
+                function (geometry) {
+                    hideLoading();
+                    
+                    // Debug logging for troubleshooting
+                    console.log('Geometry loaded:');
+                    console.log('- Vertex count:', geometry.attributes.position.count);
+                    console.log('- Has normals:', geometry.attributes.normal ? 'yes' : 'no');
+                    geometry.computeBoundingBox();
+                    console.log('- Bounding box:', geometry.boundingBox);
+                    console.log('- Model size:', geometry.boundingBox.getSize(new THREE.Vector3()));
+                    
+                    // Create bright white material for STL
+                    const material = new THREE.MeshPhongMaterial({ 
+                        color: 0xffffff,
+                        shininess: 100,
+                        side: THREE.DoubleSide  // Render both sides of faces
+                    });
+                    
+                    // Create mesh from geometry
+                    currentModel = new THREE.Mesh(geometry, material);
+                    
+                    // Enable shadows
+                    currentModel.castShadow = true;
+                    currentModel.receiveShadow = true;
+                    
+                    // Fix normals for proper lighting
+                    geometry.deleteAttribute('normal'); // Remove existing normals
+                    geometry.computeVertexNormals();
+                    geometry.computeBoundingSphere();
+
+                    centerAndScaleModel(currentModel);
+                    scene.add(currentModel);
+                },
+                function (progress) {
+                    console.log('Loading progress:', progress);
+                },
+                function (error) {
+                    console.error('Loading error:', error);
+                    showError('Failed to load STL model: ' + error.message);
+                }
+            );
+        }
+
+        // File input handler
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                loadModel(url);
+            }
+        });
+
+        // Sample model loader
+        document.getElementById('loadSample').addEventListener('click', function() {
+            // Using a sample STL model URL
+            const sampleUrl = 'https://threejs.org/examples/models/stl/ascii/slotted_disk.stl';
+            loadModel(sampleUrl);
+        });
+
+        // Ground plane - smaller and lighter
+        // const groundGeometry = new THREE.PlaneGeometry(6, 6);
+        // const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
+        // const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        // ground.rotation.x = -Math.PI / 2;
+        // ground.position.y = -1;
+        // ground.receiveShadow = true;
+        // scene.add(ground);
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Rotate model if loaded
+            if (currentModel) {
+                currentModel.rotation.y += 0.005;
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Start animation
+        animate();
+
+        // Load a default STL model on start
+        loadModel('https://threejs.org/examples/models/stl/ascii/slotted_disk.stl');
+    </script>
+</body>
+</html>
