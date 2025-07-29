@@ -3,35 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three.js Model Loader</title>
+    <title>Three.js Model Loader with Cube Controls</title>
     <style>
+        :root {
+            --primary-bg: #000;
+            --panel-bg: rgba(0,0,0,0.7);
+            --text-color: white;
+            --accent-color: #4a9eff;
+            --border-radius: 0.5rem;
+        }
+        
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: #000;
+            background: var(--primary-bg);
             font-family: Arial, sans-serif;
         }
         
         #info {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            color: white;
+            top: 1rem;
+            left: 1rem;
+            color: var(--text-color);
             z-index: 100;
-            background: rgba(0,0,0,0.7);
-            padding: 10px;
-            border-radius: 5px;
+            background: var(--panel-bg);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            max-width: 20rem;
         }
         
         #fileInput {
-            margin: 10px 0;
-            color: white;
+            margin: 1rem 0;
+            color: var(--text-color);
         }
         
         #loadingIndicator {
-            color: #4a9eff;
-            margin-top: 10px;
+            color: var(--accent-color);
+            margin-top: 1rem;
         }
         
         .hidden {
@@ -41,6 +50,116 @@
         canvas {
             display: block;
         }
+        
+        /* View Cube Styles */
+        #viewCube {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 8rem;
+            height: 8rem;
+            perspective: 40rem;
+            z-index: 200;
+        }
+        
+        .cube {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        
+        .cube-face {
+            position: absolute;
+            width: 8rem;
+            height: 8rem;
+            background: var(--panel-bg);
+            border: 0.125rem solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            font-weight: bold;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(0.625rem);
+        }
+        
+        .cube-face:hover {
+            background: rgba(74, 158, 255, 0.3);
+            border-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+        
+        .cube-face.front { transform: rotateY(0deg) translateZ(4rem); }
+        .cube-face.back { transform: rotateY(180deg) translateZ(4rem); }
+        .cube-face.right { transform: rotateY(90deg) translateZ(4rem); }
+        .cube-face.left { transform: rotateY(-90deg) translateZ(4rem); }
+        .cube-face.top { transform: rotateX(90deg) translateZ(4rem); }
+        .cube-face.bottom { transform: rotateX(-90deg) translateZ(4rem); }
+        
+        /* Corner and edge controls */
+        .cube-corner, .cube-edge {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .cube-corner:hover, .cube-edge:hover {
+            background: rgba(74, 158, 255, 0.4);
+            border-color: var(--accent-color);
+        }
+        
+        .cube-corner {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+        }
+        
+        .cube-edge {
+            width: 0.5rem;
+            height: 2rem;
+            border-radius: 0.25rem;
+        }
+        
+        /* Position corners */
+        .corner-tlf { top: 0; left: 0; transform: translate(-50%, -50%); }
+        .corner-trf { top: 0; right: 0; transform: translate(50%, -50%); }
+        .corner-blf { bottom: 0; left: 0; transform: translate(-50%, 50%); }
+        .corner-brf { bottom: 0; right: 0; transform: translate(50%, 50%); }
+        
+        /* Animation controls */
+        #animationControls {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--panel-bg);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            z-index: 100;
+        }
+        
+        .control-button {
+            background: rgba(74, 158, 255, 0.2);
+            border: 1px solid var(--accent-color);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .control-button:hover {
+            background: rgba(74, 158, 255, 0.4);
+        }
+        
+        .control-button.active {
+            background: var(--accent-color);
+        }
     </style>
 </head>
 <body>
@@ -49,30 +168,67 @@
         <input type="file" id="fileInput" accept=".stl" />
         <button id="loadSample">Load Sample</button>
         <div id="loadingIndicator" class="hidden">Loading model...</div>
-        <div id="error" class="hidden" style="color: red; margin-top: 10px;"></div>
+        <div id="error" class="hidden" style="color: red; margin-top: 1rem;"></div>
         
-        <div id="debugControls" style="margin-top: 15px; border-top: 1px solid #444; padding-top: 10px;">
-            <h4 style="margin: 5px 0;">Debug Controls</h4>
+        <div id="debugControls" style="margin-top: 1rem; border-top: 1px solid #444; padding-top: 1rem;">
+            <h4 style="margin: 0.5rem 0;">Model Transform</h4>
             
-            <div style="margin: 5px 0;">
+            <div style="margin: 0.5rem 0;">
                 <label>Position X: </label>
-                <input type="number" id="posX" value="0" step="0.1" style="width: 60px;">
-                <label style="margin-left: 10px;">Y: </label>
-                <input type="number" id="posY" value="0" step="0.1" style="width: 60px;">
-                <label style="margin-left: 10px;">Z: </label>
-                <input type="number" id="posZ" value="0" step="0.1" style="width: 60px;">
+                <input type="number" id="posX" value="0" step="0.1" style="width: 3.75rem;">
+                <label style="margin-left: 0.625rem;">Y: </label>
+                <input type="number" id="posY" value="0" step="0.1" style="width: 3.75rem;">
+                <label style="margin-left: 0.625rem;">Z: </label>
+                <input type="number" id="posZ" value="0" step="0.1" style="width: 3.75rem;">
             </div>
             
-            <div style="margin: 5px 0;">
+            <div style="margin: 0.5rem 0;">
+                <label>Rotation X: </label>
+                <input type="number" id="rotX" value="0" step="15" style="width: 3.75rem;">
+                <label style="margin-left: 0.625rem;">Y: </label>
+                <input type="number" id="rotY" value="0" step="15" style="width: 3.75rem;">
+                <label style="margin-left: 0.625rem;">Z: </label>
+                <input type="number" id="rotZ" value="0" step="15" style="width: 3.75rem;">°
+            </div>
+            
+            <div style="margin: 0.5rem 0;">
                 <label>Scale: </label>
-                <input type="number" id="scale" value="1" step="0.1" min="0.1" style="width: 60px;">
-                <button id="resetModel" style="margin-left: 10px;">Reset</button>
+                <input type="number" id="scale" value="1" step="0.1" min="0.1" style="width: 3.75rem;">
+                <button id="resetModel" style="margin-left: 0.625rem;">Reset</button>
+                <button id="autoOrient" style="margin-left: 0.25rem;">Auto Orient</button>
             </div>
             
-            <div style="margin: 5px 0; font-size: 12px; color: #ccc;">
+            <div style="margin: 0.5rem 0; font-size: 0.75rem; color: #ccc;">
                 <div id="modelStats">No model loaded</div>
             </div>
+
+            <button id="exportSTL" style="margin-left: 0.25rem;">Export STL</button>
         </div>
+    </div>
+
+    <!-- View Cube Control -->
+    <div id="viewCube">
+        <div class="cube" id="cube">
+            <div class="cube-face front" data-view="front">FRONT</div>
+            <div class="cube-face back" data-view="back">BACK</div>
+            <div class="cube-face right" data-view="right">RIGHT</div>
+            <div class="cube-face left" data-view="left">LEFT</div>
+            <div class="cube-face top" data-view="top">TOP</div>
+            <div class="cube-face bottom" data-view="bottom">BOTTOM</div>
+            
+            <!-- Corner controls for isometric views -->
+            <div class="cube-corner corner-tlf" data-view="iso1" title="Top-Left-Front Isometric"></div>
+            <div class="cube-corner corner-trf" data-view="iso2" title="Top-Right-Front Isometric"></div>
+            <div class="cube-corner corner-blf" data-view="iso3" title="Bottom-Left-Front Isometric"></div>
+            <div class="cube-corner corner-brf" data-view="iso4" title="Bottom-Right-Front Isometric"></div>
+        </div>
+    </div>
+
+    <!-- Animation Controls -->
+    <div id="animationControls">
+        <h4 style="margin: 0 0 0.5rem 0; color: var(--text-color);">Camera</h4>
+        <button class="control-button" id="autoRotate">Auto Rotate</button>
+        <button class="control-button" id="homeView">Home</button>
     </div>
 
     <script type="importmap">
@@ -86,6 +242,7 @@
     <script type="module">
         import * as THREE from 'three';
         import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+        
         // Scene setup
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -97,8 +254,8 @@
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         document.body.appendChild(renderer.domElement);
 
-        // Lighting - Multiple lights for better illumination
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+        // Lighting setup
+        const ambientLight = new THREE.AmbientLight(0xFFFFFF, 1);
         scene.add(ambientLight);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
@@ -108,51 +265,103 @@
         directionalLight.shadow.mapSize.height = 2048;
         scene.add(directionalLight);
 
-        // Add point light for better illumination
         const pointLight = new THREE.PointLight(0xffffff, 0.8, 100);
         pointLight.position.set(2, 3, 2);
         pointLight.castShadow = true;
         scene.add(pointLight);
 
-        // Add second point light from opposite side
         const pointLight2 = new THREE.PointLight(0xffffff, 0.5, 100);
         pointLight2.position.set(-2, 2, -2);
         scene.add(pointLight2);
 
-        // Camera position
-        camera.position.set(0, 2, 5);
-        camera.lookAt(0, 0, 0);
+        // Camera animation system
+        let cameraTarget = { x: 0, y: 2, z: 5 };
+        let autoRotateEnabled = false;
+        let autoRotateSpeed = 0.005;
 
-        // Controls (simple mouse rotation)
-        let mouseX = 0, mouseY = 0;
-        let isMouseDown = false;
+        const cameraViews = {
+            front: { x: 0, y: 0, z: 5 },
+            back: { x: 0, y: 0, z: -5 },
+            right: { x: 5, y: 0, z: 0 },
+            left: { x: -5, y: 0, z: 0 },
+            top: { x: 0, y: 5, z: 0 },
+            bottom: { x: 0, y: -5, z: 0 },
+            iso1: { x: -3, y: 3, z: 3 },   // Top-Left-Front
+            iso2: { x: 3, y: 3, z: 3 },    // Top-Right-Front
+            iso3: { x: -3, y: -3, z: 3 },  // Bottom-Left-Front
+            iso4: { x: 3, y: -3, z: 3 },   // Bottom-Right-Front
+            home: { x: 2, y: 2, z: 5 }
+        };
 
-        document.addEventListener('mousedown', (e) => { isMouseDown = true; });
-        document.addEventListener('mouseup', (e) => { isMouseDown = false; });
-        document.addEventListener('mousemove', (e) => {
-            if (isMouseDown) {
-                const deltaX = e.clientX - mouseX;
-                const deltaY = e.clientY - mouseY;
+        function animateCameraTo(targetPos, duration = 1000) {
+            const startPos = { 
+                x: camera.position.x, 
+                y: camera.position.y, 
+                z: camera.position.z 
+            };
+            
+            const startTime = Date.now();
+            
+            function updateCamera() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
                 
-                camera.position.x = Math.sin(deltaX * 0.01) * 5;
-                camera.position.z = Math.cos(deltaX * 0.01) * 5;
-                camera.position.y = Math.max(0.5, Math.min(4, camera.position.y + deltaY * 0.01));
+                // Smooth easing function
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                
+                camera.position.x = startPos.x + (targetPos.x - startPos.x) * easeProgress;
+                camera.position.y = startPos.y + (targetPos.y - startPos.y) * easeProgress;
+                camera.position.z = startPos.z + (targetPos.z - startPos.z) * easeProgress;
+                
                 camera.lookAt(0, 0, 0);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCamera);
+                } else {
+                    cameraTarget = { ...targetPos };
+                }
             }
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+            
+            autoRotateEnabled = false;
+            document.getElementById('autoRotate').classList.remove('active');
+            updateCamera();
+        }
+
+        // View cube controls
+        document.getElementById('viewCube').addEventListener('click', (event) => {
+            const viewType = event.target.dataset.view;
+            if (viewType && cameraViews[viewType]) {
+                animateCameraTo(cameraViews[viewType]);
+            }
         });
 
-        // Model loading
+        // Animation controls
+        document.getElementById('autoRotate').addEventListener('click', () => {
+            autoRotateEnabled = !autoRotateEnabled;
+            document.getElementById('autoRotate').classList.toggle('active', autoRotateEnabled);
+        });
+
+        document.getElementById('homeView').addEventListener('click', () => {
+            animateCameraTo(cameraViews.home);
+        });
+
+        // Set initial camera position
+        camera.position.set(2, 2, 5);
+        camera.lookAt(0, 0, 0);
+        cameraTarget = { x: 2, y: 2, z: 5 };
+
+        // Model loading system (same as before)
         let currentModel = null;
-        let originalGeometry = null;
 
         function updateModelStats() {
             const statsDiv = document.getElementById('modelStats');
             if (currentModel) {
                 const pos = currentModel.position;
+                const rot = currentModel.rotation;
                 const scale = currentModel.scale.x;
-                statsDiv.textContent = `Pos: (${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)}) Scale: ${scale.toFixed(2)}`;
+                statsDiv.innerHTML = `Pos: (${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)})<br>
+                                     Rot: (${(rot.x * 180/Math.PI).toFixed(0)}°, ${(rot.y * 180/Math.PI).toFixed(0)}°, ${(rot.z * 180/Math.PI).toFixed(0)}°)<br>
+                                     Scale: ${scale.toFixed(2)}`;
             } else {
                 statsDiv.textContent = 'No model loaded';
             }
@@ -164,9 +373,15 @@
             const posX = parseFloat(document.getElementById('posX').value) || 0;
             const posY = parseFloat(document.getElementById('posY').value) || 0;
             const posZ = parseFloat(document.getElementById('posZ').value) || 0;
+            
+            const rotX = (parseFloat(document.getElementById('rotX').value) || 0) * Math.PI / 180;
+            const rotY = (parseFloat(document.getElementById('rotY').value) || 0) * Math.PI / 180;
+            const rotZ = (parseFloat(document.getElementById('rotZ').value) || 0) * Math.PI / 180;
+            
             const scale = parseFloat(document.getElementById('scale').value) || 1;
             
             currentModel.position.set(posX, posY, posZ);
+            currentModel.rotation.set(rotX, rotY, rotZ);
             currentModel.scale.setScalar(scale);
             
             updateModelStats();
@@ -178,6 +393,11 @@
             document.getElementById('posX').value = currentModel.position.x.toFixed(2);
             document.getElementById('posY').value = currentModel.position.y.toFixed(2);
             document.getElementById('posZ').value = currentModel.position.z.toFixed(2);
+            
+            document.getElementById('rotX').value = (currentModel.rotation.x * 180 / Math.PI).toFixed(0);
+            document.getElementById('rotY').value = (currentModel.rotation.y * 180 / Math.PI).toFixed(0);
+            document.getElementById('rotZ').value = (currentModel.rotation.z * 180 / Math.PI).toFixed(0);
+            
             document.getElementById('scale').value = currentModel.scale.x.toFixed(2);
             
             updateModelStats();
@@ -206,32 +426,89 @@
             }
         }
 
+        function autoOrientModel(object) {
+            // Get the bounding box to understand model dimensions
+            const box = new THREE.Box3().setFromObject(object);
+            const size = box.getSize(new THREE.Vector3());
+            
+            console.log('Model dimensions - X:', size.x.toFixed(2), 'Y:', size.y.toFixed(2), 'Z:', size.z.toFixed(2));
+            
+            // Determine the most logical "up" direction
+            // Generally, the shortest dimension should be the height (Y-axis)
+            const dimensions = [
+                { axis: 'x', size: size.x },
+                { axis: 'y', size: size.y },
+                { axis: 'z', size: size.z }
+            ];
+            
+            // Sort by size to find shortest dimension
+            dimensions.sort((a, b) => a.size - b.size);
+            const shortestAxis = dimensions[0].axis;
+            
+            console.log('Shortest axis:', shortestAxis, 'with size:', dimensions[0].size.toFixed(2));
+            
+            // Apply rotation to make the shortest axis point up (Y)
+            if (shortestAxis === 'x') {
+                // X is shortest, rotate so X becomes Y
+                object.rotation.z = Math.PI / 2;
+                console.log('Applied rotation: Z = 90°');
+            } else if (shortestAxis === 'z') {
+                // Z is shortest, rotate so Z becomes Y  
+                object.rotation.x = -Math.PI / 2;
+                console.log('Applied rotation: X = 90°');
+            } else {
+                // Y is already shortest, no rotation needed
+                console.log('No rotation needed - Y is already the shortest axis');
+            }
+            
+            // Alternative heuristic: if width/depth ratio suggests it's lying on its side
+            const aspectRatioXZ = Math.max(size.x, size.z) / Math.min(size.x, size.z);
+            const heightRatio = size.y / Math.max(size.x, size.z);
+            
+            console.log('Aspect ratio (XZ plane):', aspectRatioXZ.toFixed(2));
+            console.log('Height ratio (Y/max(X,Z)):', heightRatio.toFixed(2));
+            
+            // If the model is very flat in Y but tall in X or Z, it's probably on its side
+            if (heightRatio < 0.3 && aspectRatioXZ > 2) {
+                console.log('Model appears to be lying flat - applying additional rotation');
+                if (size.x > size.z) {
+                    // Tall in X direction, rotate around Z
+                    object.rotation.z = Math.PI / 2;
+                } else {
+                    // Tall in Z direction, rotate around X
+                    object.rotation.x = -Math.PI / 2;
+                }
+            }
+        }
+
         function centerAndScaleModel(object) {
+            // First apply auto-orientation
+            autoOrientModel(object);
+            
+            // Recalculate bounding box after rotation
             const box = new THREE.Box3().setFromObject(object);
             const center = box.getCenter(new THREE.Vector3());
             const size = box.getSize(new THREE.Vector3());
             
-            console.log('Before centering - Center:', center);
-            console.log('Before centering - Size:', size);
+            console.log('After rotation - Center:', center);
+            console.log('After rotation - Size:', size);
             
-            // FORCE move to origin first - set position directly to negative center
-            object.position.set(0,0,0);
+            // Center the model
+            object.position.set(-center.x, -center.y, -center.z);
             
-            // Then scale to fit nicely in view (target size of 2 units)
+            // Scale to fit nicely in view
             const maxDim = Math.max(size.x, size.y, size.z);
             if (maxDim > 0) {
                 const scale = 2 / maxDim;
-                const finalScale = Math.min(scale, 10); // Cap scale to prevent tiny models becoming huge
+                const finalScale = Math.min(scale, 10);
                 object.scale.setScalar(finalScale);
                 console.log('Applied scale:', finalScale);
             }
             
-            // Final position check
             console.log('Final position:', object.position);
-            console.log('Final scale:', object.scale);
+            console.log('Final rotation:', object.rotation);
         }
 
-        // STL Loader
         const loader = new STLLoader();
 
         function loadModel(url) {
@@ -243,37 +520,22 @@
                 function (geometry) {
                     hideLoading();
                     
-                    // Debug logging for troubleshooting
-                    console.log('Geometry loaded:');
-                    console.log('- Vertex count:', geometry.attributes.position.count);
-                    console.log('- Has normals:', geometry.attributes.normal ? 'yes' : 'no');
-                    geometry.computeBoundingBox();
-                    console.log('- Bounding box:', geometry.boundingBox);
-                    console.log('- Model size:', geometry.boundingBox.getSize(new THREE.Vector3()));
-                    
-                    // Create bright white material for STL
                     const material = new THREE.MeshPhongMaterial({ 
                         color: 0xffffff,
                         shininess: 100,
-                        side: THREE.DoubleSide  // Render both sides of faces
+                        side: THREE.DoubleSide
                     });
                     
-                    // Create mesh from geometry
                     currentModel = new THREE.Mesh(geometry, material);
-                    
-                    // Enable shadows
                     currentModel.castShadow = true;
                     currentModel.receiveShadow = true;
                     
-                    // Fix normals for proper lighting
-                    geometry.deleteAttribute('normal'); // Remove existing normals
+                    geometry.deleteAttribute('normal');
                     geometry.computeVertexNormals();
                     geometry.computeBoundingSphere();
 
                     centerAndScaleModel(currentModel);
                     scene.add(currentModel);
-                    
-                    // Update debug controls to show current values
                     updateDebugControls();
                 },
                 function (progress) {
@@ -286,7 +548,7 @@
             );
         }
 
-        // File input handler
+        // Event listeners
         document.getElementById('fileInput').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
@@ -295,10 +557,12 @@
             }
         });
 
-        // Debug control event listeners
         document.getElementById('posX').addEventListener('input', updateModelTransform);
         document.getElementById('posY').addEventListener('input', updateModelTransform);
         document.getElementById('posZ').addEventListener('input', updateModelTransform);
+        document.getElementById('rotX').addEventListener('input', updateModelTransform);
+        document.getElementById('rotY').addEventListener('input', updateModelTransform);
+        document.getElementById('rotZ').addEventListener('input', updateModelTransform);
         document.getElementById('scale').addEventListener('input', updateModelTransform);
         
         document.getElementById('resetModel').addEventListener('click', function() {
@@ -308,14 +572,22 @@
             }
         });
 
-        // Sample model loader
+        document.getElementById('autoOrient').addEventListener('click', function() {
+            if (currentModel) {
+                // Reset rotation first
+                currentModel.rotation.set(0, 0, 0);
+                // Apply auto-orientation
+                autoOrientModel(currentModel);
+                updateDebugControls();
+            }
+        });
+
         document.getElementById('loadSample').addEventListener('click', function() {
-            // Using a sample STL model URL
             const sampleUrl = 'https://threejs.org/examples/models/stl/ascii/slotted_disk.stl';
             loadModel(sampleUrl);
         });
 
-        // Ground plane - smaller and lighter
+        // Ground plane
         const groundGeometry = new THREE.PlaneGeometry(6, 6);
         const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
         const ground = new THREE.Mesh(groundGeometry, groundMaterial);
@@ -328,13 +600,49 @@
         function animate() {
             requestAnimationFrame(animate);
             
-            // Rotate model if loaded
-            if (currentModel) {
-                currentModel.rotation.y += 0.005;
+            // Auto rotation around the model
+            if (autoRotateEnabled) {
+                const radius = Math.sqrt(cameraTarget.x * cameraTarget.x + cameraTarget.z * cameraTarget.z);
+                const angle = Math.atan2(cameraTarget.z, cameraTarget.x) + autoRotateSpeed;
+                
+                cameraTarget.x = Math.cos(angle) * radius;
+                cameraTarget.z = Math.sin(angle) * radius;
+                
+                camera.position.x = cameraTarget.x;
+                camera.position.z = cameraTarget.z;
+                camera.lookAt(0, 0, 0);
             }
             
             renderer.render(scene, camera);
         }
+
+        import { STLExporter } from 'three/addons/exporters/STLExporter.js';
+
+const exporter = new STLExporter();
+
+        document.getElementById('exportSTL').addEventListener('click', function() {
+            if (!currentModel) return;
+            
+            // Create a clone and apply all transforms permanently to the geometry
+            const clonedModel = currentModel.clone();
+            clonedModel.updateMatrixWorld();
+            
+            // Apply the transform matrix to the geometry vertices
+            const geometry = clonedModel.geometry.clone();
+            geometry.applyMatrix4(clonedModel.matrixWorld);
+            
+            // Export as binary STL (smaller file size)
+            const stlData = exporter.parse(clonedModel, { binary: true });
+            
+            // Download the file
+            const blob = new Blob([stlData], { type: 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'reoriented_model.stl';
+            link.click();
+            URL.revokeObjectURL(url);
+        });
 
         // Handle window resize
         window.addEventListener('resize', function() {
@@ -346,7 +654,7 @@
         // Start animation
         animate();
 
-        // Load a default STL model on start
+        // Load default model
         loadModel('https://threejs.org/examples/models/stl/ascii/slotted_disk.stl');
     </script>
 </body>
