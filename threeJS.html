@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three.js Model Loader with Cube Controls</title>
+    <title>Three.js Model Loader with Enhanced View Cube</title>
     <style>
         :root {
             --primary-bg: #000;
@@ -51,15 +51,21 @@
             display: block;
         }
         
-        /* View Cube Styles */
-        #viewCube {
+        /* Enhanced View Cube Styles */
+        #viewCubeContainer {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            width: 8rem;
-            height: 8rem;
-            perspective: 40rem;
+            width: 5rem;
+            height: 5rem;
             z-index: 200;
+        }
+        
+        #viewCube {
+            width: 5rem;
+            height: 5rem;
+            perspective: 30rem;
+            position: relative;
         }
         
         .cube {
@@ -67,13 +73,23 @@
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            cursor: pointer;
+            cursor: grab;
+            transition: transform 0.1s ease;
+            user-select: none;
+        }
+        
+        .cube:active {
+            cursor: grabbing;
+        }
+        
+        .cube.dragging {
+            transition: none;
         }
         
         .cube-face {
             position: absolute;
-            width: 8rem;
-            height: 8rem;
+            width: 5rem;
+            height: 5rem;
             background: var(--panel-bg);
             border: 0.125rem solid rgba(255,255,255,0.3);
             display: flex;
@@ -81,9 +97,11 @@
             justify-content: center;
             color: var(--text-color);
             font-weight: bold;
-            font-size: 0.875rem;
+            font-size: 0.7rem;
             transition: all 0.2s ease;
             backdrop-filter: blur(0.625rem);
+            clip-path: polygon(15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%, 0% 15%);
+            pointer-events: none;
         }
         
         .cube-face:hover {
@@ -92,37 +110,29 @@
             transform: scale(1.05);
         }
         
-        .cube-face.front { transform: rotateY(0deg) translateZ(4rem); }
-        .cube-face.back { transform: rotateY(180deg) translateZ(4rem); }
-        .cube-face.right { transform: rotateY(90deg) translateZ(4rem); }
-        .cube-face.left { transform: rotateY(-90deg) translateZ(4rem); }
-        .cube-face.top { transform: rotateX(90deg) translateZ(4rem); }
-        .cube-face.bottom { transform: rotateX(-90deg) translateZ(4rem); }
+        .cube-face.front { transform: rotateY(0deg) translateZ(2.5rem); }
+        .cube-face.back { transform: rotateY(180deg) translateZ(2.5rem); }
+        .cube-face.right { transform: rotateY(90deg) translateZ(2.5rem); }
+        .cube-face.left { transform: rotateY(-90deg) translateZ(2.5rem); }
+        .cube-face.top { transform: rotateX(90deg) translateZ(2.5rem); }
+        .cube-face.bottom { transform: rotateX(-90deg) translateZ(2.5rem); }
         
-        /* Corner and edge controls */
-        .cube-corner, .cube-edge {
+        /* Corner controls for isometric views */
+        .cube-corner {
             position: absolute;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             cursor: pointer;
             transition: all 0.2s ease;
+            width: 0.8rem;
+            height: 0.8rem;
+            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+            pointer-events: auto;
         }
         
-        .cube-corner:hover, .cube-edge:hover {
+        .cube-corner:hover {
             background: rgba(74, 158, 255, 0.4);
             border-color: var(--accent-color);
-        }
-        
-        .cube-corner {
-            width: 1rem;
-            height: 1rem;
-            border-radius: 50%;
-        }
-        
-        .cube-edge {
-            width: 0.5rem;
-            height: 2rem;
-            border-radius: 0.25rem;
         }
         
         /* Position corners */
@@ -140,6 +150,15 @@
             padding: 1rem;
             border-radius: var(--border-radius);
             z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .controls-row {
+            display: flex;
+            gap: 0.25rem;
+            align-items: center;
         }
         
         .control-button {
@@ -147,10 +166,10 @@
             border: 1px solid var(--accent-color);
             color: var(--text-color);
             padding: 0.5rem 1rem;
-            margin: 0.25rem;
             border-radius: 0.25rem;
             cursor: pointer;
             transition: all 0.2s ease;
+            white-space: nowrap;
         }
         
         .control-button:hover {
@@ -159,6 +178,32 @@
         
         .control-button.active {
             background: var(--accent-color);
+        }
+        
+        /* View navigation arrows */
+        .view-arrow {
+            background: rgba(74, 158, 255, 0.2);
+            border: 1px solid var(--accent-color);
+            color: var(--text-color);
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        
+        .view-arrow:hover {
+            background: rgba(74, 158, 255, 0.4);
+            transform: scale(1.1);
+        }
+        
+        .view-arrow:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
@@ -206,29 +251,37 @@
         </div>
     </div>
 
-    <!-- View Cube Control -->
-    <div id="viewCube">
-        <div class="cube" id="cube">
-            <div class="cube-face front" data-view="front">FRONT</div>
-            <div class="cube-face back" data-view="back">BACK</div>
-            <div class="cube-face right" data-view="right">RIGHT</div>
-            <div class="cube-face left" data-view="left">LEFT</div>
-            <div class="cube-face top" data-view="top">TOP</div>
-            <div class="cube-face bottom" data-view="bottom">BOTTOM</div>
-            
-            <!-- Corner controls for isometric views -->
-            <div class="cube-corner corner-tlf" data-view="iso1" title="Top-Left-Front Isometric"></div>
-            <div class="cube-corner corner-trf" data-view="iso2" title="Top-Right-Front Isometric"></div>
-            <div class="cube-corner corner-blf" data-view="iso3" title="Bottom-Left-Front Isometric"></div>
-            <div class="cube-corner corner-brf" data-view="iso4" title="Bottom-Right-Front Isometric"></div>
+    <!-- Enhanced View Cube Control -->
+    <div id="viewCubeContainer">
+        <div id="viewCube">
+            <div class="cube" id="cube">
+                <div class="cube-face front" data-view="front">FRONT</div>
+                <div class="cube-face back" data-view="back">BACK</div>
+                <div class="cube-face right" data-view="right">RIGHT</div>
+                <div class="cube-face left" data-view="left">LEFT</div>
+                <div class="cube-face top" data-view="top">TOP</div>
+                <div class="cube-face bottom" data-view="bottom">BOTTOM</div>
+                
+                <!-- Corner controls for isometric views -->
+                <div class="cube-corner corner-tlf" data-view="iso1" title="Top-Left-Front Isometric"></div>
+                <div class="cube-corner corner-trf" data-view="iso2" title="Top-Right-Front Isometric"></div>
+                <div class="cube-corner corner-blf" data-view="iso3" title="Bottom-Left-Front Isometric"></div>
+                <div class="cube-corner corner-brf" data-view="iso4" title="Bottom-Right-Front Isometric"></div>
+            </div>
         </div>
     </div>
 
-    <!-- Animation Controls -->
+    <!-- Animation Controls with Navigation -->
     <div id="animationControls">
         <h4 style="margin: 0 0 0.5rem 0; color: var(--text-color);">Camera</h4>
-        <button class="control-button" id="autoRotate">Auto Rotate</button>
-        <button class="control-button" id="homeView">Home</button>
+        <div class="controls-row">
+            <button class="control-button" id="autoRotate">Auto Rotate</button>
+            <button class="control-button" id="homeView">Home</button>
+        </div>
+        <div class="controls-row">
+            <div class="view-arrow" id="prevView" title="Previous view">‹</div>
+            <div class="view-arrow" id="nextView" title="Next view">›</div>
+        </div>
     </div>
 
     <script type="importmap">
@@ -242,6 +295,7 @@
     <script type="module">
         import * as THREE from 'three';
         import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+        import { STLExporter } from 'three/addons/exporters/STLExporter.js';
         
         // Scene setup
         const scene = new THREE.Scene();
@@ -274,10 +328,19 @@
         pointLight2.position.set(-2, 2, -2);
         scene.add(pointLight2);
 
-        // Camera animation system
+        // Enhanced camera animation system with view cube sync and drag controls
         let cameraTarget = { x: 0, y: 2, z: 5 };
         let autoRotateEnabled = false;
         let autoRotateSpeed = 0.005;
+        let currentViewIndex = 0;
+        
+        // Drag control variables
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let cubeRotationX = 0;
+        let cubeRotationY = 0;
+        let dragSensitivity = 0.5;
 
         const cameraViews = {
             front: { x: 0, y: 0, z: 5 },
@@ -293,7 +356,51 @@
             home: { x: 2, y: 2, z: 5 }
         };
 
-        function animateCameraTo(targetPos, duration = 1000) {
+        // View sequence for arrow navigation (main 6 faces)
+        const viewSequence = ['front', 'right', 'back', 'left', 'top', 'bottom'];
+
+        function updateViewCubeOrientation(rotX = null, rotY = null) {
+            const cube = document.getElementById('cube');
+            
+            if (rotX !== null && rotY !== null) {
+                // Direct rotation from drag
+                cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            } else {
+                // Calculate camera's spherical coordinates relative to origin
+                const cameraPos = camera.position.clone().normalize();
+                
+                // Convert camera position to rotation angles
+                const phi = Math.acos(cameraPos.y); // polar angle
+                const theta = Math.atan2(cameraPos.z, cameraPos.x); // azimuthal angle
+                
+                // Convert to degrees and apply to cube
+                const rotYDeg = -theta * 180 / Math.PI;
+                const rotXDeg = (phi - Math.PI/2) * 180 / Math.PI;
+                
+                cubeRotationX = rotXDeg;
+                cubeRotationY = rotYDeg;
+                
+                cube.style.transform = `rotateX(${rotXDeg}deg) rotateY(${rotYDeg}deg)`;
+            }
+        }
+
+        function updateCameraFromCube(rotX, rotY) {
+            // Convert cube rotation back to camera position
+            const phi = (rotX * Math.PI / 180) + Math.PI/2; // polar angle
+            const theta = -rotY * Math.PI / 180; // azimuthal angle
+            
+            // Calculate camera position at fixed distance
+            const radius = 5;
+            const x = radius * Math.sin(phi) * Math.cos(theta);
+            const y = radius * Math.cos(phi);
+            const z = radius * Math.sin(phi) * Math.sin(theta);
+            
+            camera.position.set(x, y, z);
+            camera.lookAt(0, 0, 0);
+            cameraTarget = { x, y, z };
+        }
+
+        function animateCameraTo(targetPos, duration = 1000, updateCube = true) {
             const startPos = { 
                 x: camera.position.x, 
                 y: camera.position.y, 
@@ -315,10 +422,20 @@
                 
                 camera.lookAt(0, 0, 0);
                 
+                if (updateCube && !isDragging) {
+                    if (updateCube && !isDragging) {
+                    updateViewCubeOrientation();
+                }
+                }
+                
                 if (progress < 1) {
                     requestAnimationFrame(updateCamera);
                 } else {
                     cameraTarget = { ...targetPos };
+                    if (updateCube) {
+                        // Update stored cube rotations after animation
+                        updateViewCubeOrientation();
+                    }
                 }
             }
             
@@ -327,13 +444,94 @@
             updateCamera();
         }
 
-        // View cube controls
-        document.getElementById('viewCube').addEventListener('click', (event) => {
-            const viewType = event.target.dataset.view;
-            if (viewType && cameraViews[viewType]) {
-                animateCameraTo(cameraViews[viewType]);
+        function goToView(viewName) {
+            if (cameraViews[viewName]) {
+                animateCameraTo(cameraViews[viewName]);
+                
+                // Update current view index if it's in the sequence
+                const index = viewSequence.indexOf(viewName);
+                if (index !== -1) {
+                    currentViewIndex = index;
+                }
+            }
+        }
+
+        function goToNextView() {
+            currentViewIndex = (currentViewIndex + 1) % viewSequence.length;
+            const viewName = viewSequence[currentViewIndex];
+            goToView(viewName);
+        }
+
+        function goToPrevView() {
+            currentViewIndex = (currentViewIndex - 1 + viewSequence.length) % viewSequence.length;
+            const viewName = viewSequence[currentViewIndex];
+            goToView(viewName);
+        }
+
+        // View cube drag controls
+        const cube = document.getElementById('cube');
+        
+        cube.addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('cube-corner')) return; // Don't interfere with corner clicks
+            
+            isDragging = true;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            
+            cube.classList.add('dragging');
+            autoRotateEnabled = false;
+            document.getElementById('autoRotate').classList.remove('active');
+            
+            e.preventDefault();
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const deltaX = e.clientX - dragStartX;
+            const deltaY = e.clientY - dragStartY;
+            
+            const newRotY = cubeRotationY + deltaX * dragSensitivity;
+            const newRotX = cubeRotationX - deltaY * dragSensitivity;
+            
+            // Clamp X rotation to reasonable bounds
+            const clampedRotX = Math.max(-90, Math.min(90, newRotX));
+            
+            updateViewCubeOrientation(clampedRotX, newRotY);
+            updateCameraFromCube(clampedRotX, newRotY);
+            
+            e.preventDefault();
+        });
+        
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                cube.classList.remove('dragging');
+                
+                // Update stored rotation values
+                const deltaX = event.clientX - dragStartX;
+                const deltaY = event.clientY - dragStartY;
+                
+                cubeRotationY += deltaX * dragSensitivity;
+                cubeRotationX -= deltaY * dragSensitivity;
+                cubeRotationX = Math.max(-90, Math.min(90, cubeRotationX));
             }
         });
+
+        // View cube click controls (for face/corner clicks)
+        document.getElementById('viewCube').addEventListener('click', (event) => {
+            // Only handle clicks if we weren't dragging
+            if (event.target.classList.contains('cube-corner') || event.target.classList.contains('cube-face')) {
+                const viewType = event.target.dataset.view;
+                if (viewType) {
+                    goToView(viewType);
+                }
+            }
+        });
+
+        // Arrow navigation
+        document.getElementById('nextView').addEventListener('click', goToNextView);
+        document.getElementById('prevView').addEventListener('click', goToPrevView);
 
         // Animation controls
         document.getElementById('autoRotate').addEventListener('click', () => {
@@ -342,7 +540,7 @@
         });
 
         document.getElementById('homeView').addEventListener('click', () => {
-            animateCameraTo(cameraViews.home);
+            goToView('home');
         });
 
         // Set initial camera position
@@ -352,6 +550,8 @@
 
         // Model loading system (same as before)
         let currentModel = null;
+        const loader = new STLLoader();
+        const exporter = new STLExporter();
 
         function updateModelStats() {
             const statsDiv = document.getElementById('modelStats');
@@ -427,89 +627,52 @@
         }
 
         function autoOrientModel(object) {
-            // Get the bounding box to understand model dimensions
             const box = new THREE.Box3().setFromObject(object);
             const size = box.getSize(new THREE.Vector3());
             
-            console.log('Model dimensions - X:', size.x.toFixed(2), 'Y:', size.y.toFixed(2), 'Z:', size.z.toFixed(2));
-            
-            // Determine the most logical "up" direction
-            // Generally, the shortest dimension should be the height (Y-axis)
             const dimensions = [
                 { axis: 'x', size: size.x },
                 { axis: 'y', size: size.y },
                 { axis: 'z', size: size.z }
             ];
             
-            // Sort by size to find shortest dimension
             dimensions.sort((a, b) => a.size - b.size);
             const shortestAxis = dimensions[0].axis;
             
-            console.log('Shortest axis:', shortestAxis, 'with size:', dimensions[0].size.toFixed(2));
-            
-            // Apply rotation to make the shortest axis point up (Y)
             if (shortestAxis === 'x') {
-                // X is shortest, rotate so X becomes Y
                 object.rotation.z = Math.PI / 2;
-                console.log('Applied rotation: Z = 90°');
             } else if (shortestAxis === 'z') {
-                // Z is shortest, rotate so Z becomes Y  
                 object.rotation.x = -Math.PI / 2;
-                console.log('Applied rotation: X = 90°');
-            } else {
-                // Y is already shortest, no rotation needed
-                console.log('No rotation needed - Y is already the shortest axis');
             }
             
-            // Alternative heuristic: if width/depth ratio suggests it's lying on its side
             const aspectRatioXZ = Math.max(size.x, size.z) / Math.min(size.x, size.z);
             const heightRatio = size.y / Math.max(size.x, size.z);
             
-            console.log('Aspect ratio (XZ plane):', aspectRatioXZ.toFixed(2));
-            console.log('Height ratio (Y/max(X,Z)):', heightRatio.toFixed(2));
-            
-            // If the model is very flat in Y but tall in X or Z, it's probably on its side
             if (heightRatio < 0.3 && aspectRatioXZ > 2) {
-                console.log('Model appears to be lying flat - applying additional rotation');
                 if (size.x > size.z) {
-                    // Tall in X direction, rotate around Z
                     object.rotation.z = Math.PI / 2;
                 } else {
-                    // Tall in Z direction, rotate around X
                     object.rotation.x = -Math.PI / 2;
                 }
             }
         }
 
         function centerAndScaleModel(object) {
-            // First apply auto-orientation
             autoOrientModel(object);
             
-            // Recalculate bounding box after rotation
             const box = new THREE.Box3().setFromObject(object);
             const center = box.getCenter(new THREE.Vector3());
             const size = box.getSize(new THREE.Vector3());
             
-            console.log('After rotation - Center:', center);
-            console.log('After rotation - Size:', size);
-            
-            // Center the model
             object.position.set(-center.x, -center.y, -center.z);
             
-            // Scale to fit nicely in view
             const maxDim = Math.max(size.x, size.y, size.z);
             if (maxDim > 0) {
                 const scale = 2 / maxDim;
                 const finalScale = Math.min(scale, 10);
                 object.scale.setScalar(finalScale);
-                console.log('Applied scale:', finalScale);
             }
-            
-            console.log('Final position:', object.position);
-            console.log('Final rotation:', object.rotation);
         }
-
-        const loader = new STLLoader();
 
         function loadModel(url) {
             showLoading();
@@ -574,9 +737,7 @@
 
         document.getElementById('autoOrient').addEventListener('click', function() {
             if (currentModel) {
-                // Reset rotation first
                 currentModel.rotation.set(0, 0, 0);
-                // Apply auto-orientation
                 autoOrientModel(currentModel);
                 updateDebugControls();
             }
@@ -585,6 +746,26 @@
         document.getElementById('loadSample').addEventListener('click', function() {
             const sampleUrl = 'https://threejs.org/examples/models/stl/ascii/slotted_disk.stl';
             loadModel(sampleUrl);
+        });
+
+        document.getElementById('exportSTL').addEventListener('click', function() {
+            if (!currentModel) return;
+            
+            const clonedModel = currentModel.clone();
+            clonedModel.updateMatrixWorld();
+            
+            const geometry = clonedModel.geometry.clone();
+            geometry.applyMatrix4(clonedModel.matrixWorld);
+            
+            const stlData = exporter.parse(clonedModel, { binary: true });
+            
+            const blob = new Blob([stlData], { type: 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'reoriented_model.stl';
+            link.click();
+            URL.revokeObjectURL(url);
         });
 
         // Ground plane
@@ -611,38 +792,12 @@
                 camera.position.x = cameraTarget.x;
                 camera.position.z = cameraTarget.z;
                 camera.lookAt(0, 0, 0);
+                
+                updateViewCubeOrientation();
             }
             
             renderer.render(scene, camera);
         }
-
-        import { STLExporter } from 'three/addons/exporters/STLExporter.js';
-
-const exporter = new STLExporter();
-
-        document.getElementById('exportSTL').addEventListener('click', function() {
-            if (!currentModel) return;
-            
-            // Create a clone and apply all transforms permanently to the geometry
-            const clonedModel = currentModel.clone();
-            clonedModel.updateMatrixWorld();
-            
-            // Apply the transform matrix to the geometry vertices
-            const geometry = clonedModel.geometry.clone();
-            geometry.applyMatrix4(clonedModel.matrixWorld);
-            
-            // Export as binary STL (smaller file size)
-            const stlData = exporter.parse(clonedModel, { binary: true });
-            
-            // Download the file
-            const blob = new Blob([stlData], { type: 'application/octet-stream' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'reoriented_model.stl';
-            link.click();
-            URL.revokeObjectURL(url);
-        });
 
         // Handle window resize
         window.addEventListener('resize', function() {
@@ -650,6 +805,9 @@ const exporter = new STLExporter();
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
+
+        // Initialize view cube orientation
+        updateViewCubeOrientation();
 
         // Start animation
         animate();
