@@ -344,8 +344,8 @@ document.getElementById('autoOrient').addEventListener('click', function() {
 });
 
 document.getElementById('loadSample').addEventListener('click', function() {
-    currentModelName = 'slotted_disk';
-    const sampleUrl = 'https://threejs.org/examples/models/stl/ascii/slotted_disk.stl';
+    currentModelName = 'canti';
+    const sampleUrl = './models/canti.stl';
     loadModel(sampleUrl);
 });
 
@@ -433,5 +433,5 @@ window.addEventListener('resize', function() {
 // Start animation
 animate();
 
-// Load default model
-loadModel('https://threejs.org/examples/models/stl/ascii/slotted_disk.stl');
+// Load initial model
+loadModel('./models/canti.stl');
