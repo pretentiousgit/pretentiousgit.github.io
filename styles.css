@@ -1,0 +1,47 @@
+:root {
+    --primary-bg: #2e434e;
+    --panel-bg: rgba(0,0,0,0.7);
+    --text-color: white;
+    --accent-color: #4a9eff;
+    --border-radius: 0.5rem;
+    --primary-hue: 200;
+    --face-opacity: 0.85;
+    --stroke-width: 1.5;
+    --font-fam: "Fira Sans", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+html {
+    font-family: var(--font-fam);
+    font-size: 16px;
+    color: var(--primary-bg);
+}
+
+body {
+    margin: 2rem;
+}
+
+main {
+    position: relative;
+    top: 0;
+    left:0;
+    z-index: 10;
+}
+
+.logo {
+    position: fixed;
+    top: -35%;
+    left:0;
+    z-index: -1;
+    width: 100%;
+}
+
+@media (width < 758px) {
+  .logo {
+        position: fixed;
+        top: -5%;
+        left: 0;
+        z-index: -1;
+        width: auto;
+        height: 150vh;
+    }
+}
