@@ -1,12 +1,10 @@
-// STL Viewer Main Module with Icosahedron Navigator Integration
+// STL Viewer Main Module with Modular Components
 import * as THREE from 'three';
 import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { STLExporter } from 'three/addons/exporters/STLExporter.js';
 import { createIcosahedronNavigator } from './icosahedron-navigator.js';
-
-
-// Model handling
-let currentModelName = 'model';
+import { createModelEditor } from './model-editor.js';
+import { centerAndScaleModel } from './model-utils.js';
 
 
 // Scene setup
@@ -82,8 +80,11 @@ const cameraViews = {
 // View sequence for arrow navigation (main 6 faces)
 const viewSequence = ['front', 'right', 'back', 'left', 'top', 'bottom'];
 
-// Initialize icosahedron navigator
+// Initialize modular components
 let icosahedronNav = null;
+let modelEditor = null;
+let editorContainer = null;
+let editorVisible = false;
 
 function animateCameraTo(targetPos, duration = 1000, updateNav = true) {
     const startPos = { 
@@ -149,58 +150,86 @@ function goToPrevView() {
 
 // Model loading system
 let currentModel = null;
+let currentModelName = 'model';
 const loader = new STLLoader();
 const exporter = new STLExporter();
 
-function updateModelStats() {
-    const statsDiv = document.getElementById('modelStats');
-    if (currentModel) {
-        const pos = currentModel.position;
-        const rot = currentModel.rotation;
-        const scale = currentModel.scale.x;
-        statsDiv.innerHTML = `Pos: (${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)})<br>
-                             Rot: (${(rot.x * 180/Math.PI).toFixed(0)}°, ${(rot.y * 180/Math.PI).toFixed(0)}°, ${(rot.z * 180/Math.PI).toFixed(0)}°)<br>
-                             Scale: ${scale.toFixed(2)}`;
-    } else {
-        statsDiv.textContent = 'No model loaded';
+// Getter functions for model editor
+const getCurrentModel = () => currentModel;
+const getCurrentModelName = () => currentModelName;
+
+// Editor toggle functionality
+const showEditor = () => {
+    if (!editorContainer || editorVisible) return;
+    
+    // Re-insert the editor container into the DOM
+    const infoPanel = document.getElementById('info');
+    infoPanel.appendChild(editorContainer);
+    
+    // Re-initialize the editor if needed
+    if (!modelEditor) {
+        modelEditor = createModelEditor(
+            editorContainer, 
+            getCurrentModel, 
+            onModelChange,
+            { 
+                getModelName: getCurrentModelName, 
+                exporter: exporter 
+            }
+        );
     }
-}
+    
+    editorVisible = true;
+    updateToggleButton();
+};
 
-function updateModelTransform() {
-    if (!currentModel) return;
+const hideEditor = () => {
+    if (!editorContainer || !editorVisible) return;
     
-    const posX = parseFloat(document.getElementById('posX').value) || 0;
-    const posY = parseFloat(document.getElementById('posY').value) || 0;
-    const posZ = parseFloat(document.getElementById('posZ').value) || 0;
+    // Remove from DOM but keep reference
+    editorContainer.remove();
     
-    const rotX = (parseFloat(document.getElementById('rotX').value) || 0) * Math.PI / 180;
-    const rotY = (parseFloat(document.getElementById('rotY').value) || 0) * Math.PI / 180;
-    const rotZ = (parseFloat(document.getElementById('rotZ').value) || 0) * Math.PI / 180;
+    // Destroy the editor instance to clean up listeners and intervals
+    if (modelEditor) {
+        modelEditor.destroy();
+        modelEditor = null;
+    }
     
-    const scale = parseFloat(document.getElementById('scale').value) || 1;
-    
-    currentModel.position.set(posX, posY, posZ);
-    currentModel.rotation.set(rotX, rotY, rotZ);
-    currentModel.scale.setScalar(scale);
-    
-    updateModelStats();
-}
+    editorVisible = false;
+    updateToggleButton();
+};
 
-function updateDebugControls() {
-    if (!currentModel) return;
-    
-    document.getElementById('posX').value = currentModel.position.x.toFixed(2);
-    document.getElementById('posY').value = currentModel.position.y.toFixed(2);
-    document.getElementById('posZ').value = currentModel.position.z.toFixed(2);
-    
-    document.getElementById('rotX').value = (currentModel.rotation.x * 180 / Math.PI).toFixed(0);
-    document.getElementById('rotY').value = (currentModel.rotation.y * 180 / Math.PI).toFixed(0);
-    document.getElementById('rotZ').value = (currentModel.rotation.z * 180 / Math.PI).toFixed(0);
-    
-    document.getElementById('scale').value = currentModel.scale.x.toFixed(2);
-    
-    updateModelStats();
-}
+const toggleEditor = () => {
+    if (editorVisible) {
+        hideEditor();
+    } else {
+        showEditor();
+    }
+};
+
+const updateToggleButton = () => {
+    const toggleBtn = document.getElementById('editorToggle');
+    if (toggleBtn) {
+        const icon = toggleBtn.querySelector('.toggle-icon');
+        const text = toggleBtn.querySelector('.toggle-text');
+        
+        if (editorVisible) {
+            icon.textContent = '▲';
+            text.textContent = 'Hide Editor';
+            toggleBtn.classList.add('active');
+        } else {
+            icon.textContent = '▼';
+            text.textContent = 'Show Editor';
+            toggleBtn.classList.remove('active');
+        }
+    }
+};
+
+// Callback for model changes from editor
+const onModelChange = (model) => {
+    // Currently just exists for extensibility
+    // Could add validation, scene updates, etc.
+};
 
 function showLoading() {
     document.getElementById('loadingIndicator').classList.remove('hidden');
@@ -225,54 +254,7 @@ function clearScene() {
     }
 }
 
-function autoOrientModel(object) {
-    const box = new THREE.Box3().setFromObject(object);
-    const size = box.getSize(new THREE.Vector3());
-    
-    const dimensions = [
-        { axis: 'x', size: size.x },
-        { axis: 'y', size: size.y },
-        { axis: 'z', size: size.z }
-    ];
-    
-    dimensions.sort((a, b) => a.size - b.size);
-    const shortestAxis = dimensions[0].axis;
-    
-    if (shortestAxis === 'x') {
-        object.rotation.z = Math.PI / 2;
-    } else if (shortestAxis === 'z') {
-        object.rotation.x = -Math.PI / 2;
-    }
-    
-    const aspectRatioXZ = Math.max(size.x, size.z) / Math.min(size.x, size.z);
-    const heightRatio = size.y / Math.max(size.x, size.z);
-    
-    if (heightRatio < 0.3 && aspectRatioXZ > 2) {
-        if (size.x > size.z) {
-            object.rotation.z = Math.PI / 2;
-        } else {
-            object.rotation.x = -Math.PI / 2;
-        }
-    }
-}
-
-function centerAndScaleModel(object) {
-    autoOrientModel(object);
-    
-    const box = new THREE.Box3().setFromObject(object);
-    const center = box.getCenter(new THREE.Vector3());
-    const size = box.getSize(new THREE.Vector3());
-    
-    object.position.set(-center.x, -center.y, -center.z);
-    
-    const maxDim = Math.max(size.x, size.y, size.z);
-    if (maxDim > 0) {
-        const scale = 2 / maxDim;
-        const finalScale = Math.min(scale, 10);
-        object.scale.setScalar(finalScale);
-    }
-}
-
+// Auto-orient and centering are now handled by the model editor module
 function loadModel(url) {
     showLoading();
     clearScene();
@@ -296,9 +278,13 @@ function loadModel(url) {
             geometry.computeVertexNormals();
             geometry.computeBoundingSphere();
 
-            centerAndScaleModel(currentModel);
+            // Use model editor's reset function for initial positioning
             scene.add(currentModel);
-            updateDebugControls();
+            centerAndScaleModel(currentModel);
+            
+            if (modelEditor) {
+                modelEditor.reset();
+            }
         },
         function (progress) {
             console.log('Loading progress:', progress);
@@ -310,7 +296,7 @@ function loadModel(url) {
     );
 }
 
-// Event listeners
+// Event listeners for file operations
 document.getElementById('fileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -320,54 +306,14 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
     }
 });
 
-document.getElementById('posX').addEventListener('input', updateModelTransform);
-document.getElementById('posY').addEventListener('input', updateModelTransform);
-document.getElementById('posZ').addEventListener('input', updateModelTransform);
-document.getElementById('rotX').addEventListener('input', updateModelTransform);
-document.getElementById('rotY').addEventListener('input', updateModelTransform);
-document.getElementById('rotZ').addEventListener('input', updateModelTransform);
-document.getElementById('scale').addEventListener('input', updateModelTransform);
-
-document.getElementById('resetModel').addEventListener('click', function() {
-    if (currentModel) {
-        centerAndScaleModel(currentModel);
-        updateDebugControls();
-    }
-});
-
-document.getElementById('autoOrient').addEventListener('click', function() {
-    if (currentModel) {
-        currentModel.rotation.set(0, 0, 0);
-        autoOrientModel(currentModel);
-        updateDebugControls();
-    }
-});
-
 document.getElementById('loadSample').addEventListener('click', function() {
     currentModelName = 'canti';
     const sampleUrl = './models/canti.stl';
     loadModel(sampleUrl);
 });
 
-document.getElementById('exportSTL').addEventListener('click', function() {
-    if (!currentModel) return;
-    
-    const clonedModel = currentModel.clone();
-    clonedModel.updateMatrixWorld();
-    
-    const geometry = clonedModel.geometry.clone();
-    geometry.applyMatrix4(clonedModel.matrixWorld);
-    
-    const stlData = exporter.parse(clonedModel, { binary: true });
-    
-    const blob = new Blob([stlData], { type: 'application/octet-stream' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${currentModelName}_reoriented.stl`;
-    link.click();
-    URL.revokeObjectURL(url);
-});
+// Editor toggle button
+document.getElementById('editorToggle').addEventListener('click', toggleEditor);
 
 // Animation controls
 document.getElementById('autoRotate').addEventListener('click', () => {
@@ -388,14 +334,25 @@ camera.position.set(2, 2, 5);
 camera.lookAt(0, 0, 0);
 cameraTarget = { x: 2, y: 2, z: 5 };
 
-// Initialize icosahedron navigator when DOM is ready
+// Initialize modular components when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize icosahedron navigator
     const navContainer = document.getElementById('icosahedronContainer');
     if (navContainer) {
         icosahedronNav = createIcosahedronNavigator(navContainer, camera, goToView);
         console.log('Icosahedron navigator initialized');
     } else {
         console.error('Icosahedron container not found');
+    }
+    
+    // Initialize model editor container (but don't show it initially)
+    editorContainer = document.getElementById('modelEditor');
+    if (editorContainer) {
+        // Remove from DOM initially - will be re-added when shown
+        editorContainer.remove();
+        console.log('Model editor container prepared');
+    } else {
+        console.error('Model editor container not found');
     }
 });
 
@@ -433,5 +390,5 @@ window.addEventListener('resize', function() {
 // Start animation
 animate();
 
-// Load initial model
+// Load default model
 loadModel('./models/canti.stl');
