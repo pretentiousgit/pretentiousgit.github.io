@@ -363,13 +363,13 @@ const setupEventListeners = (state) => {
   });
   
   // Wireframe toggle
-  const toggleButton = state.svg.parentElement.querySelector('#toggleWireframe');
-  if (toggleButton) {
-    toggleButton.addEventListener('click', () => {
-      state.showWireframe = !state.showWireframe;
-      render(state);
-    });
-  }
+  // const toggleButton = state.svg.parentElement.querySelector('#toggleWireframe');
+  // if (toggleButton) {
+  //   toggleButton.addEventListener('click', () => {
+  //     state.showWireframe = !state.showWireframe;
+  //     render(state);
+  //   });
+  // }
 };
 
 // Factory function that creates icosahedron navigator
@@ -389,9 +389,6 @@ const createIcosahedronNavigator = (containerElement, camera, onViewChange) => {
         <!-- Faces will be drawn by JavaScript -->
       </g>
     </svg>
-    <div class="nav-overlay">
-      <div class="nav-button" id="toggleWireframe" title="Toggle Wireframe">⬡</div>
-    </div>
   `;
 
   const state = createState(0.3, 0.5, camera, onViewChange);
