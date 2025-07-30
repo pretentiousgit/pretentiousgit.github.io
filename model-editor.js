@@ -1,6 +1,7 @@
 // Model Editor ES6 Module
 import * as THREE from 'three';
 import { autoOrientModel } from './model-utils.js';
+import { centerAndScaleModel } from './model-utils.js';
 
 // Create the editor state
 const createEditorState = (getModel, onModelChange, exportConfig) => ({

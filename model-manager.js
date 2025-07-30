@@ -16,6 +16,7 @@ const createModelManagerState = (scene, onModelChange, onLoadingChange) => ({
   currentIndex: 0,
   loadedGeometries: new Map(), // Cache geometries, not full meshes
   currentModel: null,
+  currentUploadedModelInfo: null, // Track uploaded file info
   isLoading: false
 });
 
@@ -103,6 +104,9 @@ const switchToModel = async (state, index) => {
     
     // Update current index
     state.currentIndex = index;
+    
+    // Clear uploaded model info since we're back to manifest
+    state.currentUploadedModelInfo = null;
     
     // Notify change
     if (state.onModelChange) {
@@ -229,6 +233,9 @@ const loadModelFromFile = async (state, file, customName = null) => {
     // Reset current index since we're outside manifest
     state.currentIndex = -1;
     
+    // Store uploaded model info
+    state.currentUploadedModelInfo = tempModelInfo;
+    
     // Notify change
     if (state.onModelChange) {
       state.onModelChange(state.currentModel, tempModelInfo);
@@ -281,7 +288,14 @@ const createModelManager = (scene, onModelChange, onLoadingChange) => {
   return {
     // Get current model info
     getCurrentModel: () => state.currentModel,
-    getCurrentModelInfo: () => getModelByIndex(state.currentIndex),
+    getCurrentModelInfo: () => {
+      // Return uploaded file info if current model is uploaded
+      if (state.currentIndex === -1 && state.currentUploadedModelInfo) {
+        return state.currentUploadedModelInfo;
+      }
+      // Otherwise return manifest model info
+      return getModelByIndex(state.currentIndex);
+    },
     getCurrentIndex: () => state.currentIndex,
     getModelCount: () => getModelCount(),
     getAllModels: () => state.models,
