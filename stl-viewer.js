@@ -1,11 +1,10 @@
-// STL Viewer Main Module with Modular Components
+// STL Viewer Main Module with Mobile Support and Model Management
 import * as THREE from 'three';
-import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { STLExporter } from 'three/addons/exporters/STLExporter.js';
 import { createIcosahedronNavigator } from './icosahedron-navigator.js';
 import { createModelEditor } from './model-editor.js';
-import { centerAndScaleModel } from './model-utils.js';
-
+import { createMobileCameraControls, isMobileDevice } from './mobile-camera-controls.js';
+import { createModelManager } from './model-manager.js';
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -83,8 +82,14 @@ const viewSequence = ['front', 'right', 'back', 'left', 'top', 'bottom'];
 // Initialize modular components
 let icosahedronNav = null;
 let modelEditor = null;
+let mobileControls = null;
+let modelManager = null;
 let editorContainer = null;
 let editorVisible = false;
+let isMobile = isMobileDevice();
+
+// STL Exporter for editor
+const exporter = new STLExporter();
 
 function animateCameraTo(targetPos, duration = 1000, updateNav = true) {
     const startPos = { 
@@ -112,6 +117,10 @@ function animateCameraTo(targetPos, duration = 1000, updateNav = true) {
             icosahedronNav.updateFromCamera(camera.position);
         }
         
+        if (updateNav && mobileControls) {
+            mobileControls.updateFromCamera(camera.position);
+        }
+        
         if (progress < 1) {
             requestAnimationFrame(updateCamera);
         } else {
@@ -120,7 +129,7 @@ function animateCameraTo(targetPos, duration = 1000, updateNav = true) {
     }
     
     autoRotateEnabled = false;
-    document.getElementById('autoRotate').classList.remove('active');
+    updateAutoRotateButtons();
     updateCamera();
 }
 
@@ -148,32 +157,60 @@ function goToPrevView() {
     goToView(viewName);
 }
 
-// Model loading system
-let currentModel = null;
-let currentModelName = 'model';
-const loader = new STLLoader();
-const exporter = new STLExporter();
-
-// Getter functions for model editor
-const getCurrentModel = () => currentModel;
-const getCurrentModelName = () => currentModelName;
-
-// Editor toggle functionality
-const showEditor = () => {
-    if (!editorContainer || editorVisible) return;
+// Auto rotate button state sync
+function updateAutoRotateButtons() {
+    const desktopBtn = document.getElementById('autoRotate');
+    const mobileBtn = document.getElementById('mobileAutoRotate');
     
-    // Re-insert the editor container into the DOM
+    if (desktopBtn) {
+        desktopBtn.classList.toggle('active', autoRotateEnabled);
+    }
+    if (mobileBtn) {
+        mobileBtn.classList.toggle('active', autoRotateEnabled);
+    }
+}
+
+// Model management callbacks
+function onModelChange(model, modelInfo) {
+    console.log(`Switched to model: ${modelInfo.name}`);
+    
+    // Update editor if it exists and is showing
+    if (modelEditor && editorVisible) {
+        modelEditor.updateFromModel();
+    }
+}
+
+function onLoadingChange(isLoading, message = '') {
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const errorDiv = document.getElementById('error');
+    
+    if (isLoading) {
+        loadingIndicator.textContent = message || 'Loading model...';
+        loadingIndicator.classList.remove('hidden');
+        errorDiv.classList.add('hidden');
+    } else {
+        loadingIndicator.classList.add('hidden');
+        if (message && message.includes('Failed')) {
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+    }
+}
+
+// Editor management (desktop only)
+const showEditor = () => {
+    if (isMobile || !editorContainer || editorVisible) return;
+    
     const infoPanel = document.getElementById('info');
     infoPanel.appendChild(editorContainer);
     
-    // Re-initialize the editor if needed
     if (!modelEditor) {
         modelEditor = createModelEditor(
             editorContainer, 
-            getCurrentModel, 
+            () => modelManager?.getCurrentModel() || null,
             onModelChange,
             { 
-                getModelName: getCurrentModelName, 
+                getModelName: () => modelManager?.getCurrentModelInfo()?.name || 'model',
                 exporter: exporter 
             }
         );
@@ -184,12 +221,10 @@ const showEditor = () => {
 };
 
 const hideEditor = () => {
-    if (!editorContainer || !editorVisible) return;
+    if (isMobile || !editorContainer || !editorVisible) return;
     
-    // Remove from DOM but keep reference
     editorContainer.remove();
     
-    // Destroy the editor instance to clean up listeners and intervals
     if (modelEditor) {
         modelEditor.destroy();
         modelEditor = null;
@@ -200,6 +235,8 @@ const hideEditor = () => {
 };
 
 const toggleEditor = () => {
+    if (isMobile) return;
+    
     if (editorVisible) {
         hideEditor();
     } else {
@@ -225,134 +262,160 @@ const updateToggleButton = () => {
     }
 };
 
-// Callback for model changes from editor
-const onModelChange = (model) => {
-    // Currently just exists for extensibility
-    // Could add validation, scene updates, etc.
-};
-
-function showLoading() {
-    document.getElementById('loadingIndicator').classList.remove('hidden');
-    document.getElementById('error').classList.add('hidden');
-}
-
-function hideLoading() {
-    document.getElementById('loadingIndicator').classList.add('hidden');
-}
-
-function showError(message) {
-    const errorDiv = document.getElementById('error');
-    errorDiv.textContent = message;
-    errorDiv.classList.remove('hidden');
-    hideLoading();
-}
-
-function clearScene() {
-    if (currentModel) {
-        scene.remove(currentModel);
-        currentModel = null;
-    }
-}
-
-// Auto-orient and centering are now handled by the model editor module
-function loadModel(url) {
-    showLoading();
-    clearScene();
-
-    loader.load(
-        url,
-        function (geometry) {
-            hideLoading();
-            
-            const material = new THREE.MeshPhongMaterial({ 
-                color: 0xffffff,
-                shininess: 100,
-                side: THREE.DoubleSide
-            });
-            
-            currentModel = new THREE.Mesh(geometry, material);
-            currentModel.castShadow = true;
-            currentModel.receiveShadow = true;
-            
-            geometry.deleteAttribute('normal');
-            geometry.computeVertexNormals();
-            geometry.computeBoundingSphere();
-
-            // Use model editor's reset function for initial positioning
-            scene.add(currentModel);
-            centerAndScaleModel(currentModel);
-            
-            if (modelEditor) {
-                modelEditor.reset();
-            }
-        },
-        function (progress) {
-            console.log('Loading progress:', progress);
-        },
-        function (error) {
-            console.error('Loading error:', error);
-            showError('Failed to load STL model: ' + error.message);
+// Handle responsive changes
+function handleResize() {
+    const wasDesktop = !isMobile;
+    isMobile = isMobileDevice();
+    
+    // Update camera aspect ratio
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    // If switching from desktop to mobile, clean up desktop components
+    if (wasDesktop && isMobile) {
+        if (editorVisible) {
+            hideEditor();
         }
-    );
+        if (icosahedronNav) {
+            // Icosahedron nav will be hidden by CSS
+        }
+    }
 }
 
-// Event listeners for file operations
-document.getElementById('fileInput').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        currentModelName = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
-        const url = URL.createObjectURL(file);
-        loadModel(url);
+// Set up event listeners
+function setupEventListeners() {
+    // Desktop-only file input
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && !isMobile && modelManager) {
+                // Load file through model manager
+                modelManager.loadFromFile(file);
+            }
+        });
     }
-});
 
-document.getElementById('loadSample').addEventListener('click', function() {
-    currentModelName = 'canti';
-    const sampleUrl = './models/canti.stl';
-    loadModel(sampleUrl);
-});
+    // Load sample button (desktop only)
+    const loadSampleBtn = document.getElementById('loadSample');
+    if (loadSampleBtn) {
+        loadSampleBtn.addEventListener('click', function() {
+            if (modelManager && !isMobile) {
+                modelManager.goToModel('canti');
+            }
+        });
+    }
 
-// Editor toggle button
-document.getElementById('editorToggle').addEventListener('click', toggleEditor);
+    // Editor toggle (desktop only)
+    const editorToggleBtn = document.getElementById('editorToggle');
+    if (editorToggleBtn) {
+        editorToggleBtn.addEventListener('click', toggleEditor);
+    }
 
-// Animation controls
-document.getElementById('autoRotate').addEventListener('click', () => {
-    autoRotateEnabled = !autoRotateEnabled;
-    document.getElementById('autoRotate').classList.toggle('active', autoRotateEnabled);
-});
+    // Desktop animation controls
+    const autoRotateBtn = document.getElementById('autoRotate');
+    if (autoRotateBtn) {
+        autoRotateBtn.addEventListener('click', () => {
+            autoRotateEnabled = !autoRotateEnabled;
+            updateAutoRotateButtons();
+        });
+    }
 
-document.getElementById('homeView').addEventListener('click', () => {
-    goToView('home');
-});
+    const homeViewBtn = document.getElementById('homeView');
+    if (homeViewBtn) {
+        homeViewBtn.addEventListener('click', () => goToView('home'));
+    }
 
-// Arrow navigation
-document.getElementById('nextView').addEventListener('click', goToNextView);
-document.getElementById('prevView').addEventListener('click', goToPrevView);
+    const nextViewBtn = document.getElementById('nextView');
+    if (nextViewBtn) {
+        nextViewBtn.addEventListener('click', goToNextView);
+    }
+
+    const prevViewBtn = document.getElementById('prevView');
+    if (prevViewBtn) {
+        prevViewBtn.addEventListener('click', goToPrevView);
+    }
+
+    // Mobile controls
+    const mobileAutoRotateBtn = document.getElementById('mobileAutoRotate');
+    if (mobileAutoRotateBtn) {
+        mobileAutoRotateBtn.addEventListener('click', () => {
+            autoRotateEnabled = !autoRotateEnabled;
+            updateAutoRotateButtons();
+        });
+    }
+
+    const mobileHomeViewBtn = document.getElementById('mobileHomeView');
+    if (mobileHomeViewBtn) {
+        mobileHomeViewBtn.addEventListener('click', () => goToView('home'));
+    }
+
+    const prevModelBtn = document.getElementById('prevModel');
+    if (prevModelBtn) {
+        prevModelBtn.addEventListener('click', () => {
+            if (modelManager) {
+                modelManager.prevModel();
+            }
+        });
+    }
+
+    const nextModelBtn = document.getElementById('nextModel');
+    if (nextModelBtn) {
+        nextModelBtn.addEventListener('click', () => {
+            if (modelManager) {
+                modelManager.nextModel();
+            }
+        });
+    }
+
+    // Window resize
+    window.addEventListener('resize', handleResize);
+}
 
 // Set initial camera position
 camera.position.set(2, 2, 5);
 camera.lookAt(0, 0, 0);
 cameraTarget = { x: 2, y: 2, z: 5 };
 
-// Initialize modular components when DOM is ready
+// Initialize components when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize icosahedron navigator
-    const navContainer = document.getElementById('icosahedronContainer');
-    if (navContainer) {
-        icosahedronNav = createIcosahedronNavigator(navContainer, camera, goToView);
-        console.log('Icosahedron navigator initialized');
+    console.log(`Initializing STL Viewer - Mobile: ${isMobile}`);
+    
+    // Initialize model manager
+    modelManager = createModelManager(scene, onModelChange, onLoadingChange);
+    
+    if (!isMobile) {
+        // Desktop initialization
+        const navContainer = document.getElementById('icosahedronContainer');
+        if (navContainer) {
+            icosahedronNav = createIcosahedronNavigator(navContainer, camera, goToView);
+            console.log('Icosahedron navigator initialized');
+        }
+        
+        editorContainer = document.getElementById('modelEditor');
+        if (editorContainer) {
+            editorContainer.remove();
+            console.log('Model editor container prepared');
+        }
     } else {
-        console.error('Icosahedron container not found');
+        // Mobile initialization
+        const canvas = renderer.domElement;
+        mobileControls = createMobileCameraControls(camera, canvas, (cameraPosition) => {
+            // Sync with camera target for auto-rotation
+            cameraTarget.x = cameraPosition.x;
+            cameraTarget.y = cameraPosition.y;
+            cameraTarget.z = cameraPosition.z;
+        });
+        console.log('Mobile camera controls initialized');
     }
     
-    // Initialize model editor container (but don't show it initially)
-    editorContainer = document.getElementById('modelEditor');
-    if (editorContainer) {
-        // Remove from DOM initially - will be re-added when shown
-        editorContainer.remove();
-        console.log('Model editor container prepared');
-    } else {
-        console.error('Model editor container not found');
+    // Set up event listeners
+    setupEventListeners();
+    
+    // Load default model
+    if (modelManager) {
+        modelManager.loadDefault(0); // Load first model (canti)
     }
 });
 
@@ -372,23 +435,18 @@ function animate() {
         camera.position.z = cameraTarget.z;
         camera.lookAt(0, 0, 0);
         
-        if (icosahedronNav) {
+        // Update navigation components
+        if (icosahedronNav && !isMobile) {
             icosahedronNav.updateFromCamera(camera.position);
+        }
+        
+        if (mobileControls && isMobile) {
+            mobileControls.updateFromCamera(camera.position);
         }
     }
     
     renderer.render(scene, camera);
 }
 
-// Handle window resize
-window.addEventListener('resize', function() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
 // Start animation
 animate();
-
-// Load default model
-loadModel('./models/canti.stl');
