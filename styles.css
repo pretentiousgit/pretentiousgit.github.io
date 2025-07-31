@@ -1,14 +1,77 @@
+@font-face {
+  font-family: 'Nougat-Normal';
+  src: url('./fonts/Nougat-Normal.woff2') format('woff2'),
+       url('./fonts/Nougat-Normal.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* Good for performance */
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap');
+
 :root {
     --primary-bg: #2e434e;
-    --panel-bg: rgba(0,0,0,0.7);
+    --panel-bg: rgba(0, 0, 0, 0.7);
     --text-color: white;
+    --bright-yellow: #FFD400;
     --accent-color: #4a9eff;
     --border-radius: 0.5rem;
     --primary-hue: 200;
     --face-opacity: 0.85;
     --stroke-width: 1.5;
-    --font-fam: "Fira Sans", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-fam-display: "Inter", "Epilogue", "Fira Sans", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-fam: "Inter", "Fira Sans", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+/* START RESET */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margins and padding */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Body setup */
+body {
+  margin: 0;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Media defaults */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Form elements */
+input, button, textarea, select {
+  font: inherit;
+}
+
+/* Remove list styles */
+ol, ul {
+  list-style: none;
+}
+
+/* Remove text decoration from links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Ensure text doesn't overflow */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* END RESET */
 
 html {
     font-family: var(--font-fam);
@@ -17,31 +80,118 @@ html {
 }
 
 body {
-    margin: 2rem;
+    background-color: var(--primary-bg);
 }
 
 main {
-    position: relative;
-    top: 0;
-    left:0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
     z-index: 10;
 }
 
-.logo {
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-fam-display);
+}
+
+h1 {
+    /* color: var(--text-color); */
+    color: #FFD400;
+    margin-bottom: 2rem;
+    font-size: 4rem;
+    letter-spacing: 0.1rem;
+    /* -webkit-text-stroke-width: 0.03rem;
+    -webkit-text-stroke-color: var(--primary-bg); */
+}
+
+h1 {
+    color: var(--bright-yellow);
+    /* Remove any text-stroke properties */
+    
+    /* Add drop shadow instead */
+    text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 1),
+        1px 1px 2px rgba(0, 0, 0, 1);
+}
+
+/* Or for a more subtle effect */
+/* h1 {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+} */
+
+/* Or for a "floating" effect */
+/* h1 {
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+} */
+
+
+.container {
+    max-height: 100vh;
+    min-width: 100vw;
+    overflow: hidden;
+}
+.logo-container {
     position: fixed;
-    top: -35%;
-    left:0;
+    /* Always full height, width calculated from aspect ratio */
+    height: 100vh;
+    width: calc(100vh * 63 / 72); /* Maintains 63:72 aspect ratio */
+    top: 0; /* Start at top */
+    left: 0;
     z-index: -1;
+    /* Allow overflow to be clipped */
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
     width: 100%;
+    height: 100%;
+    /* This ensures it fills the container completely */
+    object-fit: cover; /* Changed from 'contain' to 'cover' */
+}
+
+.logo path {
+    fill: #fff;
+}
+
+.particle-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    mix-blend-mode: color-burn; /* or screen, overlay, etc. */
+}
+
+.particle {
+    pointer-events: none;
+    fill: #FFF;
+    /* particle.setAttribute("fill", "#ffee00"); */
+    /* fill: var(--accent-color); */
+    /* mix-blend-mode: screen; */
+}
+
+.instructions {
+    text-align: center;
+    color: var(--text-color);
+    margin-top: 2rem;
+    opacity: 0.8;
 }
 
 @media (width < 758px) {
-  .logo {
+    /* .logo {
         position: fixed;
         top: -5%;
         left: 0;
         z-index: -1;
         width: auto;
         height: 150vh;
-    }
+    } */
 }

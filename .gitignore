@@ -59,3 +59,6 @@ build/
 # IDE/Editor specific
 .vscode/settings.json
 .vscode/launch.json
+
+# fonts
+fonts/
