@@ -19,12 +19,37 @@
     />
     <link rel="stylesheet" href="styles.css" />
     <script src="./script.js" defer></script>
+    <script src="./heatwave.js" defer></script>
   </head>
   <body>
     <div class="container">
       <main>
         <header>
-          <h1>Alex Leitch</h1>
+           <div class="heat-wave-container" id="heatContainer">
+            <svg class="heat-wave-svg" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <filter id="heatwave" primitiveUnits="objectBoundingBox" x="-50%" y="-50%" width="200%" height="200%">
+                        <!-- Heat wave displacement filter -->
+                        <feTurbulence type="fractalNoise" baseFrequency="0 0.05" numOctaves="1" result="warp" seed="42" />
+
+                        <feOffset in="warp" dx="0" dy="-.5" id="offset1" result="offset1" />
+                        <feOffset in="warp" dx="0" dy=".5" id="offset2" result="offset2" />
+
+                        <feMerge result="merged">
+                            <feMergeNode in="offset1" />
+                            <feMergeNode in="offset2" />
+                        </feMerge>
+
+                        <feGaussianBlur stdDeviation=".01" result="blur" />
+                        <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale=".05" in="SourceGraphic" result="displaced" />
+                    </filter>
+                </defs>
+
+                <text x="210" y="120" text-anchor="middle" class="heat-wave-text">Alex Leitch</text>
+            </svg>
+        </div>
+
+          <!-- <h1>Alex Leitch</h1> -->
           <h3>computational sociology & interaction design</h3>
           <nav>
             <ul>
@@ -40,7 +65,7 @@
                 <h4><a href="#writing">Writing</a></h4>
               </li>
               <li>
-                <h4><a href="#cv">CV</a></h4>
+                <h4><a href="#bio">Bio</a></h4>
               </li>
             </ul>
           </nav>
@@ -77,6 +102,12 @@
             <li><a href="./gamestorming/">Gamestorming ⇒</a></li>
             <li>
               <a href="./small-solutions/">Small Solutions App Generator ⇒</a>
+            </li>
+            <li>
+              <a href="./stl-viewer/">STL Model previewer using Three.js ⇒</a>
+            </li>
+            <li>
+              <a href="./twison-base/">Base page for a Twine visual novel exported with Twison ⇒</a>
             </li>
           </ul>
         </section>
@@ -233,47 +264,16 @@
             how people close to the tech industry handled the culture industry.
           </p>
         </section>
-        <section id="cv">
-          <h3><a href="#">Curriculum Vitae</a></h3>
-        </section>
-        <section>
-          <a href="#">CV</a>
-          <ul>
-            <li>Projects</li>
-            <li>
-              Teaching
-              <ul>
-                <li>Interaction Design</li>
-                <li>Game Design</li>
-                <li>Programming Human-Centered Interfaces</li>
-              </ul>
-            </li>
-
-            <li>Publications</li>
-            -> ACM Library Search goes here. -> two carlos prado books
-            <li>GitHub</li>
-          </ul>
-          <!-- <nav>
-            Projects
-            <ul>
-              <li>
-                <a href="./viewer.html">Sticks And Clips (2024-)</a>
-              </li>
-              <li><a href="svgDemo.html">svgAnimations</a></li>
-              <li>Strain (2024)</li>
-              <li>FiddleHex (2023)</li>
-              <li>Laser Routing (2023)</li>
-              <li>Keycaps (2020)</li>
-              <li>Aqualith (2018)</li>
-              <li>HotHouse (2017)</li>
-              <li>Nebula Space Derby (2017)</li>
-              <li>NYC tenement generator (2019-ongoing)</li>
-            </ul>
-          </nav> -->
+        <section id="bio">
+          <h3><a href="#">About</a></h3>
+          <p><a href="  ">This year's CV</a></p>
+          <p>
+            Alex Leitch is a lecturer and PhD student at the University of Maryland, College Park. They teach courses on how computers interact with people and vice-versa. Alex's current research is on how people's use of tools impacts their understanding and acceptance of differing visions of the technical future.
+          </p>
         </section>
       </main>
       <div class="logo-container">
-        <!-- Your original SVG logo -->
+        <!-- SVG logo file -->
         <svg
           class="logo"
           viewBox="0 0 63 72"

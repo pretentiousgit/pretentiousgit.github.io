@@ -169,6 +169,7 @@ nav li {
 a.title {
     display: block;
 }
+
 .container {
     max-height: 100vh;
     max-width: 60vw;
@@ -222,12 +223,42 @@ a.title {
     fill: var(--highlight-bg);
 }
 
-.instructions {
-    text-align: center;
-    color: var(--text-color);
-    margin-top: 2rem;
-    opacity: 0.8;
+/* Heat wave effect */
+.heat-wave-container {
+    /* position: relative;
+    width: 100%;
+    text-align: center; */
 }
+
+.heat-wave-text {
+    font-size: clamp(3rem, 8vw, 8rem);
+    fill: var(--text-display);
+    font-family: var(--font-fam-display);
+}
+
+.heat-wave-svg {
+    width: 100%;
+    height: auto;
+}
+
+/* Hide heat wave filter by default */
+.heat-wave-text {
+    filter: none;
+    transition: filter 0.3s ease;
+}
+
+/* Apply heat wave on hover or active class */
+.heat-wave-container:hover .heat-wave-text,
+.heat-wave-container.active .heat-wave-text {
+    filter: url(#heatwave);
+}
+
+@media (width < 758px) {
+    .heat-wave-container.mobile-heat .heat-wave-text {
+        filter: url(#heatwave);
+    }
+}
+
 
 @media (width < 758px) {
     .container {
