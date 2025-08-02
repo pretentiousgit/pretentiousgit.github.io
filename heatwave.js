@@ -51,29 +51,9 @@ function stopHeatWave() {
 heatContainer.addEventListener("mouseenter", startHeatWave);
 heatContainer.addEventListener("mouseleave", stopHeatWave);
 
-// Mobile intermittent effect
-function setupMobileEffect() {
-  if (window.innerWidth < 758) {
-    setInterval(() => {
-      if (Math.random() < 0.3) {
-        // 30% chance
-        heatContainer.classList.add("mobile-heat");
-        startHeatWave();
-
-        setTimeout(() => {
-          heatContainer.classList.remove("mobile-heat");
-          stopHeatWave();
-        }, 2000);
-      }
-    }, 4000);
-  }
-}
-
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
   // Set initial offset values
   setOffset(offset1, offsetStart);
   setOffset(offset2, offsetStart - 0.5);
-
-  setupMobileEffect();
 });
