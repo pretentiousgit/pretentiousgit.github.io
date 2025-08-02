@@ -9,28 +9,22 @@ let lastMouseMove = 0;
 let particleId = 0;
 let isOverYellowPath = false;
 
+const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
 // Convert screen coordinates to SVG coordinates
 const getOverlayCoords = (e) => {
   const rect = overlay.getBoundingClientRect();
-  const svgX = (e.clientX - rect.left) * (63 / rect.width);
-  const svgY = (e.clientY - rect.top) * (72 / rect.height);
+  const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+  const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+  
+  const svgX = (clientX - rect.left) * (63 / rect.width);
+  const svgY = (clientY - rect.top) * (72 / rect.height);
   return { x: svgX, y: svgY };
 };
 
 // Global mouse tracking with hit detection
 document.addEventListener("mousemove", (e) => {
   // Check what element is under the mouse
-//   const elementUnderMouse = document.elementFromPoint(e.clientX, e.clientY);
-//   isOverYellowPath =
-//     elementUnderMouse && elementUnderMouse.classList.contains("st0");
-
-//   if (isOverYellowPath) {
-//     const coords = getOverlayCoords(e);
-//     mouseX = coords.x;
-//     mouseY = coords.y;
-//     lastMouseMove = Date.now();
-//   }
-
   if (logoPath) {
     // Convert screen coords to SVG coords and test the path
     const point = logoPath.ownerSVGElement.createSVGPoint();
@@ -48,6 +42,45 @@ document.addEventListener("mousemove", (e) => {
     }
   }
 });
+
+document.addEventListener("touchmove", (e) => {
+  const touch = e.touches[0];
+  
+  if (logoPath) {
+    // Use same hit detection logic as mouse
+    const point = logoPath.ownerSVGElement.createSVGPoint();
+    point.x = touch.clientX;
+    point.y = touch.clientY;
+    const svgPoint = point.matrixTransform(logoPath.getScreenCTM().inverse());
+    
+    isOverYellowPath = logoPath.isPointInFill(svgPoint);
+    
+    if (isOverYellowPath) {
+      // Convert touch coords using existing function
+      const coords = getOverlayCoords(touch);
+      mouseX = coords.x;
+      mouseY = coords.y;
+      lastMouseMove = Date.now();
+    }
+  }
+}, { passive: true });
+
+// Scroll-triggered particle bursts
+let lastScrollTime = 0;
+window.addEventListener('scroll', () => {
+  const now = Date.now();
+  if (now - lastScrollTime > 500) { // Throttle to every 500ms
+    const xCore = randomInt(5, 31.5);
+    const yCore = randomInt(12, 72);
+
+    // Create a small burst
+    if (particles.length < 20) { // Don't overwhelm with particles
+      createParticle(xCore, yCore); // Center of 63x72 viewBox
+      createParticle(xCore, yCore);
+    }
+    lastScrollTime = now;
+  }
+}, { passive: true });
 
 // Create a new particle
 const createParticle = (x, y) => {
