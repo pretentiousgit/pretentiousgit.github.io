@@ -25,31 +25,64 @@
     <div class="container">
       <main>
         <header>
-           <div class="heat-wave-container" id="heatContainer">
+          <div class="heat-wave-container" id="heatContainer">
             <svg class="heat-wave-svg" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <filter id="heatwave" primitiveUnits="objectBoundingBox" x="-50%" y="-50%" width="200%" height="200%">
-                        <!-- Heat wave displacement filter -->
-                        <feTurbulence type="fractalNoise" baseFrequency="0 0.05" numOctaves="1" result="warp" seed="42" />
+              <defs>
+                <filter
+                  id="heatwave"
+                  primitiveUnits="objectBoundingBox"
+                  x="-50%"
+                  y="-50%"
+                  width="200%"
+                  height="200%"
+                >
+                  <!-- Heat wave displacement filter -->
+                  <feTurbulence
+                    type="fractalNoise"
+                    baseFrequency="0 0.05"
+                    numOctaves="1"
+                    result="warp"
+                    seed="42"
+                  />
 
-                        <feOffset in="warp" dx="0" dy="-.5" id="offset1" result="offset1" />
-                        <feOffset in="warp" dx="0" dy=".5" id="offset2" result="offset2" />
+                  <feOffset
+                    in="warp"
+                    dx="0"
+                    dy="-.5"
+                    id="offset1"
+                    result="offset1"
+                  />
+                  <feOffset
+                    in="warp"
+                    dx="0"
+                    dy=".5"
+                    id="offset2"
+                    result="offset2"
+                  />
 
-                        <feMerge result="merged">
-                            <feMergeNode in="offset1" />
-                            <feMergeNode in="offset2" />
-                        </feMerge>
+                  <feMerge result="merged">
+                    <feMergeNode in="offset1" />
+                    <feMergeNode in="offset2" />
+                  </feMerge>
 
-                        <feGaussianBlur stdDeviation=".01" result="blur" />
-                        <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale=".05" in="SourceGraphic" result="displaced" />
-                    </filter>
-                </defs>
+                  <feGaussianBlur stdDeviation=".01" result="blur" />
+                  <feDisplacementMap
+                    xChannelSelector="R"
+                    yChannelSelector="G"
+                    scale=".05"
+                    in="SourceGraphic"
+                    result="displaced"
+                  />
+                </filter>
+              </defs>
 
-                <text x="210" y="120" text-anchor="middle" class="heat-wave-text">Alex Leitch</text>
+              <text x="210" y="120" text-anchor="middle" class="heat-wave-text">
+                Alex Leitch
+              </text>
             </svg>
-        </div>
+          </div>
 
-          <!-- <h1>Alex Leitch</h1> -->
+          <h1>Alex Leitch</h1>
           <h3>computational sociology & interaction design</h3>
           <nav>
             <ul>
@@ -87,17 +120,15 @@
           </p>
           <p>
             At UMD, I collaborate with Dr. Jen Golbeck's lab on AI and social
-            media research, where my writing spans papers on AI art generation and
-            large language models to research on core expressions of sociality.
-            This work explores how we shape, and are shaped by, our uncertain
-            tools.
+            media research, where my writing spans papers on AI art generation
+            and large language models to research on core expressions of
+            sociality. This work explores how we shape, and are shaped by, our
+            uncertain tools.
           </p>
         </section>
         <section id="tools">
           <h3><a href="#">Tools</a></h3>
-          <p>
-            Code toys I keep alive to help run my classes.
-          </p>
+          <p>Code toys I keep alive to help run my classes.</p>
           <ul>
             <li><a href="./gamestorming/">Gamestorming ⇒</a></li>
             <li>
@@ -107,13 +138,19 @@
               <a href="./stl-viewer/">STL Model previewer using Three.js ⇒</a>
             </li>
             <li>
-              <a href="./twison-base/">Base page for a Twine visual novel exported with Twison ⇒</a>
+              <a href="./twison-base/"
+                >Base page for a Twine visual novel exported with Twison ⇒</a
+              >
             </li>
           </ul>
         </section>
         <section id="teaching">
           <h3><a href="#">Teaching</a></h3>
-          <p>This is a list of classes I have designed for UMD. I have previously taught independent workshops at ITP-NYU, OCADu, and for a variety of private clients.</p>
+          <p>
+            This is a list of classes I have designed for UMD. I have previously
+            taught independent workshops at ITP-NYU, OCADu, and for a variety of
+            private clients.
+          </p>
           <h4>Interaction Design</h4>
           <p>
             A graduate-level design course that takes students through how to
@@ -171,7 +208,9 @@
             digital fabrication, with a dab of art history.
           </p>
           <p>
-            <a class="title" href="https://dl.acm.org/doi/full/10.1145/3706599.3716214"
+            <a
+              class="title"
+              href="https://dl.acm.org/doi/full/10.1145/3706599.3716214"
               >Unlimited Editions: Documenting Human Style in AI Art Generation
               (2025)</a
             >I've been writing about the tech industry's distaste for older
@@ -183,13 +222,20 @@
             <a class="title" href="https://doi.org/10.48550/arXiv.2404.08065"
               >Ephemeral Myographic Motion: Repurposing the Myo Armband to
               Control Disposable Pneumatic Sculptures. 2024.</a
-            > <a class="title" href="https://media.ccc.de/v/37c3-57905-encapsulated-electromyography-with-myo-and-raspi">Related talk at CCC 2024.</a>
-            This paper covers the reverse engineering and development of
-            an interactive pneumatic sculpture that responds to the Myo armband,
+            >
+            <a
+              class="title"
+              href="https://media.ccc.de/v/37c3-57905-encapsulated-electromyography-with-myo-and-raspi"
+              >Related talk at CCC 2024.</a
+            >
+            This paper covers the reverse engineering and development of an
+            interactive pneumatic sculpture that responds to the Myo armband,
             support defunct since 2014.
           </p>
           <p>
-            <a class="title" href="https://dl.acm.org/doi/full/10.1145/3720554.3735861"
+            <a
+              class="title"
+              href="https://dl.acm.org/doi/full/10.1145/3720554.3735861"
               >Evaluating Machine Expertise: How Graduate Students Develop
               Frameworks for Assessing GenAI Content</a
             >
@@ -199,7 +245,9 @@
             domestic advice eventually.
           </p>
           <p>
-            <a class="title" href="https://dl.acm.org/doi/full/10.1145/3717867.3717877"
+            <a
+              class="title"
+              href="https://dl.acm.org/doi/full/10.1145/3717867.3717877"
               >Cross-Platform Violence Detection on Social Media: A Dataset and
               Analysis</a
             >
@@ -225,7 +273,9 @@
             as a senior javascript developer.
           </p>
           <p>
-            <a class="title" href="https://www.torrossa.com/en/resources/an/5524562#page=152"
+            <a
+              class="title"
+              href="https://www.torrossa.com/en/resources/an/5524562#page=152"
               >Truth, Post-Truth, and Subscriptions: Consensus, Truth, and
               Social Norms in Algorithmic Media. 2017.</a
             >
@@ -235,7 +285,8 @@
             be the most truthful.
           </p>
           <p>
-            <a class="title" 
+            <a
+              class="title"
               href="https://www.bloomsbury.com/us/social-media-and-your-brain-9781440854538/"
               >Exclusive Spaces. 2016.</a
             >
@@ -244,15 +295,16 @@
             easy to develop a strong sense of inclusive fellow-feeling.
           </p>
           <p>
-            <a class="title" 
+            <a
+              class="title"
               href="https://medium.com/@aeleitch/the-king-is-dead-long-live-the-king-cd3f917734a5"
               >The King is Dead, Long Live The King. 2015.</a
             >
             This essay on how difficult it is to catch a break in Canadian
-            retail did something like 225,000 views when it went live just after
-            the closure of Target in Canada. Canada's now seen the Hudson Bay
-            itself close; retail is very difficult in Canada. It is much
-            <em>more</em> difficult when hedge funds get involved, but the
+            retail did something like 225,000 views in an hour when it went live
+            just after the closure of Target in Canada. Canada's now seen the
+            Hudson Bay itself close; retail is very difficult in Canada. It is
+            much <em>more</em> difficult when hedge fund debts get involved, but the
             distances, population gap, and centralization of the fashion
             industry in Quebec - and China - hasn't changed much in ten years.
           </p>
@@ -261,14 +313,18 @@
               Viridian Design versus the Culture Industry. 2013.</a
             >
             This polemic adequately expresses my dislike, even at the time, for
-            how people close to the tech industry handled the culture industry.
+            how people close to the tech industry handle the culture industry.
           </p>
         </section>
         <section id="bio">
           <h3><a href="#">About</a></h3>
           <p><a href="  ">This year's CV</a></p>
           <p>
-            Alex Leitch is a lecturer and PhD student at the University of Maryland, College Park. They teach courses on how computers interact with people and vice-versa. Alex's current research is on how people's use of tools impacts their understanding and acceptance of differing visions of the technical future.
+            Alex Leitch is a lecturer and PhD student at the University of
+            Maryland, College Park. They teach courses on how computers interact
+            with people and vice-versa. Alex's current research is on how
+            people's use of tools impacts their understanding and acceptance of
+            differing visions of the technical future.
           </p>
         </section>
       </main>
