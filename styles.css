@@ -157,6 +157,12 @@ section {
     display: none;
 }
 
+section {
+    opacity: 0;
+    transform: translateY(20px); /* Slide up effect */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
 section.active {
     opacity: 0;
     transition: opacity 0.3s ease;
