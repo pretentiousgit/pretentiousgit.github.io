@@ -5,13 +5,9 @@
     font-weight: normal;
     font-style: normal;
     font-display: swap;
-    /* Good for performance */
 }
 
-
 @import url('https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&display=swap');
-/* @import url('https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap'); */
-/* @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap'); */
 
 :root {
     --primary-bg: hsl(201, 26%, 24%);
@@ -21,185 +17,66 @@
     --text-color: white;
     --text-display: hsl(201, 26%, 24%);
     --bright-yellow: #FFD400;
-    --accent-color: #4a9eff;
+    --accent-color: #ff6b6b;
+    --fade-color: hsl(201, 25%, 50%);
     --border-radius: 0.5rem;
-    --primary-hue: 200;
-    --face-opacity: 0.85;
-    --stroke-width: 1.5;
-    --font-fam-display: "Nougat-Normal", "Fira Sans", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    --font-fam: "Epilogue", "Fira Sans", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-fam-display: "Nougat-Normal", "Fira Sans", sans-serif;
+    --font-fam: "Epilogue", "Fira Sans", sans-serif;
 }
 
-/* START RESET */
-
-*,
-*::before,
-*::after {
+/* RESET */
+*, *::before, *::after {
     box-sizing: border-box;
 }
 
-/* Remove default margins and padding */
 * {
     margin: 0;
     padding: 0;
 }
 
-/* Body setup */
 body {
-    margin: 0;
     font-size: 1.3rem;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
-    font-optical-sizing: auto;
+    font-family: var(--font-fam);
+    color: var(--primary-bg);
+    background-color: var(--highlight-bg);
 }
 
-/* Media defaults */
-img,
-picture,
-video,
-canvas,
-svg {
+img, picture, video, canvas, svg {
     display: block;
     max-width: 100%;
 }
 
-/* Form elements */
-input,
-button,
-textarea,
-select {
+input, button, textarea, select {
     font: inherit;
 }
 
-/* Remove list styles */
-ol,
-ul {
+ol, ul {
     list-style: none;
 }
 
-/* Remove text decoration from links */
 a {
-    /* text-decoration: none; */
     color: inherit;
 }
 
-/* Ensure text doesn't overflow */
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+p, h1, h2, h3, h4, h5, h6 {
     overflow-wrap: break-word;
 }
 
-/* END RESET */
-
-html {
-    font-family: var(--font-fam);
-    font-size: 16px;
-    color: var(--primary-bg);
-}
-
-body {
-    background-color: var(--highlight-bg);
-}
-
+/* LAYOUT */
 main {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-    margin-bottom: 2rem;
-
+    position: relative;
     z-index: 10;
-}
-
-p {
-    font-size: 1.2rem;
-}
-
-h1,
-h2,
-h3 {
-    color: var(--text-display);
-}
-
-h1 {
-    font-size: 4rem;
-}
-
-h3 {
-    font-size: 1.5rem;
-}
-
-header h1 {
-    margin: 0;
-    padding: 0;
-    margin-bottom: -25px;
-    font-size: 8rem;
-    font-family: var(--font-fam-display);
-    line-height: 8rem;
-}
-
-header h1 {
-    display: none;
-}
-
-header {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-/* Manage visual navigation of website */
-section {
-    display: none;
-}
-
-section {
-    opacity: 0;
-    transform: translateY(20px); /* Slide up effect */
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-}
-
-section.active {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    opacity: 1;
-    
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-nav ul {
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-nav li {
-    /* Inherits text styles automatically */
-}
-
-a.title {
-    display: block;
-}
-
-a.header-link {
-    text-decoration: none;
+    padding-left: 1rem;
+    padding-bottom: 3rem;
 }
 
 .container {
-    max-height: 100vh;
     max-width: 45vw;
 }
 
-.content{
+.content {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -212,17 +89,98 @@ a.header-link {
     padding: 0 1rem;
 }
 
+/* SECTIONS - Fixed the height issue */
+section {
+    margin: 0 0.8rem;
+    padding-bottom: 3rem;
+    display: flex; 
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s ease-out;
+}
+
+section.hidden {
+    display: none;
+}
+
+section.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* TYPOGRAPHY */
+p {
+    font-size: 1.2rem;
+}
+
+h1, h2, h3 {
+    color: var(--text-display);
+}
+
+h1 {
+    font-size: 4rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+header h1 {
+    font-size: 8rem;
+    font-family: var(--font-fam-display);
+    line-height: 8rem;
+    margin-bottom: -25px;
+    display: none; /* Hidden by default, shown on mobile */
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* header h3 {
+    padding-bottom: 1rem;
+    border-bottom: 1px var(--primary-bg) solid;
+} */
+
+/* NAVIGATION */
+nav ul {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+nav a {
+    color: var(--fade-color)
+}
+
+nav a.active {
+    color: var(--primary-bg);
+}
+
+a.title {
+    display: block;
+}
+
+a.header-link {
+    text-decoration: none;
+}
+
+/* LOGO */
 .logo-container {
     position: fixed;
-    /* Always full height, width calculated from aspect ratio */
     height: 100vh;
     width: calc(100vh * 63 / 72);
-    /* Maintains 63:72 aspect ratio */
     top: 0;
-    /* Start at top */
     left: 0;
     z-index: -1;
-    /* Allow overflow to be clipped */
     overflow: hidden;
     isolation: isolate;
 }
@@ -234,9 +192,7 @@ a.header-link {
     z-index: 1;
     width: 100%;
     height: 100%;
-    /* This ensures it fills the container completely */
     object-fit: cover;
-    /* Changed from 'contain' to 'cover' */
     mix-blend-mode: multiply;
 }
 
@@ -260,79 +216,140 @@ a.header-link {
     fill: var(--highlight-bg);
 }
 
-/* Heat wave effect */
+/* HEAT WAVE EFFECT */
 .heat-wave-container {
-    /* position: relative;
-    width: 100%;
-    text-align: center; */
+    height: auto;
 }
 
 .heat-wave-text {
-    font-size: clamp(3rem, 8vw, 8rem);
+    /* font-size: clamp(3rem, 20cqw, 8rem); */
+    font-size: 6.8rem;
     fill: var(--text-display);
     font-family: var(--font-fam-display);
-}
-
-.heat-wave-svg {
-    width: 100%;
-    height: 120px;
-}
-
-/* Hide heat wave filter by default */
-.heat-wave-text {
     filter: none;
     transition: filter 0.3s ease;
 }
 
-/* Apply heat wave on hover or active class */
+.heat-wave-svg {
+    width: 100%;
+    /* height: 120px; */
+}
+
 .heat-wave-container:hover .heat-wave-text,
 .heat-wave-container.active .heat-wave-text {
     filter: url(#heatwave);
 }
 
+#reset {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    
+    /* Remove any inherited styles */
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    text-decoration: none;
+    
+    /* Remove focus outline if handled elsewhere */
+    outline: none;
+    
+    transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+#reset:hover {
+    opacity: 0.8;
+}
+
+#reset:active {
+    transform: scale(0.98);
+}
+
+#reset:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+    border-radius: var(--border-radius);
+}
+
+#reset {
+    padding: 1rem;
+}
+
+#reset svg {
+    display: block;
+    width: 100%; /* or specific size */
+    height: auto;
+    pointer-events: none; /* prevents image from interfering with button clicks */
+}
+
+#reset svg {
+    width: 50px;
+    transform: rotate(-90deg);
+
+    background: none;
+    background-color: transparent;
+}
+
+#reset path {
+    fill: var(--primary-bg); /* color for the SVG paths */
+}
+
+/* RESPONSIVE */
 @media (width < 758px) {
     .container {
         max-width: 100vw;
     }
 
+    main {
+        padding-left: 0;
+        padding-right: 1rem;
+    }
+
     nav ul {
-        flex-direction: column;
+        justify-content: space-around;
         flex-wrap: wrap;
-        gap: 0.5rem;
+    }
+
+    header a{
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
     }
 
     header h1 {
-        font-size: 6rem;
         display: block;
-        line-height: 8rem;
+        font-size: 6rem;
+        letter-spacing: 0.2rem;
+        line-height: normal;
     }
 
+    header h3 {
+        font-size: 1.3rem;
+    }
     .heat-wave-svg {
         display: none;
     }
+}
 
-    @media (width < 390px) {
-        header h1 {
-            line-height: 6rem;
-            margin-top: -1.2rem;
-        }
+@media (width < 390px) {
+    header h1 {
+        font-size: 6rem;
+        line-height: 6rem;
+        margin-top: -1.2rem;
+    }
 
-        h3 {
-            font-size: 1.2rem;
-        }
+    .header-link {
+        display: flex;
+        flex-direction: column;
+        gap: 1.4rem;
+    }
 
-        .header-link {
-            display: flex;
-            flex-direction: column;
-            gap: 1.4rem;
-        }
-
-        nav ul {
-            flex-direction: row;
-            flex-wrap: wrap;
-            /* gap: 0.8rem; */
-            justify-content: space-around;
-            font-size: 1.2rem;
-        }
+    nav ul {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        font-size: 1.2rem;
     }
 }
