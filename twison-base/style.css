@@ -1,0 +1,152 @@
+/* CSS files add styling rules to your content */
+/* Import Open Sans font */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Carter+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&family=Atkinson+Hyperlegible&display=swap');
+
+/* Modern gaming aesthetic with warm grays */
+:root {
+ /* Colors */
+ --warm-gray-100: #f7f3f0;
+ --warm-gray-200: #e8e4e1;
+ --warm-gray-800: #3d3b3c;
+ --accent: #ff6b6b;
+ 
+ /* Typography */
+ --heading-font: 'Space Grotesk', system-ui;
+ --body-font: 'Atkinson Hyperlegible', 'Open Sans', sans-serif, system-ui;
+ 
+ /* Spacing */
+ --space-sm: 0.5rem;
+ --space-md: 1rem;
+ --space-lg: 1.5rem;
+ 
+ /* Effects */
+ --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+ --shadow-lg: 0 2px 12px rgba(0,0,0,0.08);
+ --radius-sm: 6px;
+ --radius-lg: 12px;
+}
+
+* {
+  font-family: var(--body-font);
+}
+
+body {
+ margin: 0;
+ background-color: var(--warm-gray-100);
+ color: var(--warm-gray-800);
+  display: flex;
+  flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+
+h1, h2, h3, h4, h5 {
+ font-family: var(--heading-font);
+ font-weight: 600;
+ letter-spacing: -0.02em;
+ margin: 0;
+}
+
+header {
+  background: var(--warm-gray-200);
+  width: 100%; /* Make it span full width */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1.5rem 0; /* Changed to only vertical padding */
+  margin-bottom: 2rem;
+  box-sizing: border-box; /* Ensures padding doesn't add to width */
+}
+
+header h1 {
+    color: var(--warm-gray-800);
+}
+
+b {
+  font-weight: 700;
+}
+
+.hidden {
+    display: none;
+}
+
+.body-text {
+ font-family: var(--body-text);
+ line-height: 1.6;
+ background: white;
+ box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+ border-radius: 12px;
+}
+
+.header_subtitle {
+  font-family: var(--heading-font);
+}
+
+/* new CSS */
+.choices {
+background: var(--warm-gray-800);
+ border-radius: var(--radius-lg);
+ padding: var(--space-md);
+ margin: var(--space-md);
+ box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+ position: relative;
+ z-index: 2;
+}
+
+.choices button {
+ font-family: var(--header-font);
+ color: var(--warm-gray-100);
+  
+ border: 1px solid var(--warm-gray-200);
+ border-radius: var(--radius-sm);
+  
+ display: block;
+ width: 100%;
+ padding: 0.5rem;
+ margin: 0.5rem 0;
+ background: transparent;
+ text-align: left;
+ cursor: pointer;
+ transition: background 0.2s;
+}
+
+button:hover {
+ border: solid 1px var(--accent);
+}
+
+#story-display {
+  margin: 2rem;
+}
+
+/* Keep your existing restart button styles */
+.restart-btn {
+  position: fixed;
+  top: var(--space-md);
+  right: var(--space-md);
+  background: var(--warm-gray-800);
+  color: var(--warm-gray-100);
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+/* Add media query for mobile devices */
+@media screen and (max-width: 768px) {
+  .restart-btn {
+    position: static; /* Remove fixed positioning */
+    margin: 1rem 0.5rem; /* Negative top margin to pull it up closer to header */
+    font-size: 0.9rem; /* Slightly smaller text on mobile */
+    order: 1;
+  }
+  
+  /* Adjust main content spacing */
+  main {
+    width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+}

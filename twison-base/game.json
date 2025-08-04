@@ -1,0 +1,148 @@
+
+
+{
+  "passages": [
+    {
+      "text": "It's pouring rain, dark out. \n\nYou are standing outside the door of a large house. Your car broke down about half a mile ago, and there's no streetlights.\n\nThere's a light on in an upstairs window. You can see a driveway curving around to a garage. There seems to be a path down the opposite side of the house as well.\n\nWhat do you do?\n\n\n1. (t8n-depart:\"blur\")+(t8n-arrive:\"flicker\")[[Walk down the driveway to the garage. Maybe you can find someone to help with the car.->Garage]]\n2. (t8n-depart:\"blur\")+(t8n-arrive:\"flicker\")[[Check out the side path to the back door->Back door]]\n3. (t8n-depart:\"blur\")+(t8n-arrive:\"flicker\")[[Head up and bang on the front door->Front door]]",
+      "links": [
+        {
+          "name": "Walk down the driveway to the garage. Maybe you can find someone to help with the car.",
+          "link": "Garage",
+          "pid": "4"
+        },
+        {
+          "name": "Check out the side path to the back door",
+          "link": "Back door",
+          "pid": "2"
+        },
+        {
+          "name": "Head up and bang on the front door",
+          "link": "Front door",
+          "pid": "3"
+        }
+      ],
+      "name": "Entry",
+      "pid": "1",
+      "position": {
+        "x": "700",
+        "y": "300"
+      }
+    },
+    {
+      "text": "The side of the house is overgrown and squelching with rain, and you flinch as branches snap back, touching your face. Your lower back. You can feel the water running down your collar and your shoes starting to ooze. \n\nYou gotta get out of this weather.\n\nThe side door appears in your vision out suddenly. There's no light over it, but the window in the door glows slightly as you reach your hand out to test the lock.\n\n1. (t8n-depart:\"blur\")+(t8n-arrive:\"flicker\")[[The door creaks open before you can even get there.->Doorkeeper]]\n\n2. (t8n-depart:\"blur\")+(t8n-arrive:\"flicker\")[[You freak out and run.->Entry]]",
+      "links": [
+        {
+          "name": "The door creaks open before you can even get there.",
+          "link": "Doorkeeper",
+          "pid": "8"
+        },
+        {
+          "name": "You freak out and run.",
+          "link": "Entry",
+          "pid": "1"
+        }
+      ],
+      "name": "Back door",
+      "pid": "2",
+      "position": {
+        "x": "525",
+        "y": "500"
+      }
+    },
+    {
+      "text": "The front door is imposing, a big painted-black slab with a light hung on a chain out over the lintle. With the hulking darkness of the house behind it and the overgrown hedges, the effect is like an anglerfish waiting to unfold its jaws over you.\n\nThere's a huge brass knocker in the middle of the door, shaped like a lion's head. You reach out to grab it, feeling doughy with the wet, and let it fall with a thud.\n\nNothing. No lights.\n\nThe rain's causing water to run down the back of your ears now, soaking your shirt under your jacket.\n\nYour breath puffs out, waiting.\n\nJust as you turn to go, the door //creaks//.\n\n(t8n-depart:\"blur\")+(t8n-arrive:\"flicker\")[[1. Say \"Hello?\"->Doorkeeper]]\n(t8n-depart:\"blur\")+(t8n-arrive:\"flicker\")[[2. Stay silent and see what happens->Doorkeeper]]",
+      "links": [
+        {
+          "name": "1. Say \"Hello?\"",
+          "link": "Doorkeeper",
+          "pid": "8"
+        },
+        {
+          "name": "2. Stay silent and see what happens",
+          "link": "Doorkeeper",
+          "pid": "8"
+        }
+      ],
+      "name": "Front door",
+      "pid": "3",
+      "position": {
+        "x": "700",
+        "y": "500"
+      }
+    },
+    {
+      "text": "The driveway squelches and crunches underfoot as you make your way around the house, trying to avoid the puddles. They could hide deep potholes.\n\nThe detached garage is unlit. When you rattle the side door, it gives way easily, and you enter a musty space that stinks of old car oil and older rust. It's pitch black, so you pop your phone and turn on your flashlight.\n\nThere's dripping coming steadily from one corner, but you don't let it bother you as you poke at the heap of miscellaneous junk on a table.\n\nYou can't find a battery or any jumper cables, and you're getting ready to go when there's a sound from the door.\n\n(t8n-depart:\"blur\")+(t8n-arrive:\"flicker\")[[2. Stay silent and see what happens->Doorkeeper]]",
+      "links": [
+        {
+          "name": "2. Stay silent and see what happens",
+          "link": "Doorkeeper",
+          "pid": "8"
+        }
+      ],
+      "name": "Garage",
+      "pid": "4",
+      "position": {
+        "x": "900",
+        "y": "500"
+      }
+    },
+    {
+      "text": "",
+      "name": "Interior 1",
+      "pid": "5",
+      "position": {
+        "x": "500",
+        "y": "1000"
+      }
+    },
+    {
+      "text": "",
+      "name": "Interior 2",
+      "pid": "6",
+      "position": {
+        "x": "700",
+        "y": "1000"
+      }
+    },
+    {
+      "text": "",
+      "name": "Interior 3",
+      "pid": "7",
+      "position": {
+        "x": "900",
+        "y": "1000"
+      }
+    },
+    {
+      "text": "The door yawns open in front of you, and... an ambling stack of elegant rags appears in it. There is a smell, old - drakkar noir, the eighties, or maybe older, something from the middle of a century time's put aside now. \n\nThe person presumably in the clothes //looms// over you. They're tall, very tall, probably helped by being above you. This is objectively terrifying, but you're also recently very damp and they aren't being threatening.\n\nBehind them, there's a light deeper in the house.\n\nWithout saying anything, they gesture for you to pass them, and enter the main house.\n\n1. (t8n-depart:\"blur\")+(t8n-arrive:\"flicker\")[[Enter the house->main_hall]].",
+      "links": [
+        {
+          "name": "Enter the house",
+          "link": "main_hall",
+          "pid": "9"
+        }
+      ],
+      "name": "Doorkeeper",
+      "pid": "8",
+      "position": {
+        "x": "700",
+        "y": "700"
+      }
+    },
+    {
+      "text": "",
+      "name": "main_hall",
+      "pid": "9",
+      "position": {
+        "x": "700",
+        "y": "850"
+      }
+    }
+  ],
+  "name": "Haunted Mansion",
+  "startnode": "1",
+  "creator": "Twine",
+  "creator-version": "2.9.2",
+  "ifid": "501E98AC-CDE4-462D-90EF-A09A7495E49C"
+}
+

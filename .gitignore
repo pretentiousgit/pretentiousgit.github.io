@@ -61,4 +61,6 @@ build/
 .vscode/launch.json
 
 # fonts
-fonts/
+fonts/_site
+.sass-cache
+_drafts

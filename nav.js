@@ -16,6 +16,18 @@ const showSection = (target) => {
     });
 }
 
+const updateScrollableStatus = () => {
+    const isScrollable = document.documentElement.scrollHeight > window.innerHeight + 50;
+
+    console.log('isScrollable', isScrollable)
+    
+    // seems fake
+    window.setTimeout(() => {
+        document.documentElement.classList.toggle('is-scrollable', isScrollable);
+    }, 10)
+
+}
+
 document.addEventListener('click', (e) => {
     const clickedLink = e.target.closest('a');
     if(!clickedLink) { return; }
@@ -30,6 +42,7 @@ document.addEventListener('click', (e) => {
         const target = href.slice(1);
         showSection(target);
 
+        updateScrollableStatus()
         history.pushState(null, '', `#${target}`);
     }
 
@@ -64,3 +77,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
         showSection('init'); // or whatever your default is
     }
 })
+
+document.addEventListener('DOMContentLoaded', updateScrollableStatus);
+window.addEventListener('resize', updateScrollableStatus);

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Gamestorming: A Game Design Brainstorming Tool</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="./style.css" />
+    
+    <!-- this has to go here to import the data options -->
+    <script src="data.js"></script>
+    <script src="card_options.js"></script>
+
+    <!-- script goes here and the load is deferred to the end of the page -->
+    <script type="module" src="./script.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Gamestorming: <span class="header_subtitle">A Game Design Brainstorming Tool</span></h1>
+    </header>
+    <section class="gameboard">
+      <!-- Cards generate here based on card_options.js -->
+    </section>
+    <div class="top-block">
+      <section class="body-text">
+        <p>
+          This is a brainstorming exercise designed to produce about four game ideas per person. It is best at generating game premises.
+        </p>  
+        <h2>How to Play</h2>
+        
+        <p>
+          Click the cards above to flip them, then describe a game idea that would match all the turned cards together.
+        </p>
+        
+        <div>
+          In a group of 3-6 players, with each player taking a 1.5-minute turn:
+          <ul>
+            <li>The player whose turn it is turns over the cards</li>
+            <li>Everyone in the group takes 1.5 minutes and writes up an app idea that matches the prompts</li>
+            <li>After time, the group presents and discusses their ideas, and pass them to the main player</li>
+            <li>Play concludes when every player has had a turn and collected ideas from their group</li>
+            <li>The group should now have a diverse array of possible game designs to draw from</li>
+          </ul>
+        </div>
+        
+        <h3>
+          What each card does
+        </h3>
+        <ol>
+          <li>
+            Pick a <b>setting</b>, ranging from the familiar to the remote
+          </li>
+          
+          <li>
+            Select a <b>feature</b> that may not be immediately clear, but would be an important part of the game <strong>premise</strong>
+          </li>
+          
+          <li>
+            Choose a <b>mechanic</b> or way the game could be played
+          </li>
+
+          <li>
+            Quickly write down your game idea, keeping it as fast as possible
+          </li>
+  
+          <li>
+            Describe your speculative future app and how it aims to responsibly
+            manage information to benefit its users
+          </li>
+        </ol>
+  
+        <p>
+          Get creative and see what ideas you can come up with! The goal is to
+          think about potential futures and how apps and information technology
+          might evolve to play constructive roles.
+        </p>    
+    </section>
+    </div>
+  </body>
+</html>
