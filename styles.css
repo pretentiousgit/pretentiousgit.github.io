@@ -69,7 +69,7 @@ main {
     position: relative;
     z-index: 10;
     padding-left: 1rem;
-    padding-bottom: 3rem;
+    padding-bottom: 2rem;
 }
 
 .container {
@@ -275,17 +275,26 @@ a.header-link {
 
 #reset {
     padding: 1rem;
+    padding-top: 0rem;
+    display: none;
+    gap: 1rem;
+
+    /* this aligns boxes inside flexBox */
+    justify-content: center;
+    align-items: center;
+
+    /* this applies only to the text itself within its box */
+    text-align: center;
 }
 
 #reset svg {
-    display: block;
     width: 100%; /* or specific size */
     height: auto;
     pointer-events: none; /* prevents image from interfering with button clicks */
 }
 
 #reset svg {
-    width: 50px;
+    width: 28px;
     transform: rotate(-90deg);
 
     background: none;
@@ -294,6 +303,10 @@ a.header-link {
 
 #reset path {
     fill: var(--primary-bg); /* color for the SVG paths */
+}
+
+html.is-scrollable #reset {
+    display: flex;
 }
 
 /* RESPONSIVE */
