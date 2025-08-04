@@ -173,6 +173,9 @@ a.title {
     display: block;
 }
 
+#tools a:not(.title-link)::after {
+    content: " ⇒"
+}
 
 /* LOGO */
 .logo-container {
