@@ -4,7 +4,8 @@ This website is for storing code somewhere I can find it when I need to write a 
 
 ## About
 
-This is the source code for my personal portfolio website. I use it for code experiments and to showcase some research.
+This is the source code for my personal portfolio website.
+I use it for code experiments and to showcase some research.
 
 ## Live Site
 

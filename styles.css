@@ -165,13 +165,14 @@ nav a.active {
     color: var(--primary-bg);
 }
 
+a.header-link {
+    text-decoration: none;
+}
+
 a.title {
     display: block;
 }
 
-a.header-link {
-    text-decoration: none;
-}
 
 /* LOGO */
 .logo-container {
