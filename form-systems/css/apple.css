@@ -1,0 +1,452 @@
+/* Apple Human Interface Guidelines, written by hand.
+   Apple publishes guidance and native controls but no web stylesheet, so this
+   file restyles the exact markup of unstyled.html using element selectors only
+   (no classes). Values follow iOS: system font, 17pt body, 44pt minimum hit
+   targets, grouped inset lists, toggles instead of checkboxes, and a segmented
+   control instead of radio buttons, all inside a phone-sized screen.
+
+   Control sizes are Apple's own: 44pt rows and fields (the minimum touch
+   target), a 32pt segmented control, 50pt buttons, a 34/41 large title,
+   17/22 body text, 13/18 labels, 16pt side margins. The gaps between the
+   controls are this file's approximation of an iOS grouped list.
+
+   "Show grids" lays 44pt graph paper over the screen and marks which
+   controls fit that module and which miss it (see the end of this file
+   and js/module-check.js). */
+
+:root {
+  color-scheme: light;
+
+  --label: #000;
+  --secondary-label: rgba(60, 60, 67, 0.6);
+  --separator: rgba(60, 60, 67, 0.29);
+  --grouped-background: #f2f2f7;
+  --cell-background: #fff;
+  --fill: rgba(120, 120, 128, 0.16);
+  --blue: #007aff;
+  --green: #34c759;
+  --focus-ring: rgba(0, 122, 255, 0.4);
+}
+
+/* The top padding leaves the same space the Material page uses for its
+   window-size controls, so the two phones sit in exactly the same place. */
+body {
+  margin: 0;
+  padding: 100px 24px 24px;
+  background: #fff;
+  color: var(--label);
+  font: 17px/22px -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* ---- The phone screen ----
+   main is the screen: phone width, rounded corners, a slim bezel, and the
+   grouped-background gray. It scrolls inside itself like a real screen. */
+main {
+  box-sizing: border-box;
+  width: 412px;
+  max-width: 100%;
+  height: calc(100vh - 124px);
+  padding: 0 16px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  border: 8px solid #d1d1d6;
+  border-radius: 48px;
+  background: var(--grouped-background);
+}
+
+/* Dynamic Island at the top, home indicator at the bottom. Both are drawn
+   by CSS as gray strips that stay put while the form scrolls beneath them. */
+main::before,
+main::after {
+  content: '';
+  position: sticky;
+  z-index: 1;
+  display: block;
+  margin: 0 -16px;
+  background-color: var(--grouped-background);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+main::before {
+  top: 0;
+  height: 57px;
+  margin-bottom: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='35'%3E%3Crect width='120' height='35' rx='17.5'/%3E%3C/svg%3E");
+}
+
+main::after {
+  bottom: 0;
+  height: 29px;
+  margin-top: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='134' height='5'%3E%3Crect width='134' height='5' rx='2.5'/%3E%3C/svg%3E");
+}
+
+/* Large Title */
+h1 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 41px;
+}
+
+p {
+  margin: 4px 0 24px;
+  color: var(--secondary-label);
+}
+
+form {
+  display: grid;
+  gap: 22px;
+}
+
+form > div {
+  display: grid;
+  gap: 6px;
+}
+
+fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* Field labels and legends read as grouped-list section headers */
+label,
+legend {
+  padding: 0 16px;
+  color: var(--secondary-label);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+legend {
+  padding-bottom: 6px;
+}
+
+/* ---- Text-like fields: one white inset cell each ---- */
+
+input[type='text'],
+input[type='email'],
+input[type='date'],
+input[type='range'],
+input[type='file'],
+select,
+textarea {
+  appearance: none;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  padding: 11px 16px;
+  border: 0;
+  border-radius: 10px;
+  background-color: var(--cell-background);
+  color: var(--label);
+  font: inherit;
+}
+
+/* As tall as its four lines of text plus the padding */
+textarea {
+  height: auto;
+  resize: vertical;
+}
+
+select {
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='16' viewBox='0 0 10 16' fill='none' stroke='%233c3c43' stroke-opacity='.6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1.5 6 5 2.5 8.5 6M1.5 10 5 13.5 8.5 10'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
+
+:is(input, select, textarea, button):focus-visible {
+  outline: 4px solid var(--focus-ring);
+  outline-offset: 0;
+}
+
+/* ---- Radio buttons become a segmented control ---- */
+
+fieldset:has([type='radio']) {
+  display: flex;
+}
+
+fieldset:has([type='radio']) > div {
+  position: relative;
+  flex: 1;
+  padding: 2px 0;
+  background: rgba(118, 118, 128, 0.12);
+}
+
+fieldset:has([type='radio']) > div:first-of-type {
+  padding-left: 2px;
+  border-radius: 9px 0 0 9px;
+}
+
+fieldset:has([type='radio']) > div:last-of-type {
+  padding-right: 2px;
+  border-radius: 0 9px 9px 0;
+}
+
+/* The dot disappears; the input stretches over its segment to stay clickable */
+input[type='radio'] {
+  appearance: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+input[type='radio'] + label {
+  display: block;
+  padding: 0;
+  border-radius: 7px;
+  color: var(--label);
+  font-weight: 500;
+  line-height: 28px;
+  text-align: center;
+}
+
+input[type='radio']:checked + label {
+  background: var(--cell-background);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), 0 3px 1px rgba(0, 0, 0, 0.04);
+  font-weight: 600;
+}
+
+input[type='radio']:focus-visible {
+  outline: 0;
+}
+
+input[type='radio']:focus-visible + label {
+  outline: 4px solid var(--focus-ring);
+}
+
+/* ---- Checkboxes become toggles in a grouped list ---- */
+
+fieldset:has([type='checkbox']) > div {
+  position: relative;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  background: var(--cell-background);
+}
+
+fieldset:has([type='checkbox']) > div:first-of-type {
+  border-radius: 10px 10px 0 0;
+}
+
+fieldset:has([type='checkbox']) > div:last-of-type {
+  border-radius: 0 0 10px 10px;
+}
+
+/* Hairline separator, inset from the left like an iOS list */
+fieldset:has([type='checkbox']) > div + div::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 16px;
+  height: 1px;
+  background: var(--separator);
+  transform: scaleY(0.5);
+}
+
+input[type='checkbox'] + label {
+  flex: 1;
+  padding: 11px 0;
+  color: var(--label);
+  font-size: 17px;
+  line-height: 22px;
+}
+
+input[type='checkbox'] {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 51px;
+  height: 31px;
+  margin: 0;
+  border-radius: 31px;
+  background: var(--fill);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+input[type='checkbox']::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 0 3px 1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s;
+}
+
+input[type='checkbox']:checked {
+  background: var(--green);
+}
+
+input[type='checkbox']:checked::before {
+  transform: translateX(20px);
+}
+
+/* ---- Slider ---- */
+
+input[type='range'] {
+  padding-block: 0;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--fill);
+}
+
+input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -12px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0.5px 4px rgba(0, 0, 0, 0.12), 0 6px 13px rgba(0, 0, 0, 0.12);
+}
+
+input[type='range']::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--fill);
+}
+
+input[type='range']::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--blue);
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0.5px 4px rgba(0, 0, 0, 0.12), 0 6px 13px rgba(0, 0, 0, 0.12);
+}
+
+/* ---- File picker ---- */
+
+input[type='file'] {
+  padding-block: 7px;
+  color: var(--secondary-label);
+  font-size: 15px;
+}
+
+input[type='file']::file-selector-button {
+  appearance: none;
+  margin-right: 12px;
+  padding: 4px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(0, 122, 255, 0.15);
+  color: var(--blue);
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ---- Buttons ---- */
+
+button {
+  appearance: none;
+  min-height: 50px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--blue);
+  font: inherit;
+  cursor: pointer;
+}
+
+button[type='submit'] {
+  background: var(--blue);
+  color: #fff;
+  font-weight: 600;
+}
+
+button:active {
+  opacity: 0.7;
+}
+
+/* ---- "Show grids": graph paper ----
+   Switched on by the button in the side menu. Heavy lines mark every 44pt
+   module, measured from the top-left corner of the content; light lines
+   mark every 11pt quarter. The orange strips are the 16pt side margins.
+   The paper is a background that scrolls with the form, and the white
+   cells turn translucent so the lines show through them.
+
+   js/module-check.js then measures each control. It marks the ones that
+   are a whole number of modules tall in green, the rest in dashed pink,
+   and pins a small note to each with its height. */
+
+.show-grid main {
+  --module: 44px;
+  --quarter: 11px;
+  --margin: 16px;
+  --major: rgba(0, 122, 255, 0.55);
+  --minor: rgba(0, 122, 255, 0.16);
+  --margin-tint: rgba(246, 160, 60, 0.4);
+
+  position: relative;
+  background-image:
+    linear-gradient(to right, var(--margin-tint) var(--margin), transparent var(--margin), transparent calc(100% - var(--margin)), var(--margin-tint) calc(100% - var(--margin))),
+    repeating-linear-gradient(to bottom, var(--major) 0, var(--major) 1px, transparent 1px, transparent var(--module)),
+    repeating-linear-gradient(to right, var(--major) 0, var(--major) 1px, transparent 1px, transparent var(--module)),
+    repeating-linear-gradient(to bottom, var(--minor) 0, var(--minor) 1px, transparent 1px, transparent var(--quarter)),
+    repeating-linear-gradient(to right, var(--minor) 0, var(--minor) 1px, transparent 1px, transparent var(--quarter));
+  /* Vertical lines start at the left edge of the content */
+  background-position: 0 0, 0 0, var(--margin) 0, 0 0, var(--margin) 0;
+  background-attachment: local;
+}
+
+.show-grid :is(input[type='text'], input[type='email'], input[type='date'], input[type='range'], input[type='file'], select, textarea),
+.show-grid fieldset:has([type='checkbox']) > div {
+  background-color: rgba(255, 255, 255, 0.55);
+}
+
+.show-grid input[type='radio']:checked + label {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.show-grid [data-module='fit'] {
+  outline: 2px solid #1a7f37;
+  outline-offset: -2px;
+}
+
+.show-grid [data-module='miss'] {
+  outline: 2px dashed #d6336c;
+  outline-offset: -2px;
+}
+
+/* The notes that module-check.js pins to the top-right of each control */
+.module-note {
+  position: absolute;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: #1a7f37;
+  color: #fff;
+  font: 10px/15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: nowrap;
+  transform: translate(-100%, -50%);
+  pointer-events: none;
+}
+
+.module-note[data-module='miss'] {
+  background: #d6336c;
+}
