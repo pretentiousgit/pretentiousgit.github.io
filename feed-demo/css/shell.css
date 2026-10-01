@@ -1,0 +1,388 @@
+/* shell.css
+   The page around the examples: left navigation, teaching panels,
+   phone frame, code boxes and the diagrams. Loaded after Bootstrap on every page.
+   The posts inside the phone are plain Bootstrap. */
+
+:root {
+  --ink: #1d1d1f;
+  --muted: #6b6b70;
+  --line: #dcdce0;
+  --card: #ffffff;
+  --fast: #1a7f45;
+  --slow: #0d6efd;
+  --warn: #a35a00;
+  --error: #c3152b;
+  --code-bg: #1e1f24;
+  --code-ink: #e8e8ec;
+  --highlight: #ffcc00;
+}
+
+/* ---------- Left navigation + stage ---------- */
+
+body {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  min-height: 100vh;
+  background: #fff;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 1.25rem 1rem;
+  overflow-y: auto;
+  border-right: 1px solid var(--bs-border-color);
+  background: var(--bs-tertiary-bg);
+}
+
+.sidebar h1 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.stage {
+  min-width: 0;
+  padding: 1.5rem 1.5rem 3rem;
+}
+
+@media (max-width: 860px) {
+  body { grid-template-columns: minmax(0, 1fr); }
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--bs-border-color); }
+  .stage { padding: 1.25rem 1rem 3rem; }
+}
+
+/* ---------- Examples 1 and 2: phone on the left, code on the right ---------- */
+
+.example {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.example .panel {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+
+/* The same phone as the Bootstrap tab in form-systems:
+   412 wide, an 8px grey bezel, 40px corners */
+.phone-frame {
+  position: sticky;
+  top: 1.5rem;
+  flex: 0 0 auto;
+  width: 412px;
+  max-width: 100%;
+  height: min(860px, calc(100vh - 3rem));
+  overflow: hidden;
+  border: 8px solid #d1d1d6;
+  border-radius: 40px;
+  background: #fff;
+}
+
+.phone-screen {
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Bootstrap sizes h1 by the browser window. Inside a 412px phone,
+   this is the size Bootstrap would give it on a real 412px screen. */
+.phone-screen h1 { font-size: calc(1.375rem + 6.18px); }
+
+@media (max-width: 860px) {
+  .phone-frame { position: relative; top: 0; height: 75vh; }
+}
+
+/* ---------- Teaching panel ---------- */
+
+/* :not(.accordion-header) keeps these off the h2s inside Bootstrap's accordions */
+.panel h2:not(.accordion-header) { margin: 1.5rem 0 0.5rem; font-size: 1rem; font-weight: 700; }
+.panel h2:first-child { margin-top: 0; }
+.intro-text { color: var(--muted); max-width: 65ch; margin-bottom: 1.5rem; }
+
+/* ---------- Code boxes ---------- */
+
+.code,
+.data-view {
+  position: relative;
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 10px;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* Each line or item in the object/array view is its own block, so it can light up */
+.data-view .line { display: block; border-radius: 4px; padding: 0 0.25rem; }
+
+.data-view .highlight {
+  background: var(--highlight);
+  color: var(--ink);
+}
+
+/* The array in example 2 is long: it scrolls inside its own box */
+.data-view.scrolls { max-height: 70vh; overflow-y: auto; }
+
+details { margin-top: 1rem; }
+summary { cursor: pointer; font-weight: 600; margin-bottom: 0.5rem; }
+
+/* ---------- Example 2: the tweet list ---------- */
+
+.tweets {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tweet {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* The tweet you point at grows a little */
+.tweet:hover,
+.tweet:focus-visible {
+  position: relative;
+  z-index: 1;
+  transform: scale(1.04);
+  box-shadow: 0 0.5rem 1.25rem rgb(0 0 0 / 0.12);
+  border-color: var(--bs-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tweet { transition: none; }
+}
+
+/* ---------- Example 3: the heart button ---------- */
+
+/* A small heart with a 44px tap target around it */
+.heart-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.heart-button svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+/* Faved: the heart turns red */
+.heart-button[aria-pressed="true"] { color: #e0245e; }
+
+.heart-button[aria-pressed="true"] svg {
+  fill: #e0245e;
+  stroke: #e0245e;
+  animation: boop 0.3s ease-out;
+}
+
+.heart-button:focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@keyframes boop {
+  50% { transform: scale(1.3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heart-button[aria-pressed="true"] svg { animation: none; }
+}
+
+/* ---------- Example 3: client → network → server diagram ---------- */
+
+.request-diagram { font-size: 1.05rem; }
+
+.scenario-hint { margin: 0 0 0.75rem; }
+
+/* Every row has the same three columns, so the panels line up */
+.diagram-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(5rem, 9rem) minmax(0, 1fr);
+}
+
+.diagram-row .cell { padding: 0.75rem 1rem; }
+
+/* The two panels are drawn by giving their cells a background */
+.client-cell { background: var(--bs-primary-bg-subtle); }
+.server-cell { background: var(--bs-secondary-bg); }
+
+.diagram-head .cell { font-size: 1.35rem; font-weight: 700; padding-top: 1rem; }
+.diagram-head span { display: block; font-size: 0.85rem; font-weight: 400; color: var(--muted); }
+.diagram-head .network-cell { align-self: end; text-align: center; font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+.diagram-head .client-cell,
+.diagram-head .server-cell { border-radius: 14px 14px 0 0; }
+
+#request-rows .diagram-row:last-child .client-cell,
+#request-rows .diagram-row:last-child .server-cell { border-radius: 0 0 14px 14px; }
+
+.status { font-weight: 700; font-size: 1.2rem; }
+.detail { font-size: 0.85rem; color: var(--muted); }
+.status.waiting { color: var(--muted); }
+.status.saved { color: var(--bs-success); }
+
+/* The network: a spinning icon over a line that fills up while we wait */
+.network-cell {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.4rem;
+}
+
+.spinner,
+.check {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.spinner { animation: spin 0.9s linear infinite; }
+.spinner-track { stroke: var(--line); }
+.spinner-arc { stroke: var(--bs-primary); }
+.check { stroke: var(--bs-success); }
+
+.track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+/* animation-duration is set in 3-fave.js to match NETWORK_DELAY */
+.fill {
+  height: 100%;
+  background: var(--bs-primary);
+  animation: travel linear forwards;
+}
+
+.done .fill { background: var(--bs-success); width: 100%; animation: none; }
+
+/* Scenario 2: the Interrupt button, and what a dropped connection looks like */
+.interrupt { width: 100%; font-weight: 700; }
+
+.cross { width: 28px; height: 28px; fill: none; stroke: var(--bs-danger); stroke-width: 2.5; stroke-linecap: round; }
+.failed .fill { background: var(--bs-danger); animation-play-state: paused; }
+.status.lost { color: var(--bs-danger); }
+
+/* The "Couldn't like this post" message at the bottom of the phone */
+.phone-message {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1.5rem;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.25);
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes travel { from { width: 0; } to { width: 100%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; }
+}
+
+/* ---------- Example 4: one post popping in ---------- */
+
+.pop-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  border: 0;
+}
+
+.pop-controls:disabled { opacity: 0.6; }
+
+/* The photo slot keeps its 16:9 shape before and after the image arrives */
+.image-slot {
+  display: block;
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  border-radius: var(--bs-border-radius);
+}
+
+.image-box {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--bs-border-radius);
+  background: #dee2e6;
+}
+
+.image-box line {
+  stroke: #adb5bd;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Keys that have not arrived yet are dimmed in the object view */
+.data-view .line[data-key]:not(.filled) { color: #8b8b93; }
+
+/* A yellow flash marks the moment each value lands, on the phone and in the object */
+.arrived { animation: landed 1.2s ease-out; }
+
+@keyframes landed {
+  from { background-color: var(--highlight); color: var(--ink); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrived { animation: none; }
+}
+
+/* ---------- Timeline (example 4) ---------- */
+
+.timeline {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  list-style: none;
+  max-height: 22rem;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  font-size: 0.9rem;
+}
+
+.timeline:empty::before { content: "Nothing yet."; color: var(--muted); }
+.timeline li { padding: 0.2rem 0; border-bottom: 1px dashed var(--line); }
+.timeline li:last-child { border-bottom: 0; }
+
+.timeline .ms {
+  display: inline-block;
+  min-width: 5.5rem;
+  font-family: var(--bs-font-monospace);
+  color: var(--muted);
+}
+
+.timeline .fast { color: var(--fast); }
+.timeline .slow { color: var(--slow); }
+.timeline .warn { color: var(--warn); font-weight: 600; }
+.timeline .error { color: var(--error); font-weight: 600; }
