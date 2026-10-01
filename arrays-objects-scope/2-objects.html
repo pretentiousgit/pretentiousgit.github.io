@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2. Objects - Arrays, objects and scope</title>
+  <!-- Official Bootstrap 5, same as form-systems and feed-demo -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/shell.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="js/show-code.js" defer></script>
+  <script src="js/2-objects.js" defer></script>
+</head>
+<body>
+  <nav class="sidebar" aria-label="Examples">
+    <h1>Arrays, objects and scope</h1>
+    <ul class="nav nav-pills flex-column">
+      <li class="nav-item"><a class="nav-link" href="1-arrays.html">1. Arrays</a></li>
+      <li class="nav-item"><a class="nav-link active" aria-current="page" href="2-objects.html">2. Objects</a></li>
+      <li class="nav-item"><a class="nav-link" href="3-scope.html">3. Scope as boxes</a></li>
+      <li class="nav-item"><a class="nav-link" href="4-one-post.html">4. One object, one post</a></li>
+      <li class="nav-item"><a class="nav-link" href="5-posts.html">5. An array of posts</a></li>
+    </ul>
+  </nav>
+
+  <main class="stage">
+    <div class="accordion" id="steps">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#step-load" aria-expanded="true" aria-controls="step-load">Boxes are objects</button>
+        </h2>
+        <div id="step-load" class="accordion-collapse collapse show" data-bs-parent="#steps">
+          <div class="accordion-body">
+            <div id="load-row" class="box-row sized"></div>
+            <div class="buttons">
+              <button id="load" class="btn btn-primary btn-lg" type="button">Load next box</button>
+              <button id="load-reset" class="btn btn-outline-primary btn-lg" type="button">Start over</button>
+            </div>
+            <pre id="code-load" class="code"></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step-change" aria-expanded="false" aria-controls="step-change">Change one property</button>
+        </h2>
+        <div id="step-change" class="accordion-collapse collapse" data-bs-parent="#steps">
+          <div class="accordion-body">
+            <div id="change-row" class="box-row sized"></div>
+            <pre class="array-line model-text"></pre>
+            <div class="button-columns">
+              <div>
+                <button id="grow-1" class="btn btn-primary btn-lg" type="button">Grow box 1</button>
+                <pre id="code-grow-1" class="code"></pre>
+              </div>
+              <div>
+                <button id="paint-0" class="btn btn-primary btn-lg" type="button">Paint box 0 blue</button>
+                <pre id="code-paint-0" class="code"></pre>
+              </div>
+            </div>
+            <button class="btn btn-outline-primary reset-boxes mt-3" type="button">Reset boxes</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step-add" aria-expanded="false" aria-controls="step-add">A property becomes a CSS class</button>
+        </h2>
+        <div id="step-add" class="accordion-collapse collapse" data-bs-parent="#steps">
+          <div class="accordion-body">
+            <div id="add-row" class="box-row sized"></div>
+            <pre class="array-line model-text"></pre>
+            <div class="button-columns">
+              <div>
+                <button id="circle-2" class="btn btn-primary btn-lg" type="button">Make box 2 a circle</button>
+                <pre id="code-circle-2" class="code"></pre>
+              </div>
+              <div>
+                <button id="square-2" class="btn btn-primary btn-lg" type="button">Make box 2 a square</button>
+                <pre id="code-square-2" class="code"></pre>
+              </div>
+            </div>
+            <div class="button-columns">
+              <div>
+                <pre id="html-box-2" class="code html-code"></pre>
+              </div>
+              <div>
+                <pre class="code css-code">/* in css/shell.css */
+.box.square {
+  border-radius: 16px;
+}
+
+.box.circle {
+  border-radius: 50%;
+}</pre>
+              </div>
+            </div>
+            <button class="btn btn-outline-primary reset-boxes mt-3" type="button">Reset boxes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
