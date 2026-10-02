@@ -1,0 +1,351 @@
+/* shell.css
+   The page around the examples: left navigation and the stage.
+   Loaded after Bootstrap on every page. Same layout as feed-demo, in the course palette. */
+
+:root {
+  /* Course palette */
+  --color-yellow: #fcd44b;
+  --color-yellow-light: #fff9d8;
+  --color-red: #e55a5a;
+  --color-dark-gray: #333333;
+  --color-text: #2c3e50;
+  --color-blue: #4a90a4;
+  --color-white: #ffffff;
+  --color-light-gray: #f3f3f3;
+  --color-border: #cccccc;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- Left navigation + stage ---------- */
+
+body {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  min-height: 100vh;
+  background: var(--color-white);
+  color: var(--color-text);
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 1.25rem 1rem;
+  overflow-y: auto;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-light-gray);
+}
+
+.sidebar h1 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.stage {
+  min-width: 0;
+  max-width: 1200px;
+  padding: 1.5rem 1.5rem 3rem;
+}
+
+@media (max-width: 860px) {
+  body { grid-template-columns: minmax(0, 1fr); }
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--color-border); }
+  .stage { padding: 1.25rem 1rem 3rem; }
+}
+
+/* ---------- The boxes (the view) ---------- */
+
+.box-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-height: 5rem;
+  margin-bottom: 1rem;
+}
+
+/* Boxes of different sizes sit on a shared bottom line */
+.box-row.sized { align-items: flex-end; }
+
+/* An empty row (before the array is loaded) shows where the boxes will go */
+.box-row:empty {
+  border: 2px dashed var(--color-border);
+  border-radius: 16px;
+}
+
+.box {
+  display: grid;
+  place-items: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px var(--color-shadow);
+  color: var(--color-white);
+  /* 20px bold counts as large text, so white passes contrast on red and blue */
+  font-size: 1.25rem;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+}
+
+.box.red { background-color: var(--color-red); }
+.box.yellow { background-color: var(--color-yellow); color: var(--color-text); }
+.box.blue { background-color: var(--color-blue); }
+
+/* Example 2: the shape property becomes one of these class names.
+   2-objects.html shows these rules on the page: keep the two in step. */
+.box.square {
+  border-radius: 16px;
+}
+
+.box.circle {
+  border-radius: 50%;
+}
+
+/* A new box grows in, so you can see where it landed */
+.box.new { animation: grow-in 0.35s ease-out; }
+
+@keyframes grow-in {
+  from { transform: scale(0.3); opacity: 0; }
+}
+
+/* The array itself, written out under the boxes */
+.array-line {
+  margin: 0 0 1.25rem;
+  font-family: var(--bs-font-monospace);
+  color: var(--color-text);
+}
+
+/* The live array in example 2 runs over several lines */
+pre.array-line { white-space: pre; overflow-x: auto; font-size: 0.9rem; }
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box { transition: none; }
+  .box.new { animation: none; }
+}
+
+/* Each button with its own code box underneath, side by side */
+.button-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(28rem, 100%), 1fr));
+  gap: 1rem;
+}
+
+.button-columns .code { margin-top: 0.75rem; }
+
+/* An HTML code block: light grey, between the dark JS and the yellow CSS */
+.code.html-code {
+  background: var(--color-light-gray);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.code.html-code::before,
+.code.css-code::before {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-family: var(--bs-font-sans-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.code.html-code::before { content: "HTML: box 2, as drawn"; }
+.code.css-code::before { content: "CSS"; }
+
+/* A CSS code block: a lighter box, so it reads as a different language from the JS above it */
+.code.css-code {
+  background: var(--color-yellow-light);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+/* ---------- Example 3: loops and arrays ---------- */
+
+/* What a function gave back, written out under its boxes */
+.result-line { min-height: 1.5em; margin: 0 0 0.75rem; }
+
+/* A box in the original row that filter or find gave back */
+.box.match { outline: 3px solid var(--color-text); outline-offset: 3px; }
+
+/* ---------- Code blocks ---------- */
+
+/* An array method's name picked out in yellow: the verb says what the code does */
+.code .highlight-verb {
+  padding: 0 0.2em;
+  border-radius: 4px;
+  background: var(--color-yellow);
+  color: var(--color-dark-gray);
+  font-weight: 700;
+}
+
+/* A block of code picked out in blue, e.g. the for loop on the Loops and Arrays tab */
+.code .highlight-block {
+  display: block;
+  /* Stretch to the longest line, even when the code box scrolls sideways */
+  width: max-content;
+  min-width: calc(100% + 2rem);
+  margin: 0 -1rem;
+  padding: 0 1rem;
+  background: var(--color-blue);
+  color: var(--color-white);
+}
+
+/* Text marked in red inside code, e.g. a typo */
+.code .highlight-mark {
+  padding: 0 0.15em;
+  border-radius: 4px;
+  background: var(--color-red);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+/* Example 3, step 1: loops */
+.step-subhead { margin: 0 0 0.75rem; font-size: 1rem; font-weight: 700; }
+.button-columns + .step-subhead { margin-top: 2rem; }
+
+/* A box made from undefined (one step past the end of the array) */
+.box.undefined {
+  background: transparent;
+  border: 2px dashed var(--color-red);
+  color: var(--color-red);
+  box-shadow: none;
+}
+
+.page-clock { margin: 0 0 0.75rem; font-family: var(--bs-font-monospace); font-size: 1.5rem; font-weight: 700; }
+.never-run-label { margin: 0 0 0.4rem; font-weight: 700; color: var(--color-red); }
+.code.never-run { margin-top: 0; border-left: 6px solid var(--color-red); }
+
+/* Example 3, step 2: the script, one statement at a time */
+.step-code .statement { display: block; margin-bottom: 0.75em; padding: 0 0.4rem; border-left: 4px solid transparent; }
+.step-code .statement:last-child { margin-bottom: 0; }
+.step-code .statement.upcoming { opacity: 0.35; }
+.step-code .statement.just-ran { border-left-color: var(--color-yellow); background: rgb(255 255 255 / 0.1); }
+
+/* "What your JavaScript can see": the variables that exist so far.
+   A new one flashes when its line runs. */
+.vars-title { margin: 0 0 0.4rem; font-weight: 700; }
+.code.vars-code {
+  background: var(--color-yellow-light);
+  color: var(--color-dark-gray);
+  border: 1px solid var(--color-border);
+}
+.vars-code .variable { display: block; }
+.vars-code .new-variable { animation: changed 1.2s ease-out; }
+
+@keyframes changed {
+  from { background-color: var(--color-yellow); color: var(--color-dark-gray); }
+}
+
+.code {
+  margin: 1.25rem 0 0;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 10px;
+  background: var(--color-dark-gray);
+  color: var(--color-white);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* ---------- Examples 4 and 5: the phone (copied from feed-demo, in the course palette) ---------- */
+
+.example {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.example .panel {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+
+/* The same phone as the Bootstrap tab in form-systems:
+   412 wide, an 8px grey bezel, 40px corners */
+.phone-frame {
+  position: sticky;
+  top: 1.5rem;
+  flex: 0 0 auto;
+  width: 412px;
+  max-width: 100%;
+  height: min(860px, calc(100vh - 3rem));
+  overflow: hidden;
+  border: 8px solid #d1d1d6;
+  border-radius: 40px;
+  background: var(--color-white);
+}
+
+.phone-screen {
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Bootstrap sizes h1 by the browser window. Inside a 412px phone,
+   this is the size Bootstrap would give it on a real 412px screen. */
+.phone-screen h1 { font-size: calc(1.375rem + 6.18px); }
+
+@media (max-width: 860px) {
+  .phone-frame { position: relative; top: 0; height: 75vh; }
+}
+
+.intro-text { max-width: 65ch; margin-bottom: 1.5rem; opacity: 0.8; }
+
+/* The object or array, one line (or one item) per block, so each can light up */
+.data-view {
+  position: relative;
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 10px;
+  background: var(--color-dark-gray);
+  color: var(--color-white);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.data-view .line { display: block; border-radius: 4px; padding: 0 0.25rem; }
+
+.data-view .highlight {
+  background: var(--color-yellow);
+  color: var(--color-dark-gray);
+}
+
+/* The array in the posts example is long: it scrolls inside its own box */
+.data-view.scrolls { max-height: 70vh; overflow-y: auto; }
+
+/* Code boxes inside an accordion sit flush with the panel */
+.accordion-body > .code:first-child,
+.accordion-body > .data-view:first-child { margin-top: 0; }
+
+/* The post list. The post you point at grows a little. */
+.tweets {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tweet { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+
+.tweet:hover,
+.tweet:focus-visible {
+  position: relative;
+  z-index: 1;
+  transform: scale(1.04);
+  box-shadow: 0 0.5rem 1.25rem var(--color-shadow);
+  border-color: var(--color-blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tweet { transition: none; }
+}
