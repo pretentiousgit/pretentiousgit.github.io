@@ -11,12 +11,12 @@
 
 :root {
     --primary-bg: hsl(201, 26%, 24%);
-    --logo-color: hsl(201, 45%, 82%);
-    --highlight-bg: hsl(201, 45%, 85%);
+    --logo-color: hsl(51, 100%, 97%);
+    --highlight-bg: hsl(50, 100%, 85%);
     --panel-bg: rgba(0, 0, 0, 0.7);
     --text-color: white;
     --text-display: hsl(201, 26%, 24%);
-    --bright-yellow: #FFD400;
+    --bright-yellow: hsl(50, 100%, 50%);
     --accent-color: #ff6b6b;
     --fade-color: hsl(201, 25%, 50%);
     --border-radius: 0.5rem;
@@ -70,16 +70,20 @@ main {
     z-index: 10;
     padding-left: 1rem;
     padding-bottom: 2rem;
+    height: stretch;
+    /* background: linear-gradient(180deg,rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 0.78) 50%, rgba(237, 221, 83, 0.52) 100%); */
 }
 
 .container {
     max-width: 45vw;
+    height: stretch;
 }
 
 .content {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    height: stretch;
+    /* gap: 1rem; */
 }
 
 .top-block {
@@ -91,8 +95,9 @@ main {
 
 /* SECTIONS - Fixed the height issue */
 section {
-    margin: 0 0.8rem;
+    padding: 0.8rem;
     padding-bottom: 3rem;
+    padding-top: 2rem;
     display: flex; 
 
     opacity: 0;
@@ -112,6 +117,7 @@ section.active {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    border-top: 1px solid var(--fade-color);
 }
 
 /* TYPOGRAPHY */
@@ -125,10 +131,12 @@ h1, h2, h3 {
 
 h1 {
     font-size: 4rem;
+    text-shadow: 2px 2px var(--fade-color);
 }
 
-h3 {
-    font-size: 1.5rem;
+h2 {
+    font-size: 1.4rem;
+    font-weight: 300;
 }
 
 header h1 {
@@ -154,15 +162,33 @@ header {
 nav ul {
     display: flex;
     flex-direction: row;
-    gap: 2rem;
+    gap: 1rem;
 }
 
+
 nav a {
-    color: var(--fade-color)
+    color: var(--primary-bg);
+    font-size: 0.8em;
+    font-weight: 400;
+    text-decoration: none;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+
+    display: block;
+    padding: 0.3em 0.4em 0em;
+
+    border: 1px var(--fade-color) solid;
+    border-bottom: none;
+    border-radius: 4px 4px 0px 0px;
 }
 
 nav a.active {
     color: var(--primary-bg);
+    font-weight: 800;
+    background-color: var(--highlight-bg);
+    mix-blend-mode: multiply;
 }
 
 a.header-link {
@@ -183,7 +209,7 @@ a.title {
     height: 100vh;
     width: calc(100vh * 63 / 72);
     top: 0;
-    left: 0;
+    right: 0;
     z-index: -1;
     overflow: hidden;
     isolation: isolate;
@@ -198,10 +224,26 @@ a.title {
     height: 100%;
     object-fit: cover;
     mix-blend-mode: multiply;
+    transform: rotate(180deg) skew(-10deg);
 }
 
 .logo path {
     fill: var(--logo-color);
+}
+
+.logo-small {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+}
+
+.logo-small path {
+    fill: var(--fade-color);
 }
 
 .particle-overlay {
@@ -212,7 +254,7 @@ a.title {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    mix-blend-mode: overlay;
+    mix-blend-mode: multiply;
 }
 
 .particle {
@@ -245,9 +287,13 @@ a.title {
 }
 
 #reset {
+    display: none; /* corrected in JS */
+    
     background: none;
     border: none;
-    padding: 0;
+    padding: 1rem;
+    padding-top: 0rem;
+    gap: 0.1em;
     margin: 0;
     cursor: pointer;
     
@@ -261,6 +307,13 @@ a.title {
     outline: none;
     
     transition: opacity 0.2s ease, transform 0.1s ease;
+
+    /* this aligns boxes inside flexBox */
+    justify-content: center;
+    align-items: center;
+
+    /* this applies only to the text itself within its box */
+    text-align: center;
 }
 
 #reset:hover {
@@ -275,20 +328,6 @@ a.title {
     outline: 2px solid var(--accent-color);
     outline-offset: 2px;
     border-radius: var(--border-radius);
-}
-
-#reset {
-    padding: 1rem;
-    padding-top: 0rem;
-    display: none;
-    gap: 1rem;
-
-    /* this aligns boxes inside flexBox */
-    justify-content: center;
-    align-items: center;
-
-    /* this applies only to the text itself within its box */
-    text-align: center;
 }
 
 #reset svg {
@@ -340,13 +379,24 @@ html.is-scrollable #reset {
         font-size: 6rem;
         letter-spacing: 0.2rem;
         line-height: normal;
+        text-shadow: -2px 2px hsl(201,37%,68%, 0.8);
     }
 
-    header h3 {
+    header h2 {
         font-size: 1.3rem;
     }
     .heat-wave-svg {
         display: none;
+    }
+
+    .logo-container {        
+        height: 20vh;
+        width: calc(20vh * 63 / 72);
+        right: 0;
+        object-fit: cover;
+    }
+    .logo {
+        right: 0;
     }
 }
 
