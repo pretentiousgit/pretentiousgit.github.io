@@ -1,6 +1,6 @@
 # Alex Leitch Dot Com
 
-This website is for storing code somewhere I can find it when I need to write a demo.
+This website is for storing code somewhere I can find it when I need to write a demo. Sometimes I use it to play with CSS.
 
 ## About
 
