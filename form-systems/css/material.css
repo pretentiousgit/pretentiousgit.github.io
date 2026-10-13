@@ -1,0 +1,328 @@
+/* Page setup for the Material form.
+   The md-* components style themselves. This file supplies what Material
+   leaves to the product: the typefaces, the color scheme, the window the
+   app runs in, the top app bar, and the layout grid. */
+
+/* ---- Typefaces ----
+   m3.material.io sets its titles in Google Sans. Roboto is the documented
+   default for everything else, so the components keep it. */
+:root {
+  --md-ref-typeface-brand: 'Google Sans', 'Roboto', system-ui, sans-serif;
+  --md-ref-typeface-plain: 'Roboto', system-ui, sans-serif;
+}
+
+/* ---- Color roles ----
+   The Material 3 baseline scheme, exactly as built into the components.
+   Every lavender tint on the page comes from this one block: replace these
+   values and the whole form, components included, takes the new scheme. */
+:root {
+  --md-sys-color-primary: #6750a4;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #eaddff;
+  --md-sys-color-on-primary-container: #21005d;
+  --md-sys-color-secondary: #625b71;
+  --md-sys-color-secondary-container: #e8def8;
+  --md-sys-color-on-secondary-container: #1d192b;
+  --md-sys-color-tertiary: #7d5260;
+  --md-sys-color-tertiary-container: #ffd8e4;
+  --md-sys-color-on-tertiary-container: #31111d;
+  --md-sys-color-error: #b3261e;
+  --md-sys-color-surface: #fef7ff;
+  --md-sys-color-surface-container-low: #f7f2fa;
+  --md-sys-color-surface-container: #f3edf7;
+  --md-sys-color-surface-container-high: #ece6f0;
+  --md-sys-color-surface-container-highest: #e6e0e9;
+  --md-sys-color-on-surface: #1d1b20;
+  --md-sys-color-on-surface-variant: #49454f;
+  --md-sys-color-outline: #79747e;
+  --md-sys-color-outline-variant: #cac4d0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  height: 100vh;
+  margin: 0;
+  padding: 24px;
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  /* body-large */
+  font-family: var(--md-ref-typeface-plain);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+/* ---- The window ----
+   .device is a size container: everything inside it responds to the width
+   of the window, not the width of the browser. That is how one page can be
+   a phone and a desktop app. */
+.device {
+  container: device / inline-size;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  width: 412px;
+  max-width: 100%;
+  min-width: 320px;
+  min-height: 0;
+  overflow: hidden;
+  resize: horizontal;
+}
+
+/* label-large */
+.readout {
+  margin: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+}
+
+.readout::after {
+  content: 'Compact · 4 columns · 16dp margins';
+}
+
+.window {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  border: 8px solid var(--md-sys-color-outline-variant);
+  border-radius: 40px;
+  background: var(--md-sys-color-surface);
+}
+
+.status-bar,
+.title-bar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--md-sys-color-surface-container);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.status-bar {
+  height: 40px;
+  padding: 0 24px;
+}
+
+.status-icons,
+.window-controls {
+  display: flex;
+}
+
+.status-icons md-icon {
+  --md-icon-size: 18px;
+}
+
+.title-bar {
+  display: none;
+  height: 32px;
+  padding: 0 12px 0 24px;
+  background: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.window-controls {
+  gap: 20px;
+}
+
+.window-controls md-icon {
+  --md-icon-size: 16px;
+}
+
+.gesture-bar {
+  flex: none;
+  width: 108px;
+  height: 4px;
+  margin: 10px auto;
+  border-radius: 2px;
+  background: var(--md-sys-color-on-surface);
+}
+
+/* ---- Top app bar (small): 64dp tall, title-large ----
+   Shown in surface-container, the color an app bar takes once content
+   scrolls beneath it. */
+.top-app-bar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  height: 64px;
+  padding: 0 4px;
+  background: var(--md-sys-color-surface-container);
+}
+
+.top-app-bar h1 {
+  flex: 1;
+  margin: 0;
+  font-family: var(--md-ref-typeface-brand);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+/* ---- The pane and its grid ---- */
+.pane {
+  --margin: 16px;
+  --columns: 4;
+  --gutter: 16px;
+
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px var(--margin);
+}
+
+.supporting-text {
+  margin: 0 0 24px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+  gap: 24px var(--gutter);
+  align-items: start;
+}
+
+/* Compact: every field spans all four columns */
+.grid > * {
+  grid-column: 1 / -1;
+}
+
+/* Medium and expanded windows (600dp and up): 8 columns, 24dp margins */
+@container device (min-width: 600px) {
+  .readout::after {
+    content: 'Medium · 8 columns · 24dp margins';
+  }
+
+  .window {
+    border-width: 1px;
+    border-radius: 12px;
+  }
+
+  .status-bar,
+  .gesture-bar {
+    display: none;
+  }
+
+  .title-bar {
+    display: flex;
+  }
+
+  .top-app-bar {
+    padding: 0 12px;
+  }
+
+  .pane {
+    --margin: 24px;
+    --columns: 8;
+    --gutter: 24px;
+  }
+
+  .grid > .half {
+    grid-column: span 4;
+  }
+
+  .grid > .narrow {
+    grid-column: span 3;
+  }
+
+  .grid > .wide {
+    grid-column: span 5;
+  }
+}
+
+@container device (min-width: 840px) {
+  .readout::after {
+    content: 'Expanded · 8 columns · 24dp margins';
+  }
+}
+
+/* Large and extra-large windows (1200dp and up): 12 columns */
+@container device (min-width: 1200px) {
+  .readout::after {
+    content: 'Large · 12 columns · 24dp margins';
+  }
+
+  .pane {
+    --columns: 12;
+  }
+
+  .grid > .half {
+    grid-column: span 6;
+  }
+
+  .grid > .narrow {
+    grid-column: span 4;
+  }
+
+  .grid > .wide {
+    grid-column: span 8;
+  }
+}
+
+@container device (min-width: 1600px) {
+  .readout::after {
+    content: 'Extra-large · 12 columns · 24dp margins';
+  }
+}
+
+/* ---- Fields ---- */
+md-outlined-text-field,
+md-outlined-select {
+  min-width: 0;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* label-large */
+legend,
+.field > span,
+.field > label {
+  padding: 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+}
+
+fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 48px;
+  padding-left: 4px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+md-slider {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}

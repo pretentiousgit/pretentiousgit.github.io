@@ -1,0 +1,150 @@
+/* Grid inspection overlay, switched on by the "Show grids" button.
+   Nothing here applies until the page has the class show-grid. It then
+   draws over each system's own grid classes, the way a browser's inspector
+   does: columns in blue, gutters in purple, page margins in orange, and a
+   dashed outline around each field's box. It measures nothing; it redraws
+   each grid from the same numbers the design system itself uses. */
+
+:root {
+  --overlay-column: rgba(66, 133, 244, 0.22);
+  --overlay-gutter: rgba(155, 89, 208, 0.32);
+  --overlay-margin: rgba(246, 160, 60, 0.4);
+  --overlay-item: #d6336c;
+}
+
+/* ==== USWDS and Bootstrap ====
+   Both build a 12-column grid the same way: every column is one twelfth of
+   the row, and the gutter is padding, half on each side of every column. */
+
+/* USWDS: grid-gap is 2 units (1rem) wide, 4 units from the desktop breakpoint */
+.show-grid .grid-row.grid-gap {
+  --overlay-half-gutter: 0.5rem;
+}
+
+.show-grid .grid-container {
+  --grid-margin: 1rem;
+}
+
+@media all and (min-width: 64em) {
+  .show-grid .grid-row.grid-gap {
+    --overlay-half-gutter: 1rem;
+  }
+
+  .show-grid .grid-container {
+    --grid-margin: 2rem;
+  }
+}
+
+/* Bootstrap: the gutter is its --bs-gutter-x variable */
+.show-grid .row {
+  --overlay-half-gutter: calc(var(--bs-gutter-x) * 0.5);
+}
+
+.show-grid :is(.grid-row.grid-gap, .row),
+.show-grid :is(.grid-container, .container) {
+  position: relative;
+}
+
+/* Columns and gutters: one twelfth of the row, repeated */
+.show-grid :is(.grid-row.grid-gap, .row)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: repeating-linear-gradient(
+    to right,
+    var(--overlay-gutter) 0,
+    var(--overlay-gutter) var(--overlay-half-gutter),
+    var(--overlay-column) var(--overlay-half-gutter),
+    var(--overlay-column) calc(100% / 12 - var(--overlay-half-gutter)),
+    var(--overlay-gutter) calc(100% / 12 - var(--overlay-half-gutter)),
+    var(--overlay-gutter) calc(100% / 12)
+  );
+  pointer-events: none;
+}
+
+/* Page margins: the container's side padding */
+.show-grid :is(.grid-container, .container)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  border: solid var(--overlay-margin);
+  border-width: 0 var(--grid-margin, calc(var(--bs-gutter-x) * 0.5));
+  pointer-events: none;
+}
+
+/* Each field's box, labelled with its own class names */
+.show-grid :is(.grid-row.grid-gap, .row) > * {
+  position: relative;
+  outline: 1px dashed var(--overlay-item);
+  outline-offset: -1px;
+}
+
+.show-grid :is(.grid-row.grid-gap, .row) > *::after {
+  content: attr(class);
+  position: absolute;
+  top: var(--overlay-label-top, 3px);
+  left: var(--overlay-half-gutter);
+  z-index: 11;
+  padding: 0 4px;
+  background: var(--overlay-item);
+  color: #fff;
+  font: 11px/15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Where there is no spare room inside the box, the label sits just above it */
+.show-grid .row > * {
+  --overlay-label-top: -15px;
+}
+
+/* Browsers place things inside a fieldset from below its legend, so this
+   one has to climb over the legend as well */
+.show-grid .grid-row.grid-gap > fieldset {
+  --overlay-label-top: -38px;
+}
+
+/* ==== Material ====
+   A true CSS grid: 4, 8 or 12 columns with a gap between them. The column
+   count, gutter and margin come from the variables set in material.css. */
+
+.show-grid .grid {
+  position: relative;
+}
+
+.show-grid .grid::before {
+  --column: calc((100% - (var(--columns) - 1) * var(--gutter)) / var(--columns));
+
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: repeating-linear-gradient(
+    to right,
+    var(--overlay-column) 0,
+    var(--overlay-column) var(--column),
+    var(--overlay-gutter) var(--column),
+    var(--overlay-gutter) calc(var(--column) + var(--gutter))
+  );
+  pointer-events: none;
+}
+
+.show-grid .grid::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: calc(-1 * var(--margin));
+  bottom: 0;
+  left: calc(-1 * var(--margin));
+  z-index: 10;
+  border: solid var(--overlay-margin);
+  border-width: 0 var(--margin);
+  pointer-events: none;
+}
+
+.show-grid .grid > * {
+  outline: 1px dashed var(--overlay-item);
+  outline-offset: 3px;
+}

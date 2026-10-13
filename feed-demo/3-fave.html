@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3. Fave - Information objects</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/shell.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="js/timeline.js" defer></script>
+  <script src="js/tweets.js" defer></script>
+  <script src="js/3-fave.js" defer></script>
+</head>
+<body>
+  <nav class="sidebar" aria-label="Examples">
+    <h1>Information objects</h1>
+    <ul class="nav nav-pills flex-column">
+      <li class="nav-item"><a class="nav-link" href="1-object.html">1. One object, one post</a></li>
+      <li class="nav-item"><a class="nav-link" href="2-collection.html">2. An array of posts</a></li>
+      <li class="nav-item"><a class="nav-link active" aria-current="page" href="3-fave.html">3. Fave: fast or slow?</a></li>
+      <li class="nav-item"><a class="nav-link" href="4-pop-in.html">4. Pop in over time</a></li>
+    </ul>
+  </nav>
+
+  <main class="stage">
+    <div class="example">
+      <!-- Same phone as the Bootstrap tab in form-systems: 412 wide, grey bezel -->
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="container py-4">
+            <h1>Social feed app</h1>
+            <p class="lead">Check on your phone friends.</p>
+            <ul id="tweets" class="tweets"></ul>
+          </div>
+        </div>
+        <p id="phone-message" class="phone-message" role="status" hidden></p>
+      </div>
+
+      <div class="panel">
+        <p class="intro-text">Click a heart. It turns red on the phone right away. Saving it means a trip to the server, and that takes time. Your clicks show up in whichever scenario is open.</p>
+
+        <h2>What happens after a click</h2>
+        <div class="accordion scenarios" id="scenarios">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#scenario-works" aria-expanded="true" aria-controls="scenario-works">1. When it works</button>
+            </h3>
+            <div id="scenario-works" class="accordion-collapse collapse show" data-bs-parent="#scenarios">
+              <div class="accordion-body">
+                <div class="request-diagram">
+                  <div class="diagram-row diagram-head">
+                    <div class="cell client-cell">Client<span>on the phone</span></div>
+                    <div class="cell network-cell">Network</div>
+                    <div class="cell server-cell">Server<span>somewhere else</span></div>
+                  </div>
+                  <div id="rows-works" data-interruptible="false" aria-live="polite">
+                    <div class="diagram-row no-requests">
+                      <div class="cell client-cell"><div class="detail">Click a heart on the phone.</div></div>
+                      <div class="cell network-cell"></div>
+                      <div class="cell server-cell"><div class="detail">Nothing yet.</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#scenario-drops" aria-expanded="false" aria-controls="scenario-drops">2. When the connection drops</button>
+            </h3>
+            <div id="scenario-drops" class="accordion-collapse collapse" data-bs-parent="#scenarios">
+              <div class="accordion-body">
+                <p class="scenario-hint">Click a heart, then press <strong>Interrupt</strong> before the line fills up.</p>
+                <div class="request-diagram">
+                  <div class="diagram-row diagram-head">
+                    <div class="cell client-cell">Client<span>on the phone</span></div>
+                    <div class="cell network-cell">Network</div>
+                    <div class="cell server-cell">Server<span>somewhere else</span></div>
+                  </div>
+                  <div id="rows-drops" data-interruptible="true" aria-live="polite">
+                    <div class="diagram-row no-requests">
+                      <div class="cell client-cell"><div class="detail">Click a heart on the phone.</div></div>
+                      <div class="cell network-cell"></div>
+                      <div class="cell server-cell"><div class="detail">Nothing yet.</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>The code</h2>
+        <div class="accordion" id="code-panels">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panel-fave" aria-expanded="true" aria-controls="panel-fave">What a click does (<code class="ms-1">faveTweet</code>)</button>
+            </h2>
+            <div id="panel-fave" class="accordion-collapse collapse show" data-bs-parent="#code-panels">
+              <div class="accordion-body">
+                <pre id="code" class="code"></pre>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panel-server" aria-expanded="false" aria-controls="panel-server">The slow trip, faked with a timeout (<code class="ms-1">sendToServer</code>)</button>
+            </h2>
+            <div id="panel-server" class="accordion-collapse collapse" data-bs-parent="#code-panels">
+              <div class="accordion-body">
+                <pre id="code-server" class="code"></pre>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panel-interrupt" aria-expanded="false" aria-controls="panel-interrupt">When the connection drops (<code class="ms-1">sendWithInterrupt</code>)</button>
+            </h2>
+            <div id="panel-interrupt" class="accordion-collapse collapse" data-bs-parent="#code-panels">
+              <div class="accordion-body">
+                <pre id="code-interrupt" class="code"></pre>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panel-template" aria-expanded="false" aria-controls="panel-template">The template, now with a heart (<code class="ms-1">renderTweet</code>)</button>
+            </h2>
+            <div id="panel-template" class="accordion-collapse collapse" data-bs-parent="#code-panels">
+              <div class="accordion-body">
+                <pre id="code-template" class="code"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3. Loops and Arrays - Arrays, objects and scope</title>
+  <!-- Official Bootstrap 5, same as form-systems and feed-demo -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/shell.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="js/show-code.js" defer></script>
+  <script src="js/3-array-methods.js" defer></script>
+  <script src="js/3-step-through.js" defer></script>
+</head>
+<body>
+  <nav class="sidebar" aria-label="Examples">
+    <h1>Arrays, objects and scope</h1>
+    <ul class="nav nav-pills flex-column">
+      <li class="nav-item"><a class="nav-link" href="1-arrays.html">1. Arrays</a></li>
+      <li class="nav-item"><a class="nav-link" href="2-objects.html">2. Objects</a></li>
+      <li class="nav-item"><a class="nav-link active" aria-current="page" href="3-array-methods.html">3. Loops and Arrays</a></li>
+      <li class="nav-item"><a class="nav-link" href="5-one-post.html">4. One object, one post</a></li>
+      <li class="nav-item"><a class="nav-link" href="6-posts.html">5. An array of posts</a></li>
+    </ul>
+  </nav>
+
+  <main class="stage">
+    <div class="accordion" id="steps">
+
+      <!-- Step 1: loops take more lines and are easier to get wrong -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#step-loops" aria-expanded="true" aria-controls="step-loops">Loops: more lines, more to get wrong</button>
+        </h2>
+        <div id="step-loops" class="accordion-collapse collapse show" data-bs-parent="#steps">
+          <div class="accordion-body">
+            <h3 class="step-subhead">Making a new array</h3>
+            <div class="button-columns">
+              <div>
+                <div id="build-loop-row" class="box-row"></div>
+                <button id="run-build-loop" class="btn btn-primary btn-lg" type="button">Build with a for loop</button>
+                <pre id="code-build-loop" class="code"></pre>
+              </div>
+              <div>
+                <div id="build-typo-row" class="box-row"></div>
+                <button id="run-build-typo" class="btn btn-primary btn-lg" type="button">Same loop, one typo</button>
+                <pre id="code-build-typo" class="code"></pre>
+              </div>
+              <div>
+                <div id="build-foreach-row" class="box-row"></div>
+                <button id="run-build-foreach" class="btn btn-primary btn-lg" type="button">Build with forEach</button>
+                <pre id="code-build-foreach" class="code"></pre>
+              </div>
+            </div>
+
+            <h3 class="step-subhead">A while loop holds up the whole page</h3>
+            <p class="page-clock">Page clock: <span id="page-clock">0.0 s</span></p>
+            <div class="button-columns">
+              <div>
+                <button id="run-while" class="btn btn-primary btn-lg" type="button">Run a while loop for 3 seconds</button>
+                <pre id="code-while" class="code"></pre>
+              </div>
+              <div>
+                <p class="never-run-label">Never run this: it waits forever</p>
+                <pre class="code never-run">let boxesLoaded = false;
+
+while (!boxesLoaded) {
+  // Waiting for the boxes to load. But while this loop runs,
+  // nothing else can, so they never load and this never ends.
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: map vs forEach, one statement at a time -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step-map" aria-expanded="false" aria-controls="step-map">map vs forEach, one line at a time</button>
+        </h2>
+        <div id="step-map" class="accordion-collapse collapse" data-bs-parent="#steps">
+          <div class="accordion-body">
+            <div id="steps-row" class="box-row"></div>
+            <div class="buttons mb-3">
+              <button id="step-next" class="btn btn-primary btn-lg" type="button">Run next line</button>
+              <button id="step-reset" class="btn btn-outline-primary btn-lg" type="button">Start over</button>
+            </div>
+            <div class="button-columns">
+              <div>
+                <pre id="step-code" class="code step-code"></pre>
+              </div>
+              <div>
+                <p class="vars-title">What your JavaScript can see</p>
+                <pre id="step-vars" class="code vars-code"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: filter gives back an array, find gives back one item -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step-filter" aria-expanded="false" aria-controls="step-filter">filter and find</button>
+        </h2>
+        <div id="step-filter" class="accordion-collapse collapse" data-bs-parent="#steps">
+          <div class="accordion-body">
+            <div id="source-row" class="box-row sized"></div>
+            <div class="button-columns mt-4">
+              <div>
+                <div id="filter-row" class="box-row sized"></div>
+                <pre id="filter-result" class="array-line result-line"></pre>
+                <button id="run-filter" class="btn btn-primary btn-lg" type="button">filter: only the red boxes</button>
+                <pre id="code-filter" class="code"></pre>
+              </div>
+              <div>
+                <div id="find-row" class="box-row sized"></div>
+                <pre id="find-result" class="array-line result-line"></pre>
+                <button id="run-find" class="btn btn-primary btn-lg" type="button">find: the first 100px box</button>
+                <pre id="code-find" class="code"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

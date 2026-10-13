@@ -1,0 +1,105 @@
+/* The look of designsystem.digital.gov, layered on top of stock USWDS.
+   The stock stylesheet ships Source Sans Pro and Merriweather only. The USWDS
+   documentation site adds Public Sans Web for its page chrome, so this file
+   loads that typeface and copies the site's own .site-* rules, values
+   unchanged. Form controls stay in Source Sans Pro, as they do on the site.
+   Colors come from USWDS color utility classes in the markup
+   (bg-primary-vivid, text-gray-50, and so on) wherever a utility exists. */
+
+@font-face {
+  font-family: 'Public Sans Web';
+  font-style: normal;
+  font-weight: 300;
+  font-display: fallback;
+  src: url('https://cdn.jsdelivr.net/npm/@uswds/uswds@3.14.0/dist/fonts/public-sans/PublicSans-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Public Sans Web';
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url('https://cdn.jsdelivr.net/npm/@uswds/uswds@3.14.0/dist/fonts/public-sans/PublicSans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Public Sans Web';
+  font-style: normal;
+  font-weight: 700;
+  font-display: fallback;
+  src: url('https://cdn.jsdelivr.net/npm/@uswds/uswds@3.14.0/dist/fonts/public-sans/PublicSans-Bold.woff2') format('woff2');
+}
+
+:root {
+  --public-sans: 'Public Sans Web', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+body {
+  font-family: var(--public-sans);
+}
+
+.site-page-title {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.8);
+  font-family: var(--public-sans);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.site-text-intro {
+  max-width: 72ex;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-family: var(--public-sans);
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* Small uppercase label inside the preview block ("DEFAULT" on the site) */
+.site-preview-heading {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: var(--public-sans);
+  font-size: 0.88rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ---- The highlight banner: the site's "Component preview" block ---- */
+
+.site-accordion-code.site-component-preview {
+  margin-top: 3rem;
+}
+
+.site-accordion-code > .usa-accordion__heading {
+  font-family: var(--public-sans);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* White plus/minus icons, since the bar is dark. Bar colors are utilities. */
+.site-accordion-heading .usa-accordion__button,
+.site-accordion-heading .usa-accordion__button:hover {
+  background-image: url('https://cdn.jsdelivr.net/npm/@uswds/uswds@3.14.0/dist/img/usa-icons-bg/remove--white.svg'), linear-gradient(transparent, transparent);
+  background-repeat: no-repeat;
+}
+
+/* The stock build has no hover:text-white utility, so this one is by hand */
+.site-accordion-heading .usa-accordion__button:hover {
+  color: #fff;
+}
+
+.site-accordion-heading .usa-accordion__button[aria-expanded='false'],
+.site-accordion-heading .usa-accordion__button[aria-expanded='false']:hover {
+  background-image: url('https://cdn.jsdelivr.net/npm/@uswds/uswds@3.14.0/dist/img/usa-icons-bg/add--white.svg'), linear-gradient(transparent, transparent);
+}
+
+.site-accordion-code.site-component-preview .usa-accordion__content {
+  overflow: visible;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
