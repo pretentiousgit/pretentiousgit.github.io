@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pocket Hatch — cross-grain slice generator</title>
+<style>
+  :root { --ink:#1a1a1a; --line:#d0d0d0; --accent:#e21833; --panel:#f7f7f7; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+         color:var(--ink); display:grid; grid-template-columns:380px 1fr; height:100vh; }
+  .controls { padding:18px 20px; overflow:auto; border-right:1px solid var(--line); background:var(--panel); }
+  .preview  { padding:20px; overflow:auto; display:flex; flex-direction:column; gap:14px; min-height:0; }
+  h1 { font-size:17px; margin:0 0 4px; }
+  .sub { color:#666; font-size:12px; margin:0 0 16px; }
+  label { display:block; font-weight:600; margin:14px 0 4px; font-size:12px; text-transform:uppercase; letter-spacing:.4px; }
+  input, select, textarea { width:100%; padding:7px 8px; border:1px solid var(--line); border-radius:5px; font:inherit; background:#fff; }
+  textarea { font-family:ui-monospace,Menlo,Consolas,monospace; font-size:11px; height:150px; resize:vertical; }
+  .row { display:flex; gap:10px; }
+  .row > div { flex:1; }
+  .row > button { flex:1; width:auto; margin-top:8px; }
+  .hint { font-size:11px; color:#777; margin-top:3px; }
+  button { margin-top:16px; padding:9px 12px; border:0; border-radius:6px; background:var(--accent); color:#fff;
+           font-weight:700; cursor:pointer; width:100%; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  button.secondary { background:#e6e6e6; color:#222; margin-top:8px; }
+  button.secondary[aria-pressed="true"] { background:var(--accent); color:#fff; }
+  .stats { flex:none; background:#fff; border:1px solid var(--line); border-radius:8px; padding:14px 16px; }
+  .stats table { width:100%; border-collapse:collapse; font-size:13px; }
+  .stats td { padding:3px 0; }
+  .stats td:last-child { text-align:right; font-variant-numeric:tabular-nums; font-weight:600; }
+  .stage-wrap { position:relative; flex:1; min-height:0; }
+  .stage { position:absolute; inset:0; overflow:auto; display:flex; align-items:center; justify-content:center;
+           border:1px dashed var(--line); border-radius:8px; padding:16px; background:
+           repeating-conic-gradient(#fafafa 0% 25%, #fff 0% 50%) 0/24px 24px; }
+  .stage.actual-size { align-items:flex-start; justify-content:flex-start; }
+  .stage svg { max-width:100%; max-height:100%; width:auto; height:auto; display:block; }
+  .err { color:var(--accent); font-weight:600; }
+  code { background:#eee; padding:1px 4px; border-radius:3px; font-size:12px; }
+  .dropzone { position:relative; }
+  .dropzone.dragover textarea { outline:2px dashed var(--accent); outline-offset:2px; background:#fff5f6; }
+  .dropzone-overlay {
+    position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(226,24,51,0.06); border:2px dashed var(--accent); border-radius:5px;
+    color:var(--accent); font-weight:700; font-size:13px; pointer-events:none;
+  }
+  .dropzone.dragover .dropzone-overlay { display:flex; }
+  .filename { font-size:11px; color:#777; margin-top:3px; }
+  input:disabled, select:disabled { opacity:.5; }
+  .stage-toolbar { position:absolute; top:8px; right:8px; z-index:2; display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
+  .stage-btn { width:auto; margin-top:0; padding:6px 10px; font-size:12px; box-shadow:0 1px 3px rgba(0,0,0,.15); }
+  .recal-link { font-size:11px; color:#666; background:#fff; padding:2px 6px; border-radius:4px; cursor:pointer; text-decoration:underline; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+  .cal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; z-index:10; padding:20px; }
+  .cal-overlay.open { display:flex; }
+  .cal-panel { background:#fff; border-radius:10px; padding:22px 24px; max-width:min(94vw, 760px); width:100%;
+               max-height:92vh; overflow:auto; }
+  .cal-panel h2 { font-size:15px; margin:0 0 8px; }
+  .cal-card-wrap { display:flex; align-items:center; justify-content:center; min-height:120px; margin:14px 0; }
+  .cal-card { background:#dfe3e6; border:1px solid #aab0b6; border-radius:6px; flex-shrink:0; transition:width .05s, height .05s; }
+  .cal-slider-row { display:flex; align-items:center; gap:10px; }
+  .cal-slider-row input[type="range"] { width:100%; }
+  .cal-slider-row span { font-size:11px; color:#777; width:44px; text-align:right; font-variant-numeric:tabular-nums; }
+  .cal-actions { display:flex; gap:8px; margin-top:18px; }
+  .cal-actions button { margin-top:0; }
+</style>
+</head>
+<body>
+  <!-- This project was produced to support laser-engraver experiments and supports a poster at UIST2026. It could use refinements, or be further developed into an interesting Rhino plugin, or have other work added. Mainly, I wanted to be able to cut tidy blind mortise into small pieces of wood without needing a router bit, and this lets me do that. -->
+  <div class="controls">
+    <h1>Pocket Hatch</h1>
+    <p class="sub">Uniform cross-grain slice generator for laser engravers</p>
+
+    <label>Source SVG (paste, or drag &amp; drop a .svg file)</label>
+    <div class="dropzone" id="dropzone">
+      <textarea id="src" spellcheck="false"></textarea>
+      <div class="dropzone-overlay">drop .svg file here</div>
+    </div>
+    <div class="filename" id="filename"></div>
+    <div class="hint">Rails mode uses the first two <code>&lt;path&gt;</code> as top/bottom edges. Outline mode fills all closed loops from <code>&lt;path&gt;</code> (including compound paths), plus <code>&lt;rect&gt;</code>/<code>&lt;circle&gt;</code>/<code>&lt;ellipse&gt;</code>/<code>&lt;polygon&gt;</code> — e.g. a plate drawn as a rect with hole circles as separate elements. Holes stay uncut automatically.</div>
+
+    <label>Interpret Source As</label>
+    <select id="mode">
+      <option value="rails">Two rails (top + bottom edge)</option>
+      <option value="outline">One closed outline</option>
+    </select>
+
+    <div class="row">
+      <div>
+        <label>Target Width (mm)</label>
+        <input id="width" type="number" step="0.1" min="0.01" value="33.75">
+        <div class="hint">physical output</div>
+      </div>
+      <div>
+        <label>Slice Spacing (mm)</label>
+        <input id="spacing" type="number" step="0.1" min="0.01" value="1">
+        <div class="hint">space between cuts</div>
+      </div>
+    </div>
+    <div class="row">
+      <button class="secondary" id="fromSource72">↺ Set width @72dpi</button>
+      <button class="secondary" id="fromSource96">↺ Set width @96dpi</button>
+    </div>
+    <div class="hint">Dropped files auto-set width at 72dpi on load to match Illustrator defaults.</div>
+
+    <div class="row">
+      <div>
+        <label>Kerf Gap (mm)</label>
+        <input id="kerf" type="number" step="0.05" min="0" value="0.1">
+        <div class="hint">pull slice ends back from outline to prevent cross-cut (0 = touch)</div>
+      </div>
+      <div></div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>Grain Angle</label>
+        <input id="grain" type="number" step="1" value="0">
+        <div class="hint">set grain angle from 0 to 90</div>
+      </div>
+      <div>
+        <label>Cut Color</label>
+        <input id="color" type="text" value="#ff0000">
+        <div class="hint">LightBurn keys cuts by color</div>
+      </div>
+    </div>
+
+    <label><input type="checkbox" id="outline" style="width:auto;display:inline;margin-right:6px" checked>Include perimeter outline</label>
+
+    <button type="button" class="secondary" id="invertParity" aria-pressed="false">⇄ Invert nesting parity</button>
+    <div class="hint" id="parityHint">Cutting bands 1, 3, 5… in from the outermost edge of each nested set. Click to flip to bands 2, 4, 6… instead.</div>
+
+    <label><input type="checkbox" id="relief" style="width:auto;display:inline;margin-right:6px">Add clearance relief cuts</label>
+    <div class="row">
+      <div>
+        <label>Relief Spacing (mm)</label>
+        <input id="reliefSpacing" type="number" step="0.5" min="0.1" value="15" disabled>
+        <div class="hint">Regions taller than this will be evenly divided</div>
+      </div>
+    </div>
+
+    <button id="gen">Generate</button>
+    <button class="secondary" id="dl">Download SVG</button>
+  </div>
+
+  <div class="preview dropzone" id="preview">
+    <div class="stats" id="stats">Generating…</div>
+    <div class="stage-wrap" id="stageWrap">
+      <div class="stage" id="stage"></div>
+      <div class="stage-toolbar">
+        <button type="button" class="secondary stage-btn" id="calibrateBtn" aria-pressed="false">Calibrate size</button>
+        <a href="#" class="recal-link" id="recalLink" style="display:none">recalibrate</a>
+      </div>
+    </div>
+    <div class="dropzone-overlay">drop .svg file here</div>
+  </div>
+
+  <div class="cal-overlay" id="calOverlay">
+    <div class="cal-panel">
+      <h2>Calibrate real size</h2>
+      <p class="hint">Hold a credit or debit card up to your screen. Move the slider until this rectangle matches the card's width exactly.</p>
+      <div class="cal-card-wrap"><div class="cal-card" id="calCard"></div></div>
+      <div class="cal-slider-row">
+        <input type="range" id="calSlider" min="40" max="200" value="100" step="1">
+        <span id="calSliderPct">100%</span>
+      </div>
+      <div class="hint">There's no way for a browser to know your screen's real pixel density, so this is the only reliable way to get an accurate on-screen size — it's a one-time (per browser/monitor/zoom level) manual match, not automatic.</div>
+      <div class="cal-actions">
+        <button type="button" class="secondary" id="calCancel">Cancel</button>
+        <button type="button" id="calSave">Save calibration</button>
+      </div>
+    </div>
+  </div>
+
+  <svg id="scratch" style="position:absolute;width:0;height:0;visibility:hidden" xmlns="http://www.w3.org/2000/svg"></svg>
+
+<script>
+const SAMPLE = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="128.52" height="51.05" viewBox="0 0 128.52 51.05">
+  <path d="m.5,19.9c39.17-25.06,92.31-26.37,127.52-.84"/>
+  <path d="m.5,50.62c39.17-25.06,92.31-26.37,127.52-.84"/>
+</svg>`;
+
+const $ = id => document.getElementById(id);
+$('src').value = SAMPLE;
+
+// ---- flatten any <path> to a polyline using the browser's own geometry ----
+function flatten(dAttr) {
+  const ns = 'http://www.w3.org/2000/svg';
+  const p = document.createElementNS(ns, 'path');
+  p.setAttribute('d', dAttr);
+  $('scratch').appendChild(p);
+  const len = p.getTotalLength();
+  const step = Math.max(len / 500, 0.25);
+  const pts = [];
+  for (let d = 0; d <= len; d += step) { const q = p.getPointAtLength(d); pts.push({x:q.x, y:q.y}); }
+  const e = p.getPointAtLength(len); pts.push({x:e.x, y:e.y});
+  $('scratch').removeChild(p);
+  return pts;
+}
+
+// ---- flatten a basic shape element (rect/circle/ellipse/polygon) using its
+//      own native geometry — rect/circle/ellipse/polygon all implement
+//      SVGGeometryElement in modern browsers, so getTotalLength/
+//      getPointAtLength work directly and handle things like a rect's
+//      rounded corners (rx/ry) exactly, no re-derivation needed ----
+function flattenShape(el){
+  const ns = 'http://www.w3.org/2000/svg';
+  const clone = document.createElementNS(ns, el.tagName.toLowerCase());
+  for (const attr of el.attributes) clone.setAttribute(attr.name, attr.value);
+  $('scratch').appendChild(clone);
+  if (typeof clone.getTotalLength !== 'function') {
+    $('scratch').removeChild(clone);
+    throw `<${el.tagName}> isn't supported as a fillable shape in this browser.`;
+  }
+  const len = clone.getTotalLength();
+  const step = Math.max(len / 500, 0.25);
+  const pts = [];
+  for (let d = 0; d <= len; d += step) { const q = clone.getPointAtLength(d); pts.push({x:q.x, y:q.y}); }
+  $('scratch').removeChild(clone);
+  return pts;
+}
+
+function bbox(pts){ let a={x:1e9,y:1e9}, b={x:-1e9,y:-1e9};
+  for(const p of pts){ a.x=Math.min(a.x,p.x); a.y=Math.min(a.y,p.y); b.x=Math.max(b.x,p.x); b.y=Math.max(b.y,p.y);} return {a,b}; }
+
+function rot(p, deg){ const r=deg*Math.PI/180, c=Math.cos(r), s=Math.sin(r);
+  return {x:p.x*c - p.y*s, y:p.x*s + p.y*c}; }
+
+// ---- split a path 'd' into its subpaths, each rebuilt as a standalone
+//      absolute d string (so a hole ring drawn with a relative 'm' still
+//      lands in the right place when flattened on its own) ----
+function cmdLen(c){ return {M:2,L:2,H:1,V:1,C:6,S:4,Q:4,T:2,A:7,Z:0}[c.toUpperCase()]; }
+function parseCommands(d){
+  const toks = d.match(/[a-zA-Z]|-?\d*\.?\d+(?:[eE][+-]?\d+)?/g) || [];
+  const cmds=[]; let i=0, cur='';
+  while(i<toks.length){
+    if(/[a-zA-Z]/.test(toks[i])) cur=toks[i++];
+    else if(!cur) break;
+    if(cur.toUpperCase()==='Z'){ cmds.push({letter:cur,coords:[]}); cur=''; continue; }
+    const n=cmdLen(cur), coords=[];
+    for(let k=0;k<n;k++) coords.push(parseFloat(toks[i++]));
+    cmds.push({letter:cur,coords});
+    if(cur==='M') cur='L'; else if(cur==='m') cur='l'; // implicit lineto after moveto
+  }
+  return cmds;
+}
+function splitSubpaths(d){
+  const f=n=>+n.toFixed(4);
+  const cmds=parseCommands(d); const subs=[];
+  let cur=null, cx=0,cy=0,sx=0,sy=0;
+  for(const {letter,coords} of cmds){
+    const rel=letter===letter.toLowerCase(), C=letter.toUpperCase();
+    const P=i=> rel?[cx+coords[i],cy+coords[i+1]]:[coords[i],coords[i+1]];
+    if(C==='M'){ [cx,cy]=P(0); sx=cx;sy=cy; cur=[`M${f(cx)},${f(cy)}`]; subs.push(cur); }
+    else if(C==='L'||C==='T'){ [cx,cy]=P(0); cur.push(`${C}${f(cx)},${f(cy)}`); }
+    else if(C==='H'){ cx=rel?cx+coords[0]:coords[0]; cur.push(`L${f(cx)},${f(cy)}`); }
+    else if(C==='V'){ cy=rel?cy+coords[0]:coords[0]; cur.push(`L${f(cx)},${f(cy)}`); }
+    else if(C==='C'){ const a=P(0),b=P(2),e=P(4); [cx,cy]=e;
+      cur.push(`C${f(a[0])},${f(a[1])} ${f(b[0])},${f(b[1])} ${f(e[0])},${f(e[1])}`); }
+    else if(C==='S'||C==='Q'){ const b=P(0),e=P(2); [cx,cy]=e;
+      cur.push(`${C}${f(b[0])},${f(b[1])} ${f(e[0])},${f(e[1])}`); }
+    else if(C==='A'){ const e=P(5); const s=rel? e : [coords[5],coords[6]]; [cx,cy]=s;
+      cur.push(`A${coords[0]} ${coords[1]} ${coords[2]} ${coords[3]} ${coords[4]} ${f(s[0])},${f(s[1])}`); }
+    else if(C==='Z'){ cx=sx;cy=sy; if(cur) cur.push('Z'); }
+  }
+  return subs.map(s=>s.join(' '));
+}
+
+// ---- outline-drawing recipe for a basic shape: just its own geometry
+//      attributes, none of fill/stroke/class/style, which are set on
+//      the wrapping <g> in the output so they can't conflict ----
+function shapeOutlineNode(el){
+  const tag = el.tagName.toLowerCase();
+  const keep = {
+    rect: ['x','y','width','height','rx','ry'],
+    circle: ['cx','cy','r'],
+    ellipse: ['cx','cy','rx','ry'],
+    polygon: ['points'],
+  }[tag];
+  if(!keep) return null;
+  const attrs = {};
+  for(const name of keep){ const v = el.getAttribute(name); if(v!==null) attrs[name]=v; }
+  return {tag, attrs};
+}
+
+function renderOutlineNode({tag, attrs}){
+  const s = Object.entries(attrs).map(([k,v])=>`${k}="${v}"`).join(' ');
+  return `<${tag} ${s}/>`;
+}
+
+// ---- read every closed loop from an SVG string: <path> elements may encode
+//      several loops (compound paths / holes) via multiple M...Z segments,
+//      while basic shapes (rect/circle/ellipse/polygon) are each already one
+//      closed loop on their own — e.g. a plate drawn as <rect> with mounting
+//      holes as <circle> elements, all siblings rather than one <path>.
+//
+//      Each loop carries two representations: `pts` (a dense flattened
+//      polyline, used only internally for the scanline-intersection math)
+//      and `outline`
+//      original un-flattened vector command(s) retain a circle as <circle>
+//      Bézier paths remain <path d="...">
+//      Only `outline` is used to render the perimeter in the output
+//      this prevents circles converting to many anchor points
+function loopsFromSVG(svgString){
+  const doc = new DOMParser().parseFromString(svgString, 'image/svg+xml');
+  const loops = [];
+  for(const p of doc.querySelectorAll('path')){
+    const d = p.getAttribute('d');
+    if(!d) continue;
+    for(const sub of splitSubpaths(d))
+      loops.push({ pts: flatten(sub), outline: [{tag:'path', attrs:{d: sub}}] });
+  }
+  for(const el of doc.querySelectorAll('rect, circle, ellipse, polygon')){
+    const node = shapeOutlineNode(el);
+    loops.push({ pts: flattenShape(el), outline: node ? [node] : [] });
+  }
+  return loops;
+}
+
+// ---- vertical scanline fill over one OR many loops (holes via even-odd).
+//      `offset` picks which alternating band gets cut:
+//      0 = 1,3,5… counting in from the outermost edge of each nested stack
+//      1 = 2,4,6… counts in from the second line
+//      this allows banded island pockets
+//
+//      Columns alternate cut direction (serpentine/boustrophedon):
+//      while this may be obviated by laser drivers, 
+//      columns are emitted bottom-to-top with each line's own endpoints
+//      reversed too, so the laser head's last position in one column is
+//      already next to its first position in the next column, instead of
+//      always resetting to the top.
+//      This can reduce cutting time by up to 90% if respected in driver software
+
+function hatch(loops, spacing, offset, gap){
+  offset = offset ? 1 : 0;
+  gap = gap > 0 ? gap : 0;
+  const all = loops.flat();
+  const {a,b} = bbox(all);
+  const segs = [];
+  const start = Math.ceil(a.x/spacing)*spacing;
+  let col = 0;
+  for(let x = start; x <= b.x + 1e-6; x += spacing, col++){
+    const ys = [];
+    for(const loop of loops)
+      for(let i=0;i<loop.length;i++){
+        const p1=loop[i], p2=loop[(i+1)%loop.length];
+        if((p1.x<=x && x<p2.x) || (p2.x<=x && x<p1.x)){
+          const t=(x-p1.x)/(p2.x-p1.x);
+          ys.push(p1.y + t*(p2.y-p1.y));
+        }
+      }
+    ys.sort((m,n)=>m-n);
+    // each [lo,hi] pair spans one fill band
+    // kerf offsets pull both ends in by `gap` to leave a kerf-sized break
+    // so a slice cut never lands on the perimeter cut,
+    // avoiding a double-energy dot where two cuts cross.
+    // A band too short to survive 2×gap is dropped rather than inverted.
+    const pairs = [];
+    for(let k=offset; k+1<ys.length; k+=2){
+      let lo = ys[k], hi = ys[k+1];
+      if(gap){ lo += gap; hi -= gap; if(hi - lo <= 1e-6) continue; }
+      pairs.push([lo, hi]);
+    }
+    if(col % 2 === 1){
+      pairs.reverse();
+      for(const pr of pairs){ const t=pr[0]; pr[0]=pr[1]; pr[1]=t; }
+    }
+    for(const [y1,y2] of pairs) segs.push([{x,y:y1},{x,y:y2}]);
+  }
+  return segs;
+}
+
+// ---- clearance relief cuts: coarse horizontal lines are added on top of
+//      fine vertical slices, so a tall filled region still clears easily
+//
+//      Cut rows are placed symmetric about the region's vertical center
+//
+//      Stepping outward from center in spacing increments (first row
+//      at ±spacing/2, then ±spacing/2±spacing, …) keeps every interior gap
+//      exactly equal to `spacing`
+//      the two outer end-pieces may vary
+//      a step is only taken if it leaves at least half a spacing's worth of
+//      material beyond it, otherwise it collapses to a single line at the
+//      exact center instead of an undersized pair
+//
+//      `offset` mirrors hatch()'s nesting-parity toggle (0 = bands 1,3,5…
+//      from the outside, 1 = bands 2,4,6… inverted) so a relief row through
+//      a nested hole-inside-an-island shape cuts the same bands
+//
+//      `bounds` (the region height/center are measured from) is passed in
+//      by the caller rather than computed here.
+//
+//      It must be the bbox of the actual fine-slice cut geometry
+//      produced by hatch(), not raw input loops, in order to prevent gaps
+//      when nesting parity is inverted.
+
+function reliefLines(loops, spacing, offset, bounds, gap){
+  offset = offset ? 1 : 0;
+  gap = gap > 0 ? gap : 0;
+  const {a,b} = bounds;
+  const H = b.y - a.y;
+  if(H <= spacing) return [];
+  const center = a.y + H/2;
+  const half = H/2;
+  const ys = [];
+  let d = spacing/2;
+  while((half - d) >= spacing/2){
+    ys.push(center - d, center + d);
+    d += spacing;
+  }
+  if(ys.length === 0) ys.push(center);
+  ys.sort((m,n)=>m-n);
+  const segs = [];
+  for(const y of ys){
+    const xs = [];
+    for(const loop of loops)
+      for(let i=0;i<loop.length;i++){
+        const p1=loop[i], p2=loop[(i+1)%loop.length];
+        if((p1.y<=y && y<p2.y) || (p2.y<=y && y<p1.y)){
+          const t=(y-p1.y)/(p2.y-p1.y);
+          xs.push(p1.x + t*(p2.x-p1.x));
+        }
+      }
+    xs.sort((m,n)=>m-n);
+    // same kerf break as hatch(): endpoints sit on a loop boundary, so pull
+    // both ends in by `gap`; drop a run too short to survive
+    for(let j=offset;j+1<xs.length;j+=2){
+      let lo = xs[j], hi = xs[j+1];
+      if(gap){ lo += gap; hi -= gap; if(hi - lo <= 1e-6) continue; }
+      segs.push([{x:lo,y},{x:hi,y}]);
+    }
+  }
+  return segs;
+}
+
+let lastSVG = '';
+
+function generate(){
+  const stats = $('stats');
+  const f = n => (+n.toFixed(4));
+  try {
+    const doc = new DOMParser().parseFromString($('src').value, 'image/svg+xml');
+    const mode = $('mode').value;
+
+    // build a list of closed loops in source units. Each loop carries both
+    // `pts` (flattened polyline, for hatch/bbox math) and `outline` (the
+    // ORIGINAL un-flattened vector geometry, for rendering the perimeter
+    // without turning every circle into a 500-anchor polygon)
+    let loops;
+    if(mode === 'rails'){
+      const paths = [...doc.querySelectorAll('path')];
+      if(paths.length < 2) throw 'Rails mode needs two <path> elements (top + bottom edge).';
+      const d1 = paths[0].getAttribute('d'), d2 = paths[1].getAttribute('d');
+      const r1 = flatten(d1), r2 = flatten(d2);
+      loops = [{
+        pts: r1.concat([...r2].reverse()),
+        outline: [
+          {tag:'path', attrs:{d:d1}},
+          {tag:'path', attrs:{d:d2}},
+          {tag:'line', attrs:{x1:f(r1[0].x), y1:f(r1[0].y), x2:f(r2[0].x), y2:f(r2[0].y)}},
+          {tag:'line', attrs:{x1:f(r1[r1.length-1].x), y1:f(r1[r1.length-1].y), x2:f(r2[r2.length-1].x), y2:f(r2[r2.length-1].y)}},
+        ]
+      }];
+    } else {
+      loops = loopsFromSVG($('src').value);              // every subpath = a loop (holes included)
+      if(!loops.length) throw 'No fillable outline found.';
+    }
+
+    // scale to target physical mm (based on overall source bbox width)
+    const src = bbox(loops.flatMap(L => L.pts));
+    const srcW = src.b.x - src.a.x;
+    const targetW = parseFloat($('width').value);
+    if(!isFinite(targetW) || targetW <= 0) throw 'Target width must be a positive number.';
+    const scale = targetW / srcW;
+    loops = loops.map(L => ({ pts: L.pts.map(p => ({x:p.x*scale, y:p.y*scale})), outline: L.outline }));
+
+    const spacing = parseFloat($('spacing').value);
+    if(!isFinite(spacing) || spacing <= 0) throw 'Slice spacing must be a positive number.';
+    const grain = parseFloat($('grain').value) || 0;
+    const invert = $('invertParity').getAttribute('aria-pressed') === 'true';
+    let gap = parseFloat($('kerf').value);
+    if(!isFinite(gap) || gap < 0) gap = 0;
+    // no upper bound on gap: it shrinks each slice along its own length, which
+    // is independent of slice spacing. Any slice left shorter than the gap
+    // simply drops (handled in hatch()/reliefLines()), so an oversized gap
+    // degrades gracefully to fewer/shorter lines rather than needing a guard.
+
+    // rotate so cuts are vertical, hatch across all loops, rotate back.
+    // gap is applied in this rotated space — along the cut direction — but
+    // rotation is an isometry, so a gap of `gap` mm here is `gap` mm in the
+    // final geometry too.
+    const rl = grain ? loops.map(L => L.pts.map(p => rot(p, -grain))) : loops.map(L => L.pts);
+    const hatchSegsRotated = hatch(rl, spacing, invert ? 1 : 0, gap);
+    let segs = grain ? hatchSegsRotated.map(s => s.map(pt => rot(pt, grain))) : hatchSegsRotated;
+
+    // optional clearance relief cuts — same rotated space, transposed scan.
+    // Bounds come from the hatch output actually produced above (respects
+    // nesting-parity inversion), not the raw loops — see reliefLines() note.
+    let reliefCount = 0, reliefSpacing = null;
+    if($('relief').checked){
+      reliefSpacing = parseFloat($('reliefSpacing').value);
+      if(!isFinite(reliefSpacing) || reliefSpacing <= 0) throw 'Relief spacing must be a positive number.';
+      const reliefBounds = hatchSegsRotated.length ? bbox(hatchSegsRotated.flat()) : bbox(rl.flat());
+      let reliefSegs = reliefLines(rl, reliefSpacing, invert ? 1 : 0, reliefBounds, gap);
+      if(grain) reliefSegs = reliefSegs.map(s => s.map(pt => rot(pt, grain)));
+      reliefCount = reliefSegs.length;
+      segs = segs.concat(reliefSegs);
+    }
+
+    // gather all output geometry, normalise to (0,0)
+    const all = segs.flat().concat($('outline').checked ? loops.flatMap(L => L.pts) : []);
+    const ob = bbox(all);
+    const W = ob.b.x - ob.a.x, H = ob.b.y - ob.a.y;
+    const shift = p => ({x:p.x - ob.a.x, y:p.y - ob.a.y});
+
+    const color = $('color').value.trim() || '#ff0000';
+    let lines = '';
+    let travel = 0, cutLength = 0, prevEnd = null;
+    for(const [p,q] of segs){
+      const A=shift(p), B=shift(q);
+      lines += `    <line x1="${f(A.x)}" y1="${f(A.y)}" x2="${f(B.x)}" y2="${f(B.y)}"/>\n`;
+      cutLength += Math.hypot(B.x-A.x, B.y-A.y);
+      if(prevEnd) travel += Math.hypot(A.x-prevEnd.x, A.y-prevEnd.y);
+      prevEnd = B;
+    }
+
+    let outline = '';
+    if($('outline').checked){
+      // one shared transform (uniform scale + translate — the only thing
+      // ever applied to the outline) wrapping each loop's ORIGINAL geometry
+      // verbatim, so a circle stays a <circle>, a Bézier path stays a
+      // <path> with its original anchor count, not a dense flattened polygon
+      const tx = f(-ob.a.x), ty = f(-ob.a.y);
+      const strokeW = f(0.1 / scale); // pre-scale compensation so rendered width = 0.1mm after the group's scale()
+      const nodes = loops.flatMap(L => L.outline).map(renderOutlineNode).join('\n    ');
+      outline = `  <g id="outline" transform="translate(${tx},${ty}) scale(${f(scale)})" fill="none" stroke="${color}" stroke-width="${strokeW}">\n    ${nodes}\n  </g>\n`;
+    }
+
+    lastSVG =
+`<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${f(W)}mm" height="${f(H)}mm" viewBox="0 0 ${f(W)} ${f(H)}">
+${outline}  <g id="cut-lines" fill="none" stroke="${color}" stroke-width="0.1">
+${lines}  </g>
+</svg>`;
+
+    $('stage').innerHTML = lastSVG;
+    $('dl').disabled = false;
+    applyPreviewMode();
+
+    stats.innerHTML = `<table>
+      <tr><td>Physical size</td><td>${f(W)} × ${f(H)} mm</td></tr>
+      <tr><td>Loops (outer + holes)</td><td>${loops.length}</td></tr>
+      <tr><td>Cut lines</td><td>${segs.length}${reliefCount ? ` (${segs.length - reliefCount} slice + ${reliefCount} relief)` : ''}</td></tr>
+      <tr><td>Slice width</td><td>${spacing} mm (uniform)</td></tr>
+      <tr><td>Kerf gap</td><td>${gap ? `${f(gap)} mm (no crossings)` : 'off (cuts touch outline)'}</td></tr>
+      <tr><td>Fill parity</td><td>${invert ? 'bands 2, 4, 6… (inverted)' : 'bands 1, 3, 5… (default)'}</td></tr>
+      <tr><td>Clearance relief</td><td>${$('relief').checked ? `every ${reliefSpacing} mm (${reliefCount} lines)` : 'off'}</td></tr>
+      <tr><td>Grain / cut angle</td><td>${grain}° / ${grain+90}°</td></tr>
+      <tr><td>Total cut length</td><td>${f(cutLength)} mm</td></tr>
+      <tr><td>Non-cutting travel</td><td>${f(travel)} mm (serpentine order)</td></tr>
+      <tr><td>Scale from source</td><td>×${f(scale)}</td></tr>
+      <tr><td>Coordinate system</td><td>1 unit = 1 mm</td></tr>
+    </table>`;
+  } catch(e){
+    stats.innerHTML = `<span class="err">${e}</span>`;
+    $('stage').innerHTML = '';
+    lastSVG = '';
+    $('dl').disabled = true;
+  }
+}
+
+// ---- source-unit → mm guesses. An SVG's bare numbers are ambiguous: web
+//      tools (and the CSS spec) assume 96 units/inch, but Illustrator's
+//      native working unit is points, 72/inch — 1/3 smaller an inch than
+//      the 96dpi guess, so a file authored in points comes out 96/72 =
+//      1.333... (133%) too small if read as 96dpi. There's no reliable way
+//      to tell which one a given file actually used from its numbers alone
+//      (confirmed against a real case: test.svg's mounting holes only
+//      landed on their actual intended size, 6.35mm/quarter-inch, at 72dpi
+//      — at 96dpi they came out ~4.8mm, a plausible-looking but wrong
+//      guess). 72dpi is used as the default on file load since that's been
+//      the more common source in practice here; both buttons stay
+//      available since it's still just a guess either way.
+//
+//      The width this computes MUST be measured the same way generate()
+//      measures `srcW` — the actual flattened-geometry bounding box, not
+//      the SVG's declared viewBox/width attribute. Those two can differ
+//      (e.g. base_plate.svg's viewBox is 396.4 wide, but its rect sits at
+//      x=".5" with width="395.4" — a deliberate half-unit inset margin, so
+//      the real geometry bbox is 395.4, not 396.4). Using the declared
+//      width here while generate() scales against the geometry bbox means
+//      the two numbers quietly disagree, introducing a small but real
+//      systematic error. ----
+function sourceGeometryWidth(svgString, mode){
+  try {
+    const doc = new DOMParser().parseFromString(svgString, 'image/svg+xml');
+    let loops;
+    if(mode === 'rails'){
+      const paths = [...doc.querySelectorAll('path')];
+      if(paths.length < 2) return null;
+      loops = [flatten(paths[0].getAttribute('d')).concat(flatten(paths[1].getAttribute('d')))];
+    } else {
+      loops = loopsFromSVG(svgString).map(L => L.pts);
+      if(!loops.length) return null;
+    }
+    const {a,b} = bbox(loops.flat());
+    const w = b.x - a.x;
+    return isFinite(w) && w > 0 ? w : null;
+  } catch(e){ return null; }
+}
+function widthFromSourceAtDPI(svgString, dpi){
+  const srcW = sourceGeometryWidth(svgString, $('mode').value);
+  return srcW == null ? null : srcW / dpi * 25.4;
+}
+
+$('gen').onclick = generate;
+$('fromSource72').onclick = () => {
+  const w = widthFromSourceAtDPI($('src').value, 72);
+  if(w != null){ $('width').value = w.toFixed(2); generate(); }
+};
+$('fromSource96').onclick = () => {
+  const w = widthFromSourceAtDPI($('src').value, 96);
+  if(w != null){ $('width').value = w.toFixed(2); generate(); }
+};
+$('dl').onclick = () => {
+  if(!lastSVG) return;
+  const blob = new Blob([lastSVG], {type:'image/svg+xml'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'pocket_hatch.svg'; a.click();
+  URL.revokeObjectURL(a.href);
+};
+$('invertParity').onclick = () => {
+  const btn = $('invertParity');
+  const on = btn.getAttribute('aria-pressed') === 'true';
+  btn.setAttribute('aria-pressed', String(!on));
+  $('parityHint').textContent = !on
+    ? 'Cutting bands 2, 4, 6… in from the outermost edge of each nested set (inverted). Click to flip back to bands 1, 3, 5…'
+    : 'Cutting bands 1, 3, 5… in from the outermost edge of each nested set. Click to flip to bands 2, 4, 6… instead.';
+  generate();
+};
+
+['src','mode','width','spacing','kerf','grain','color','outline','reliefSpacing'].forEach(id =>
+  $(id).addEventListener('input', generate));
+
+// ---- real-size calibration: as of 2026 there's no browser API for a screen's
+//      physical pixel density (devicePixelRatio is a device-px:CSS-px
+//      ratio, not a physical measurement), so the only reliable way to show
+//      the preview at true physical size is to ask the user to match a
+//      known-size real object on screen. A credit/debit card (ISO 7810
+//      ID-1, 85.60 × 53.98mm) is used since it's a near-universal reference
+//      most people can grab in a few seconds. The result (px per mm) is
+//      stored in localStorage — it's specific to this browser, monitor, and
+//      zoom level, not portable, and stays stale until re-run by hand.
+//
+//      This only affects the on-screen preview. The exported SVG is always
+//      mm-exact regardless (viewBox = mm, 1 unit = 1mm) — calibration has
+//      no bearing on cut accuracy. ----
+const CARD_W_MM = 85.60, CARD_H_MM = 53.98;
+const CAL_KEY = 'pocketHatchCalibration';
+const CSS_PX_PER_MM = 96 / 25.4; // CSS's own reference-pixel assumption, used only as the slider's starting guess
+
+let actualSizeOn = false;
+
+function loadCalibration(){
+  try { return JSON.parse(localStorage.getItem(CAL_KEY)); } catch(e){ return null; }
+}
+function saveCalibration(pxPerMm){
+  try { localStorage.setItem(CAL_KEY, JSON.stringify({ pxPerMm, devicePixelRatio: window.devicePixelRatio || 1 })); }
+  catch(e){ /* localStorage unavailable (private browsing etc.) — calibration just won't persist */ }
+}
+
+function updateCalCardSize(){
+  const mult = parseFloat($('calSlider').value) / 100;
+  const pxPerMm = CSS_PX_PER_MM * mult;
+  $('calCard').style.width = (CARD_W_MM * pxPerMm) + 'px';
+  $('calCard').style.height = (CARD_H_MM * pxPerMm) + 'px';
+  $('calSliderPct').textContent = Math.round(parseFloat($('calSlider').value)) + '%';
+}
+function openCalibration(){
+  $('calSlider').value = 100;
+  updateCalCardSize();
+  $('calOverlay').classList.add('open');
+}
+function closeCalibration(){
+  $('calOverlay').classList.remove('open');
+}
+
+function updateCalibrateUI(){
+  const cal = loadCalibration();
+  $('recalLink').style.display = cal ? 'inline' : 'none';
+  $('calibrateBtn').textContent = cal ? 'Preview size' : 'Calibrate size';
+  $('calibrateBtn').setAttribute('aria-pressed', String(actualSizeOn));
+}
+
+// re-applies whichever preview mode is active to the just-inserted <svg> —
+// needed every generate() call, since $('stage').innerHTML = lastSVG wipes
+// any inline style set on the previous <svg> along with it
+function applyPreviewMode(){
+  const stageEl = $('stage');
+  const svg = stageEl.querySelector('svg');
+  if(!svg){ stageEl.classList.remove('actual-size'); return; }
+  if(actualSizeOn){
+    const cal = loadCalibration();
+    if(cal){
+      const wMm = parseFloat(svg.getAttribute('width'));
+      const hMm = parseFloat(svg.getAttribute('height'));
+      const wPx = wMm * cal.pxPerMm, hPx = hMm * cal.pxPerMm;
+      svg.style.maxWidth = 'none';
+      svg.style.maxHeight = 'none';
+      svg.style.width = wPx + 'px';
+      svg.style.height = hPx + 'px';
+      // top/left-align only if the real-size render actually overflows the
+      // box (padding included) — otherwise flexbox centering + overflow:auto
+      // can clip the leading edge on the overflowing axis, making part of
+      // the preview unreachable by scrolling. A piece that fits at real
+      // size should just stay centered, same as fit-to-box mode.
+      const PAD = 32; // .stage's own 16px padding, both sides
+      const overflows = wPx > (stageEl.clientWidth - PAD) || hPx > (stageEl.clientHeight - PAD);
+      stageEl.classList.toggle('actual-size', overflows);
+      return;
+    }
+  }
+  svg.style.maxWidth = ''; svg.style.maxHeight = '';
+  svg.style.width = ''; svg.style.height = '';
+  stageEl.classList.remove('actual-size');
+}
+
+$('calibrateBtn').onclick = () => {
+  if(!loadCalibration()){ openCalibration(); return; }
+  actualSizeOn = !actualSizeOn;
+  updateCalibrateUI();
+  applyPreviewMode();
+};
+$('recalLink').onclick = (e) => { e.preventDefault(); openCalibration(); };
+$('calSlider').addEventListener('input', updateCalCardSize);
+$('calCancel').onclick = closeCalibration;
+$('calOverlay').addEventListener('click', e => { if(e.target === $('calOverlay')) closeCalibration(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && $('calOverlay').classList.contains('open')) closeCalibration(); });
+$('calSave').onclick = () => {
+  const mult = parseFloat($('calSlider').value) / 100;
+  saveCalibration(CSS_PX_PER_MM * mult);
+  closeCalibration();
+  actualSizeOn = true;
+  updateCalibrateUI();
+  applyPreviewMode();
+};
+
+updateCalibrateUI();
+
+$('relief').addEventListener('change', () => {
+  $('reliefSpacing').disabled = !$('relief').checked;
+  generate();
+});
+
+// ---- decide whether a dropped file's content matches "rails" (two or more
+//      OPEN top/bottom edge curves) or "outline" (closed loop(s), and/or any
+//      rect/circle/ellipse/polygon — rails mode can't use those at all). A
+//      <path> counts as closed if its `d` ends in Z/z, OR — for hand-authored
+//      paths that draw back to the start without an explicit close command —
+//      its first and last flattened points coincide within 0.5% of the
+//      path's own bounding-box diagonal. Returns null when the content is
+//      too ambiguous to confidently pick a mode (e.g. a single lone open
+//      path), in which case the current mode — and its existing validation
+//      error, if any — is left alone. ----
+function pathIsClosed(d){
+  if(/[Zz]\s*$/.test(d.trim())) return true;
+  try {
+    const pts = flatten(d);
+    if(pts.length < 2) return false;
+    const {a,b} = bbox(pts);
+    const diag = Math.hypot(b.x-a.x, b.y-a.y);
+    const eps = Math.max(diag*0.005, 1e-6);
+    const first = pts[0], last = pts[pts.length-1];
+    return Math.hypot(last.x-first.x, last.y-first.y) <= eps;
+  } catch(e){ return false; }
+}
+function detectMode(svgString){
+  const doc = new DOMParser().parseFromString(svgString, 'image/svg+xml');
+  const paths = [...doc.querySelectorAll('path')].map(p => p.getAttribute('d')).filter(Boolean);
+  const hasBasicShapes = doc.querySelector('rect, circle, ellipse, polygon') !== null;
+  const openCount = paths.filter(d => !pathIsClosed(d)).length;
+  const hasClosed = hasBasicShapes || paths.some(pathIsClosed);
+  if(openCount >= 2) return 'rails';
+  if(hasClosed) return 'outline';
+  return null;
+}
+
+// ---- drag & drop an .svg file onto the textarea or preview panel ----
+function loadSVGFile(file){
+  if(!file) return;
+  if(file.type && file.type !== 'image/svg+xml' && !file.name.toLowerCase().endsWith('.svg')){
+    $('stats').innerHTML = `<span class="err">"${file.name}" doesn't look like an SVG file.</span>`;
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    $('src').value = reader.result;
+    const notes = [];
+    const detected = detectMode(reader.result);
+    if(detected && detected !== $('mode').value){
+      $('mode').value = detected;
+      notes.push(`detected ${detected === 'outline' ? 'closed outline' : 'open rail'} content, switched to ${detected === 'outline' ? 'Outline' : 'Rails'} mode`);
+    }
+    const autoWidth = widthFromSourceAtDPI(reader.result, 72);
+    if(autoWidth != null){
+      $('width').value = autoWidth.toFixed(2);
+      notes.push(`width set to ${autoWidth.toFixed(2)}mm @72dpi`);
+    }
+    $('filename').textContent = '📄 ' + file.name + (notes.length ? ' — ' + notes.join('; ') : '');
+    generate();
+  };
+  reader.onerror = () => { $('stats').innerHTML = `<span class="err">Could not read "${file.name}".</span>`; };
+  reader.readAsText(file);
+}
+
+const dropzone = $('dropzone');
+['dragenter','dragover'].forEach(evt =>
+  dropzone.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); dropzone.classList.add('dragover'); }));
+['dragleave','dragend'].forEach(evt =>
+  dropzone.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); dropzone.classList.remove('dragover'); }));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault(); e.stopPropagation();
+  dropzone.classList.remove('dragover');
+  loadSVGFile(e.dataTransfer.files[0]);
+});
+
+// ---- drag & drop an .svg file onto the preview panel too, same file loader ----
+const preview = $('preview');
+['dragenter','dragover'].forEach(evt =>
+  preview.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); preview.classList.add('dragover'); }));
+['dragleave','dragend'].forEach(evt =>
+  preview.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); preview.classList.remove('dragover'); }));
+preview.addEventListener('drop', e => {
+  e.preventDefault(); e.stopPropagation();
+  preview.classList.remove('dragover');
+  loadSVGFile(e.dataTransfer.files[0]);
+});
+
+// stop the browser from navigating away if a file is dropped outside the zone
+['dragover','drop'].forEach(evt =>
+  window.addEventListener(evt, e => { if(e.target !== $('src')) e.preventDefault(); }));
+
+generate();
+</script>
+</body>
+</html>
