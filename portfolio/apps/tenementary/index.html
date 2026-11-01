@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tenementary</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: white; overflow: hidden; }
+      /* The sketch draws within x 23-316, y 116-761 of its 800 x 800 canvas; this frames that area. */
+      #canvasHolder { position: relative; height: 100%; overflow: hidden; }
+      canvas { position: absolute; left: 0; top: -12.857%; width: 235.29% !important; height: auto !important; }
+      #first { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: white; z-index: 1; }
+    </style>
+    <script src="bundle.js" defer></script>
+  </head>
+  <body>
+    <div id="canvasHolder"><img id="first" src="../../img/te_1-480.webp" alt="" /></div>
+    <script>
+      // The sketch draws slowly, so a still stands in until its first frame appears.
+      const wait = setInterval(() => {
+        const c = document.querySelector('canvas');
+        if (!c) return;
+        const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+        for (let i = 3; i < d.length; i += 4) {
+          if (d[i] > 10 && d[i - 1] < 200) {
+            document.getElementById('first').remove();
+            clearInterval(wait);
+            return;
+          }
+        }
+      }, 250);
+    </script>
+  </body>
+</html>

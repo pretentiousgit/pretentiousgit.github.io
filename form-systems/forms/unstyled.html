@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Studio sign-up — unstyled</title>
+  <!-- No stylesheet on purpose: this is what the browser gives you for free. -->
+</head>
+<body>
+  <main>
+    <h1>Studio sign-up</h1>
+    <p>Reserve a seat in the grids workshop.</p>
+
+    <form>
+      <div>
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" autocomplete="name" required>
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+
+      <div>
+        <label for="date">Preferred date</label>
+        <input id="date" name="date" type="date" value="2026-10-13">
+      </div>
+
+      <div>
+        <label for="section">Section</label>
+        <select id="section" name="section">
+          <option value="0101">0101 — Tuesday morning</option>
+          <option value="0102">0102 — Tuesday afternoon</option>
+          <option value="0103">0103 — Thursday morning</option>
+        </select>
+      </div>
+
+      <fieldset>
+        <legend>Design experience</legend>
+        <div>
+          <input id="experience-new" name="experience" type="radio" value="new" checked>
+          <label for="experience-new">New</label>
+        </div>
+        <div>
+          <input id="experience-some" name="experience" type="radio" value="some">
+          <label for="experience-some">Some</label>
+        </div>
+        <div>
+          <input id="experience-lots" name="experience" type="radio" value="lots">
+          <label for="experience-lots">Lots</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Tools you will bring</legend>
+        <div>
+          <input id="tool-paper" name="tools" type="checkbox" value="paper" checked>
+          <label for="tool-paper">Paper and pencil</label>
+        </div>
+        <div>
+          <input id="tool-figma" name="tools" type="checkbox" value="figma">
+          <label for="tool-figma">Figma</label>
+        </div>
+        <div>
+          <input id="tool-illustrator" name="tools" type="checkbox" value="illustrator">
+          <label for="tool-illustrator">Illustrator</label>
+        </div>
+      </fieldset>
+
+      <div>
+        <label for="confidence">Confidence with grids</label>
+        <input id="confidence" name="confidence" type="range" min="0" max="10" value="5">
+      </div>
+
+      <div>
+        <label for="sketch">Upload a sketch</label>
+        <input id="sketch" name="sketch" type="file" accept="image/*,.pdf">
+      </div>
+
+      <div>
+        <label for="notes">Notes</label>
+        <textarea id="notes" name="notes" rows="4"></textarea>
+      </div>
+
+      <div>
+        <button type="submit">Sign up</button>
+        <button type="reset">Reset</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

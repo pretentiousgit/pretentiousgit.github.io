@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>One form, many looks</title>
+  <link rel="stylesheet" href="css/shell.css">
+  <script src="js/swap.js" defer></script>
+</head>
+<body>
+  <nav class="sidebar" aria-label="Design systems">
+    <h1>One form, many looks</h1>
+
+    <!-- swap.js adds one button per design system here -->
+    <ul id="system-list"></ul>
+
+    <div class="grid-tools">
+      <button id="grid-toggle" type="button" aria-pressed="false">Show grids</button>
+      <p id="grid-hint" hidden>This form is not built on a layout grid.</p>
+      <ul class="grid-legend" data-kind="columns" hidden>
+        <li><span class="swatch swatch-column"></span>Columns</li>
+        <li><span class="swatch swatch-gutter"></span>Gutters</li>
+        <li><span class="swatch swatch-margin"></span>Margins</li>
+        <li><span class="swatch swatch-item"></span>Each field's box</li>
+      </ul>
+      <ul class="grid-legend" data-kind="module" hidden>
+        <li><span class="swatch swatch-major"></span>44pt module: one touch target</li>
+        <li><span class="swatch swatch-minor"></span>11pt quarter-module</li>
+        <li><span class="swatch swatch-margin"></span>Margins: 16pt</li>
+        <li><span class="swatch swatch-fit"></span>Fits the module</li>
+        <li><span class="swatch swatch-miss"></span>Misses the module</li>
+      </ul>
+      <p id="grid-summary" hidden></p>
+    </div>
+
+    <aside id="guideline" hidden>
+      <h2>Guideline</h2>
+      <p id="guideline-note"></p>
+      <a id="guideline-link" target="_blank" rel="noopener"></a>
+    </aside>
+  </nav>
+
+  <main>
+    <!-- Shown only for forms that respond to the browser's width (USWDS, Bootstrap).
+         The buttons resize the frame below, so the form's own breakpoints
+         decide the layout, exactly as they would on a real phone. -->
+    <div id="viewport-tools" hidden>
+      <div class="viewport-buttons" role="group" aria-label="Window size">
+        <button type="button" data-viewport="phone" aria-pressed="false">Phone</button>
+        <button type="button" data-viewport="desktop" aria-pressed="true">Desktop browser</button>
+      </div>
+      <p id="viewport-readout"></p>
+    </div>
+
+    <iframe id="stage" title="Form preview"></iframe>
+  </main>
+</body>
+</html>

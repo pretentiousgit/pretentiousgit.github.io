@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Studio sign-up — USWDS</title>
+  <!-- Official U.S. Web Design System build. Same native inputs as the
+       unstyled form, with usa-* component classes, grid-* layout classes,
+       and color utility classes added. uswds-site.css adds Public Sans Web
+       and the .site-* rules used on designsystem.digital.gov. -->
+  <script src="https://cdn.jsdelivr.net/npm/@uswds/uswds@3.14.0/dist/js/uswds-init.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@uswds/uswds@3.14.0/dist/css/uswds.min.css">
+  <link rel="stylesheet" href="../css/uswds-site.css">
+  <!-- Inspection aid for the "Show grids" button; not part of the design system -->
+  <link rel="stylesheet" href="../css/grid-overlay.css">
+  <script src="../js/grid-overlay.js" defer></script>
+</head>
+<body class="bg-white text-ink">
+  <main class="grid-container padding-y-4">
+    <h1 class="site-page-title">Studio sign-up</h1>
+    <p class="site-text-intro">Reserve a seat in the grids workshop.</p>
+
+    <!-- Highlight banner: the "Component preview" block from the USWDS site -->
+    <div class="usa-accordion usa-accordion--bordered site-accordion-code site-component-preview">
+      <h2 class="usa-accordion__heading site-accordion-heading">
+        <button type="button" class="usa-accordion__button bg-primary-vivid hover:bg-primary-darker text-white" aria-expanded="true" aria-controls="signup-content">
+          Sign-up form
+        </button>
+      </h2>
+
+      <div id="signup-content" class="usa-accordion__content">
+        <h3 class="site-preview-heading text-gray-50">Your details</h3>
+
+        <form class="usa-form maxw-none">
+          <!-- One 12-column row. Columns stack on small screens and wrap
+               onto a new line whenever a line's spans add up to 12. -->
+          <div id="form-grid" class="grid-row grid-gap">
+            <div class="tablet:grid-col-6">
+              <label class="usa-label" for="name">Full name <abbr title="required" class="usa-hint usa-hint--required">*</abbr></label>
+              <input class="usa-input" id="name" name="name" type="text" autocomplete="name" required>
+            </div>
+
+            <div class="tablet:grid-col-6">
+              <label class="usa-label" for="email">Email <abbr title="required" class="usa-hint usa-hint--required">*</abbr></label>
+              <input class="usa-input" id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+
+            <div class="tablet:grid-col-4">
+              <label class="usa-label" for="date">Preferred date</label>
+              <input class="usa-input" id="date" name="date" type="date" value="2026-10-13">
+            </div>
+
+            <div class="tablet:grid-col-8">
+              <label class="usa-label" for="section">Section</label>
+              <select class="usa-select" id="section" name="section">
+                <option value="0101">0101 — Tuesday morning</option>
+                <option value="0102">0102 — Tuesday afternoon</option>
+                <option value="0103">0103 — Thursday morning</option>
+              </select>
+            </div>
+
+            <fieldset class="usa-fieldset tablet:grid-col-6 margin-top-3">
+              <legend class="usa-legend">Design experience</legend>
+              <div class="usa-radio">
+                <input class="usa-radio__input" id="experience-new" name="experience" type="radio" value="new" checked>
+                <label class="usa-radio__label" for="experience-new">New</label>
+              </div>
+              <div class="usa-radio">
+                <input class="usa-radio__input" id="experience-some" name="experience" type="radio" value="some">
+                <label class="usa-radio__label" for="experience-some">Some</label>
+              </div>
+              <div class="usa-radio">
+                <input class="usa-radio__input" id="experience-lots" name="experience" type="radio" value="lots">
+                <label class="usa-radio__label" for="experience-lots">Lots</label>
+              </div>
+            </fieldset>
+
+            <fieldset class="usa-fieldset tablet:grid-col-6 margin-top-3">
+              <legend class="usa-legend">Tools you will bring</legend>
+              <div class="usa-checkbox">
+                <input class="usa-checkbox__input" id="tool-paper" name="tools" type="checkbox" value="paper" checked>
+                <label class="usa-checkbox__label" for="tool-paper">Paper and pencil</label>
+              </div>
+              <div class="usa-checkbox">
+                <input class="usa-checkbox__input" id="tool-figma" name="tools" type="checkbox" value="figma">
+                <label class="usa-checkbox__label" for="tool-figma">Figma</label>
+              </div>
+              <div class="usa-checkbox">
+                <input class="usa-checkbox__input" id="tool-illustrator" name="tools" type="checkbox" value="illustrator">
+                <label class="usa-checkbox__label" for="tool-illustrator">Illustrator</label>
+              </div>
+            </fieldset>
+
+            <div class="tablet:grid-col-6">
+              <label class="usa-label" for="confidence">Confidence with grids</label>
+              <input class="usa-range" id="confidence" name="confidence" type="range" min="0" max="10" value="5">
+            </div>
+
+            <div class="tablet:grid-col-6">
+              <label class="usa-label" for="sketch">Upload a sketch</label>
+              <input class="usa-file-input" id="sketch" name="sketch" type="file" accept="image/*,.pdf">
+            </div>
+
+            <div class="grid-col-12">
+              <label class="usa-label" for="notes">Notes</label>
+              <textarea class="usa-textarea" id="notes" name="notes" rows="4"></textarea>
+            </div>
+
+            <div class="grid-col-12">
+              <button class="usa-button" type="submit">Sign up</button>
+              <button class="usa-button usa-button--outline" type="reset">Reset</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@uswds/uswds@3.14.0/dist/js/uswds.min.js"></script>
+</body>
+</html>

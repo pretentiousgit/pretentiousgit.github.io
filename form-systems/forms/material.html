@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Studio sign-up — Material</title>
+  <!-- Official Material Web components (Material Design 3). Material ships
+       its own custom elements, so the native inputs are replaced by md-* tags.
+       material.css adds the m3.material.io look: Google Sans titles, the
+       baseline color roles, a top app bar, and Material's layout grid inside
+       a window that can be a phone or a desktop app. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Roboto:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=arrow_back,battery_full,close,crop_square,minimize,more_vert,signal_cellular_4_bar,wifi&display=block">
+  <link rel="stylesheet" href="../css/material.css">
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@material/web@2.5.0/all.js/+esm"></script>
+  <script src="../js/material-window.js" defer></script>
+  <!-- Inspection aid for the "Show grids" button; not part of the design system -->
+  <link rel="stylesheet" href="../css/grid-overlay.css">
+  <script src="../js/grid-overlay.js" defer></script>
+</head>
+<body>
+  <!-- Pick a window size. The corner of the window can also be dragged. -->
+  <md-chip-set aria-label="Window size">
+    <md-filter-chip label="Android phone" data-width="412px" selected></md-filter-chip>
+    <md-filter-chip label="Desktop app window" data-width="100%"></md-filter-chip>
+  </md-chip-set>
+
+  <div id="device" class="device">
+    <!-- Filled in by material.css: names the current breakpoint and grid -->
+    <p class="readout"></p>
+
+    <div class="window">
+      <!-- Phone only: Android status bar -->
+      <div class="status-bar" aria-hidden="true">
+        <span>9:30</span>
+        <span class="status-icons">
+          <md-icon>wifi</md-icon>
+          <md-icon>signal_cellular_4_bar</md-icon>
+          <md-icon>battery_full</md-icon>
+        </span>
+      </div>
+
+      <!-- Desktop only: the app window's title bar -->
+      <div class="title-bar" aria-hidden="true">
+        <span>Studio</span>
+        <span class="window-controls">
+          <md-icon>minimize</md-icon>
+          <md-icon>crop_square</md-icon>
+          <md-icon>close</md-icon>
+        </span>
+      </div>
+
+      <!-- Highlight banner: Material's top app bar -->
+      <header class="top-app-bar">
+        <md-icon-button aria-label="Back"><md-icon>arrow_back</md-icon></md-icon-button>
+        <h1>Studio sign-up</h1>
+        <md-icon-button aria-label="More options"><md-icon>more_vert</md-icon></md-icon-button>
+      </header>
+
+      <main class="pane">
+        <p class="supporting-text">Reserve a seat in the grids workshop.</p>
+
+        <form>
+          <!-- Material's layout grid: 4 columns on a phone, 8 in a medium or
+               expanded window, 12 in a large one. Fields span all 4 columns
+               on a phone; the classes say how far they span when wider. -->
+          <div id="form-grid" class="grid">
+            <md-outlined-text-field class="half" label="Full name" name="name" type="text" autocomplete="name" required></md-outlined-text-field>
+
+            <md-outlined-text-field class="half" label="Email" name="email" type="email" autocomplete="email" required></md-outlined-text-field>
+
+            <md-outlined-text-field class="narrow" label="Preferred date" name="date" type="date" value="2026-10-13"></md-outlined-text-field>
+
+            <md-outlined-select class="wide" label="Section" name="section">
+              <md-select-option value="0101" selected>
+                <div slot="headline">0101 — Tuesday morning</div>
+              </md-select-option>
+              <md-select-option value="0102">
+                <div slot="headline">0102 — Tuesday afternoon</div>
+              </md-select-option>
+              <md-select-option value="0103">
+                <div slot="headline">0103 — Thursday morning</div>
+              </md-select-option>
+            </md-outlined-select>
+
+            <fieldset class="half">
+              <legend>Design experience</legend>
+              <label>
+                <md-radio name="experience" value="new" checked></md-radio>
+                New
+              </label>
+              <label>
+                <md-radio name="experience" value="some"></md-radio>
+                Some
+              </label>
+              <label>
+                <md-radio name="experience" value="lots"></md-radio>
+                Lots
+              </label>
+            </fieldset>
+
+            <fieldset class="half">
+              <legend>Tools you will bring</legend>
+              <label>
+                <md-checkbox name="tools" value="paper" checked></md-checkbox>
+                Paper and pencil
+              </label>
+              <label>
+                <md-checkbox name="tools" value="figma"></md-checkbox>
+                Figma
+              </label>
+              <label>
+                <md-checkbox name="tools" value="illustrator"></md-checkbox>
+                Illustrator
+              </label>
+            </fieldset>
+
+            <div class="field half">
+              <span>Confidence with grids</span>
+              <md-slider name="confidence" min="0" max="10" value="5" labeled aria-label="Confidence with grids"></md-slider>
+            </div>
+
+            <!-- Material 3 has no file-upload component, so this one stays native. -->
+            <div class="field half">
+              <label for="sketch">Upload a sketch</label>
+              <input id="sketch" name="sketch" type="file" accept="image/*,.pdf">
+            </div>
+
+            <md-outlined-text-field label="Notes" name="notes" type="textarea" rows="4"></md-outlined-text-field>
+
+            <div class="actions">
+              <md-filled-button type="submit">Sign up</md-filled-button>
+              <md-outlined-button type="reset">Reset</md-outlined-button>
+            </div>
+          </div>
+        </form>
+      </main>
+
+      <!-- Phone only: Android gesture handle -->
+      <div class="gesture-bar" aria-hidden="true"></div>
+    </div>
+  </div>
+</body>
+</html>

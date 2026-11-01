@@ -11,17 +11,41 @@
 
 :root {
     --primary-bg: hsl(201, 26%, 24%);
-    --logo-color: hsl(201, 45%, 82%);
-    --highlight-bg: hsl(201, 45%, 85%);
+    --logo-color: hsl(51, 100%, 97%);
+    --highlight-bg: hsl(50, 100%, 85%);
     --panel-bg: rgba(0, 0, 0, 0.7);
     --text-color: white;
     --text-display: hsl(201, 26%, 24%);
-    --bright-yellow: #FFD400;
+    --bright-yellow: hsl(50, 100%, 50%);
     --accent-color: #ff6b6b;
     --fade-color: hsl(201, 25%, 50%);
     --border-radius: 0.5rem;
     --font-fam-display: "Nougat-Normal", "Fira Sans", sans-serif;
     --font-fam: "Epilogue", "Fira Sans", sans-serif;
+
+    /* TYPE SCALE
+       Every text size on the site comes from here, shared with the portfolio.
+       rem follows the size set in the visitor's browser; px would ignore it.
+       Each step is about 1.25 times the last. */
+    --text-fine: 0.75rem;    /* the page credit and phone tabs: short labels only, never reading text */
+    --text-small: 0.875rem;  /* captions and tabs */
+    --text-body: 1rem;       /* reading text: the browser's own default */
+    --text-h4: 1.25rem;
+    --text-h3: 1.563rem;
+    /* Fluid sizes: clamp(smallest, preferred, largest).
+       The preferred size mixes rem with vw. With vw alone, zooming the page wouldn't enlarge the text. */
+    --text-lede: clamp(1.25rem, 1rem + 1vw, 1.563rem);
+    --name-size: clamp(3rem, 1rem + 15vw, 5.5rem);
+    /* Reading comfort: unitless line heights scale with the text, and long lines are hard to follow. */
+    --leading-body: 1.5;
+    --leading-small: 1.4;
+    --leading-heading: 1.15;
+    --measure: 65ch;
+
+    /* The page margin, shared with the portfolio. */
+    --gutter: clamp(1rem, 3vw, 2.5rem);
+    /* The homepage's text column stops growing at 40.5rem, which is 45vw on a typical 1440px screen. */
+    --column: min(45vw, 40.5rem);
 }
 
 /* RESET */
@@ -33,10 +57,11 @@
     margin: 0;
     padding: 0;
 }
+/* The root size is deliberately left unset, so the visitor's browser setting decides what 1rem is. */
 
 body {
-    font-size: 1.3rem;
-    line-height: 1.5;
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
     -webkit-font-smoothing: antialiased;
     font-family: var(--font-fam);
     color: var(--primary-bg);
@@ -68,31 +93,36 @@ p, h1, h2, h3, h4, h5, h6 {
 main {
     position: relative;
     z-index: 10;
-    padding-left: 1rem;
+    padding-left: var(--gutter);
+    padding-right: max(var(--gutter), calc(100% - var(--column)));
     padding-bottom: 2rem;
+    border-top: 1px solid var(--fade-color);
+    height: stretch;
+    /* background: linear-gradient(180deg,rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 0.78) 50%, rgba(237, 221, 83, 0.52) 100%); */
 }
 
 .container {
-    max-width: 45vw;
+    height: stretch;
 }
 
 .content {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    height: stretch;
+    /* gap: 1rem; */
 }
 
 .top-block {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 0 1rem;
+    padding: 1rem var(--gutter) 0;
 }
 
 /* SECTIONS - Fixed the height issue */
 section {
-    margin: 0 0.8rem;
     padding-bottom: 3rem;
+    padding-top: 2rem;
     display: flex; 
 
     opacity: 0;
@@ -116,7 +146,7 @@ section.active {
 
 /* TYPOGRAPHY */
 p {
-    font-size: 1.2rem;
+    max-width: var(--measure);
 }
 
 h1, h2, h3 {
@@ -125,17 +155,29 @@ h1, h2, h3 {
 
 h1 {
     font-size: 4rem;
+    text-shadow: 2px 2px var(--fade-color);
+}
+
+h2 {
+    font-size: var(--text-h4);
+    line-height: var(--leading-heading);
+    font-weight: 300;
 }
 
 h3 {
-    font-size: 1.5rem;
+    font-size: var(--text-h3);
+    line-height: var(--leading-heading);
+}
+
+h4 {
+    font-size: var(--text-h4);
+    line-height: var(--leading-heading);
 }
 
 header h1 {
-    font-size: 8rem;
+    font-size: var(--name-size);
     font-family: var(--font-fam-display);
-    line-height: 8rem;
-    margin-bottom: -25px;
+    line-height: 1;
     display: none; /* Hidden by default, shown on mobile */
 }
 
@@ -154,15 +196,33 @@ header {
 nav ul {
     display: flex;
     flex-direction: row;
-    gap: 2rem;
+    gap: 1rem;
 }
 
+
 nav a {
-    color: var(--fade-color)
+    color: var(--primary-bg);
+    font-size: var(--text-small);
+    font-weight: 400;
+    text-decoration: none;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+
+    display: block;
+    padding: 0.3em 0.4em 0em;
+
+    border: 1px var(--fade-color) solid;
+    border-bottom: none;
+    border-radius: 4px 4px 0px 0px;
 }
 
 nav a.active {
     color: var(--primary-bg);
+    font-weight: 800;
+    background-color: var(--highlight-bg);
+    mix-blend-mode: multiply;
 }
 
 a.header-link {
@@ -183,7 +243,7 @@ a.title {
     height: 100vh;
     width: calc(100vh * 63 / 72);
     top: 0;
-    left: 0;
+    right: 0;
     z-index: -1;
     overflow: hidden;
     isolation: isolate;
@@ -198,10 +258,26 @@ a.title {
     height: 100%;
     object-fit: cover;
     mix-blend-mode: multiply;
+    transform: rotate(180deg) skew(-10deg);
 }
 
 .logo path {
     fill: var(--logo-color);
+}
+
+.logo-small {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+}
+
+.logo-small path {
+    fill: var(--fade-color);
 }
 
 .particle-overlay {
@@ -212,7 +288,7 @@ a.title {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    mix-blend-mode: overlay;
+    mix-blend-mode: multiply;
 }
 
 .particle {
@@ -223,11 +299,13 @@ a.title {
 /* HEAT WAVE EFFECT */
 .heat-wave-container {
     height: auto;
+    margin-bottom: 0.4rem;
 }
 
 .heat-wave-text {
-    /* font-size: clamp(3rem, 20cqw, 8rem); */
-    font-size: 6.8rem;
+    /* Units inside the SVG's 420-unit box, not screen pixels. The whole SVG is scaled by --name-size,
+       so rem here would count that size twice. */
+    font-size: 108.8px;
     fill: var(--text-display);
     font-family: var(--font-fam-display);
     filter: none;
@@ -235,8 +313,9 @@ a.title {
 }
 
 .heat-wave-svg {
-    width: 100%;
-    /* height: 120px; */
+    /* The SVG's text is 108.8 units tall in a 420-unit box, so this renders it at --name-size. */
+    width: calc(var(--name-size) * 420 / 108.8);
+    filter: drop-shadow(2px 2px 0 var(--fade-color));
 }
 
 .heat-wave-container:hover .heat-wave-text,
@@ -245,9 +324,13 @@ a.title {
 }
 
 #reset {
+    display: none; /* corrected in JS */
+    
     background: none;
     border: none;
-    padding: 0;
+    padding: 1rem;
+    padding-top: 0rem;
+    gap: 0.1em;
     margin: 0;
     cursor: pointer;
     
@@ -261,6 +344,13 @@ a.title {
     outline: none;
     
     transition: opacity 0.2s ease, transform 0.1s ease;
+
+    /* this aligns boxes inside flexBox */
+    justify-content: center;
+    align-items: center;
+
+    /* this applies only to the text itself within its box */
+    text-align: center;
 }
 
 #reset:hover {
@@ -275,20 +365,6 @@ a.title {
     outline: 2px solid var(--accent-color);
     outline-offset: 2px;
     border-radius: var(--border-radius);
-}
-
-#reset {
-    padding: 1rem;
-    padding-top: 0rem;
-    display: none;
-    gap: 1rem;
-
-    /* this aligns boxes inside flexBox */
-    justify-content: center;
-    align-items: center;
-
-    /* this applies only to the text itself within its box */
-    text-align: center;
 }
 
 #reset svg {
@@ -314,59 +390,93 @@ html.is-scrollable #reset {
 }
 
 /* RESPONSIVE */
-@media (width < 758px) {
-    .container {
-        max-width: 100vw;
-    }
+/* LOADER: the logo sits centre stage with its bubbles until the first view is ready */
+.loading .top-block,
+.loading main,
+.loading .credits {
+    visibility: hidden;
+}
 
+.loading .logo-container {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    height: min(60vh, 80vw);
+    width: calc(min(60vh, 80vw) * 63 / 72);
+    z-index: 100;
+}
+
+/* The bubbles are masked to the upright logo, so it stands upright here. */
+.loading .logo {
+    transform: none;
+}
+
+.loading .logo path,
+.loading .st0 {
+    fill: var(--fade-color);
+}
+
+.loading .particle-overlay {
+    mix-blend-mode: normal;
+}
+
+.loading .particle {
+    fill: var(--highlight-bg);
+}
+
+/* Breakpoints in rem move with the text, so larger text gets the roomier layout sooner. */
+@media (width < 47.375rem) {
     main {
-        padding-left: 0;
-        padding-right: 1rem;
+        padding-right: var(--gutter);
     }
 
+    /* Tabs sit on a line, so they stay in one row. They share the width when they fit,
+       and the row scrolls sideways when they don't: wrapping would strand a tab above the line. */
     nav ul {
-        justify-content: space-around;
-        flex-wrap: wrap;
+        gap: 0.25rem;
+        overflow-x: auto;
+        scrollbar-width: none;
     }
 
-    header a{
+    nav ul::-webkit-scrollbar {
+        display: none;
+    }
+
+    nav li {
+        flex: 1 0 auto;
+    }
+
+    nav a {
+        font-size: var(--text-fine);
+        letter-spacing: 0.08em;
+    }
+
+    header a {
         display: flex;
         flex-direction: column;
-        gap: 1.6rem;
+        gap: 0.25rem;
+    }
+
+    header h2 {
+        font-size: var(--text-body);
     }
 
     header h1 {
         display: block;
-        font-size: 6rem;
-        letter-spacing: 0.2rem;
-        line-height: normal;
+        text-shadow: -2px 2px hsl(201,37%,68%, 0.8);
     }
 
-    header h3 {
-        font-size: 1.3rem;
-    }
     .heat-wave-svg {
         display: none;
     }
-}
 
-@media (width < 390px) {
-    header h1 {
-        font-size: 6rem;
-        line-height: 6rem;
-        margin-top: -1.2rem;
+    .logo-container {        
+        height: 20vh;
+        width: calc(20vh * 63 / 72);
+        right: 0;
+        object-fit: cover;
     }
-
-    .header-link {
-        display: flex;
-        flex-direction: column;
-        gap: 1.4rem;
-    }
-
-    nav ul {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        font-size: 1.2rem;
+    .logo {
+        right: 0;
     }
 }

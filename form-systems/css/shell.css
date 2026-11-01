@@ -1,0 +1,313 @@
+/* Styles for the page shell only (side menu + preview frame).
+   Each form lives in its own file inside the iframe, so nothing here
+   can leak into the forms being compared. */
+
+:root {
+  --ink: #1b1b1b;
+  --muted: #5c5c5c;
+  --line: #d9d9d9;
+  --panel: #f4f4f4;
+  --accent: #1b1b1b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: grid;
+  grid-template-columns: 17rem 1fr;
+  height: 100vh;
+  margin: 0;
+  background: #fff;
+  color: var(--ink);
+  font: 15px/1.45 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem 1rem;
+  overflow-y: auto;
+  border-right: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.sidebar h1 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+#system-list {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#system-list button {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+#system-list button:hover {
+  border-color: var(--line);
+  background: #fff;
+}
+
+#system-list button[aria-current='true'] {
+  background: var(--accent);
+  color: #fff;
+}
+
+#system-list button:focus-visible,
+#guideline a:focus-visible {
+  outline: 2px solid #0b5fff;
+  outline-offset: 2px;
+}
+
+/* ---- "Show grids" button, with a key to the overlay colors ---- */
+
+.grid-tools {
+  display: grid;
+  gap: 0.6rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+#grid-hint[hidden],
+#grid-summary[hidden],
+.grid-legend[hidden] {
+  display: none;
+}
+
+#grid-toggle {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#grid-toggle[aria-pressed='true'] {
+  background: var(--ink);
+  color: #fff;
+}
+
+#grid-toggle:disabled {
+  border-color: var(--line);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+#grid-toggle:focus-visible {
+  outline: 2px solid #0b5fff;
+  outline-offset: 2px;
+}
+
+#grid-hint,
+#grid-summary {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.grid-legend {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  font-size: 0.85rem;
+  list-style: none;
+}
+
+.grid-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Same colors as css/grid-overlay.css and the graph paper in css/apple.css */
+.swatch {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--line);
+}
+
+.swatch-column {
+  background: rgba(66, 133, 244, 0.35);
+}
+
+.swatch-gutter {
+  background: rgba(155, 89, 208, 0.45);
+}
+
+.swatch-margin {
+  background: rgba(246, 160, 60, 0.55);
+}
+
+.swatch-major {
+  border: 2px solid rgba(0, 122, 255, 0.55);
+  background: transparent;
+}
+
+.swatch-minor {
+  border: 1px solid rgba(0, 122, 255, 0.3);
+  background: transparent;
+}
+
+.swatch-fit {
+  border: 2px solid #1a7f37;
+  background: transparent;
+}
+
+.swatch-miss {
+  border: 2px dashed #d6336c;
+  background: transparent;
+}
+
+.swatch-item {
+  border: 1px dashed #d6336c;
+  background: transparent;
+}
+
+#guideline {
+  padding: 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+#guideline[hidden] {
+  display: none;
+}
+
+#guideline h2 {
+  margin: 0 0 0.35rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+#guideline p {
+  margin: 0 0 0.6rem;
+}
+
+#guideline a {
+  color: #0b5fff;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+#stage {
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+}
+
+/* ---- Phone and desktop sizes for forms that respond to browser width ----
+   The spacing puts the frame in exactly the same place as the phones on the
+   Material and Apple tabs: 24 from the left, 100 from the top, 412 wide. */
+
+main.has-viewports {
+  padding: 24px;
+}
+
+#viewport-tools {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+#viewport-tools[hidden] {
+  display: none;
+}
+
+.viewport-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.viewport-buttons button {
+  height: 32px;
+  padding: 0 16px;
+  border: 1px solid var(--muted);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.viewport-buttons button[aria-pressed='true'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+
+.viewport-buttons button:focus-visible {
+  outline: 2px solid #0b5fff;
+  outline-offset: 2px;
+}
+
+#viewport-readout {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+#stage[data-viewport='phone'] {
+  width: 412px;
+  max-width: 100%;
+  border: 8px solid #d1d1d6;
+  border-radius: 40px;
+}
+
+#stage[data-viewport='desktop'] {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+/* Narrow screens: menu on top, form below */
+@media (max-width: 640px) {
+  body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .sidebar {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  #system-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

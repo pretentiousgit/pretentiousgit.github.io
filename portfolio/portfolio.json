@@ -1,0 +1,536 @@
+{
+  "site": {
+    "title": "Alex Leitch",
+    "subtitle": "Installations and tools, 2010–2026",
+    "url": "https://alexleitch.com/portfolio/",
+    "credits": [
+      "Logo by [Tom Creighton](https://tomcreighton.com).",
+      "Header font: [Nougat Normal](https://joyride.studio/nougat/) by Creighton's Joyride Studio."
+    ]
+  },
+  "statement": {
+    "lede": "",
+    "paragraphs": [
+      "This page documents my work on creative technology projects. My background is in visual design and software development, especially weird uses of web tech. I very much enjoy CNC tooling, especially laser cutters. I like to build stuff with artists, work out new techniques to support their creative practice or vision, then publish those techniques as papers, public talks, and articles."
+    ]
+  },
+  "cover": {
+    "file": "cover.jpg",
+    "caption": "Fiddlehex, Ontario Place, Toronto, 2023",
+    "alt": "Fiddlehex at night: a glowing pink and blue etched acrylic sculpture with the Toronto skyline behind it, a viewer looking up at it"
+  },
+  "works": [
+    {
+      "slug": "the-annihilation-room",
+      "title": "The Annihilation Room",
+      "years": "2026",
+      "thumbnail": "an_1.jpg",
+      "sections": [
+        {
+          "heading": "The Annihilation Room",
+          "credits": [
+            "2026. With J. Golbeck and C. Chen.",
+            "Hornbake Library, University of Maryland, NextNOW Fest."
+          ],
+          "paragraphs": [
+            "The Annihilation Room is an immersive exhibition presenting the photography of Jen Golbeck. As a photographer with the AP, Jen captured striking images of the 2025 anti-ICE protests in Los Angeles and across the United States. This room contrasts life-size prints of that work with a plastic jungle, evoking the expansion of Southern logics of control and violence to the rest of the continent through automated surveillance technology and police violence. As viewers explore the images on offer, the room watches, identifying their weak points on an embedded screen. These are captured as flickering skeletons on a nearby screen.",
+            "Supported by an Arts for All grant, University of Maryland."
+          ],
+          "videos": [
+            {
+              "label": "walkthrough",
+              "duration": "1:00",
+              "url": "https://youtube.com/shorts/t6_Zl1BVsgA"
+            }
+          ],
+          "links": [
+            "Event: [arts.umd.edu](https://arts.umd.edu/events/annihilation-room)"
+          ],
+          "layout": "lead",
+          "images": [
+            {
+              "file": "an_1.jpg",
+              "alt": "Dark room lined with plastic foliage, large photographs of riot police on the walls, and a screen on the right"
+            },
+            {
+              "file": "an_3.jpg",
+              "alt": "Large photograph of an officer in tactical gear hung among foliage above a bench"
+            },
+            {
+              "file": "an_2.jpg",
+              "alt": "Two visitors standing in the dim room in front of the photographs"
+            },
+            {
+              "file": "ann_pose.jpg",
+              "alt": "Screen in the dark room showing a red pose skeleton of the viewer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "strain",
+      "title": "Strain",
+      "years": "2024",
+      "thumbnail": "st_cov.jpg",
+      "sections": [
+        {
+          "heading": "Strain",
+          "credits": [
+            "2024. With Celia Chen.",
+            "University of Maryland; Fireshonks remote stage at CCC Congress 2023; Sustainable Unmaking Workshop at CHI-Hawaii 2024; OSHWA Open Hardware Summit, 2024."
+          ],
+          "paragraphs": [
+            "A kinetic sculpture of soft pneumatic actuators, puppeteered by muscle signals from a discontinued Myo myoelectric armband worn by the user.",
+            "This work unites a reverse-engineered abandoned gesture controller, the Myo armband, with the small-run open hardware project the Programmable Air. Intended to rot over time, Strain makes use of strong, quick-decomposition condoms as air bladders, held in place by a net of standard bamboo skewers and 3D-printed shackles.",
+            "This work was intended to explore how little 3D printing we can get away with in order to maximise volume in space. The printed parts are based on the brutalist interior of the Montreal metro, contrasted with fine organic shapes that fall apart under pressure."
+          ],
+          "videos": [
+            {
+              "label": "mechanics demo",
+              "duration": "0:41",
+              "url": "https://youtube.com/shorts/_7y_uk5Oto4"
+            }
+          ],
+          "links": [
+            "[Strain at Hackster.io](https://www.hackster.io/cmsc730-group-7/strain-6ee28a)"
+          ],
+          "layout": "lead",
+          "images": [
+            {
+              "file": "st_cov.jpg",
+              "alt": "Strain: translucent inflated bladders on bamboo skewers rising from a laser-cut box"
+            },
+            {
+              "file": "st_parts.jpg",
+              "alt": "Laid-out parts: printed clips, bamboo skewers, tubing and a condom"
+            },
+            {
+              "file": "st_lab.jpg",
+              "alt": "Strain on a table in a fabrication lab"
+            }
+          ]
+        },
+        {
+          "heading": "Strain: gesture control",
+          "paragraphs": [
+            "Strain is inflated or relaxed by reading forearm muscle gestures into a Raspberry Pi, which translates commands to serial and signals the Programmable Air through its onboard Arduino Nano.",
+            "This project was developed into a small library of printable volume spines, plus new Arduino/Raspi control code. It was presented as a piece of reverse engineering at Fireshonks 2023, part of the annual Chaos Computer Club Congress, and as a workshop paper at CHI 2024."
+          ],
+          "links": [
+            "Talk: [media.ccc.de (40 min)](https://media.ccc.de/v/37c3-57905-encapsulated-electromyography-with-myo-and-raspi)"
+          ],
+          "layout": "strip",
+          "images": [
+            {
+              "file": "st_2.jpg",
+              "alt": "Video still: a forearm wearing the Myo armband gestures in front of Strain"
+            },
+            {
+              "file": "st_6.jpg",
+              "alt": "Video still: a forearm wearing the Myo armband gestures in front of Strain"
+            },
+            {
+              "file": "st_10.jpg",
+              "alt": "Video still: a forearm wearing the Myo armband gestures in front of Strain"
+            },
+            {
+              "file": "st_14.jpg",
+              "alt": "Video still: a forearm wearing the Myo armband gestures in front of Strain"
+            },
+            {
+              "file": "st_18.jpg",
+              "alt": "Video still: a forearm wearing the Myo armband gestures in front of Strain"
+            }
+          ],
+          "caption": "Stills from gesture-control video"
+        }
+      ]
+    },
+    {
+      "slug": "minor-mending-pocket-hatch",
+      "title": "Minor Mending / Pocket Hatch",
+      "years": "2023–26",
+      "thumbnail": "ph_lamp.jpg",
+      "sections": [
+        {
+          "heading": "Minor Mending / Pocket Hatch",
+          "credits": [
+            "2023–2026. Pocket Hatch with Celia Chen.",
+            "ITPCamp final show, 2023; ACM UIST, Detroit, 2026."
+          ],
+          "paragraphs": [
+            "Minor Mending is a lamp made at ITPCamp using a novel structured hatching technique, which allows a laser cutter to clear a blind mortise with finger pressure.",
+            "This technique was then further developed into a dependency-free browser tool called Pocket Hatch, which sets up vector hatching for a blind mortise from any SVG outline. Images produced with the software can be used to produce a pocket cut with any laser engraver that can cut wood, a job that normally would involve a router."
+          ],
+          "layout": "side",
+          "images": [
+            {
+              "file": "ph_lamp.jpg",
+              "alt": "Minor Mending: a curved lamp with a hatched laser-cut pattern on a wooden base",
+              "fit": "contain"
+            },
+            {
+              "file": "ph_test.jpg",
+              "alt": "Curved pocket shown with its slices cut, then cleared by hand",
+              "caption": "Slice demo showing required spacing for the technique.",
+              "fit": "contain"
+            },
+            {
+              "file": "ph_depth.jpg",
+              "alt": "Cross-section of maple showing pocket depth tests",
+              "caption": "Depth tests in maple"
+            },
+            {
+              "file": "ph_tool.jpg",
+              "alt": "Screenshot of the Pocket Hatch browser tool",
+              "caption": "Screencap of Pocket Hatch browser tool",
+              "fit": "contain"
+            }
+          ]
+        }
+      ],
+      "thumbnailFit": "contain"
+    },
+    {
+      "slug": "fiddlehex",
+      "title": "Fiddlehex",
+      "years": "2023",
+      "thumbnail": "cover.jpg",
+      "sections": [
+        {
+          "heading": "Fiddlehex",
+          "credits": [
+            "2023. With Sagan Yee, Dave Cox, Lee Wilkins and Hillary Predko. Artist and producer.",
+            "Winterlights Festival, Ontario Place, Toronto."
+          ],
+          "paragraphs": [
+            "Fiddlehex is a crystalline hexagon of larger-than-life acrylic panels, laser-etched and edge-lit from below. Panel colours cycle from purple through green and gold while no-one is around, then light blue through purple as the audience approaches, promising spring at the end of winter. It was developed to provide excellent lighting in the middle of winter, to evoke a fern breaking through the frost in early spring.",
+            "Supported by an Ontario Place Winterlights Festival grant. This work was later documented by Lee Wilkins as “DMX Lighting for Makers” for *Make*, Vol. 91."
+          ],
+          "layout": "lead",
+          "images": [
+            {
+              "file": "cover.jpg",
+              "alt": "Fiddlehex at night: a glowing pink and blue etched acrylic sculpture with the Toronto skyline behind it, a viewer looking up at it"
+            },
+            {
+              "file": "fh_view.jpg",
+              "alt": "A group views Fiddlehex glowing in the distance at dusk"
+            },
+            {
+              "file": "fh_sun.jpg",
+              "alt": "Etched acrylic spirals in low golden sun"
+            }
+          ]
+        },
+        {
+          "layout": "process",
+          "images": [
+            {
+              "file": "fh_sand.jpg",
+              "alt": "Preparing a large panel for edge lighting in a workshop"
+            },
+            {
+              "file": "fh_inst.jpg",
+              "alt": "The team assembling the base on site in the snow"
+            },
+            {
+              "file": "fh_dia.jpg",
+              "alt": "Proposal drawing: four panel colours changing as a person approaches",
+              "fit": "contain"
+            }
+          ],
+          "caption": "Top: preparing panels for edge lighting; on-site assembly. Bottom: proposal drawing of colour changing with proximity."
+        }
+      ]
+    },
+    {
+      "slug": "keycaps",
+      "title": "Keycaps",
+      "years": "2019–21",
+      "thumbnail": "ke_1.jpg",
+      "sections": [
+        {
+          "heading": "Keycaps",
+          "credits": [
+            "2019–2021. Sculpted and cast.",
+            "Private collection."
+          ],
+          "paragraphs": [
+            "Miniature sculpture for mechanical keyboards, cast in polyurethane. Developmental exploration for how a 3D-printed 2-shot casting process might work.",
+            "Related session: Casting Small Plastics in Non-Industrial Environments, ITPCamp 2020."
+          ],
+          "layout": "even",
+          "images": [
+            {
+              "file": "ke_1.jpg",
+              "alt": "Cast keycaps in blue, orange and purple on a grey plate"
+            },
+            {
+              "file": "ke_3.jpg",
+              "alt": "A sculpted keycap held in a clamp on a workbench"
+            },
+            {
+              "file": "ke_2.jpg",
+              "alt": "Sculpted keycap masters on a grey plate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "tenementary",
+      "title": "Tenementary",
+      "years": "2019",
+      "thumbnail": "te_1.png",
+      "sections": [
+        {
+          "heading": "Tenementary",
+          "credits": [
+            "2019. Built for ITPCamp. Software, p5.js."
+          ],
+          "paragraphs": [
+            "A generator to solve the housing crisis.",
+            "Wait a couple seconds and there will be a new apartment on this page.",
+            "Tenementary produces near-identical iterations of fire escapes, windows, and air conditioners. These were designed based on tenements seen on walks between Chelsea and the Tisch building by Washington Square Park in 2019, before ITP's move to Brooklyn. Each unique building promises a possible home, only to have it slip away as the audience walks past. This work draws on Luc Sante’s *Low Life* and on apartments held as investments rather than homes.",
+            "Tenementary is intended to be hooked to a roll-plotter, with each unique apartment drawn on paper, but this has not been realized.",
+            "This work represents deep nostalgia for the shell of life available to New York's many temporary residents.",
+            "The technical element of this work is a P5js library and build process that can be compacted out of a traditional software development architecture that separates concerns into subfiles, but can be automatically built out by webpack into a small dist file. This architecture was decided on to showcase how even very repetitive results come from much deeper and more complex processes."
+          ],
+          "links": [
+            "Code: [github.com/pretentiousgit/new-york-towers](https://github.com/pretentiousgit/new-york-towers)"
+          ],
+          "layout": "embed",
+          "images": [],
+          "embed": {
+            "src": "apps/tenementary/",
+            "title": "Tenementary running: a new generated tenement facade is drawn every few seconds",
+            "bundle": "new-york-towers/dist/bundle.js"
+          }
+        }
+      ],
+      "thumbnailFit": "contain"
+    },
+    {
+      "slug": "aqualith",
+      "title": "Aqualith",
+      "years": "2018",
+      "thumbnail": "aq_1.jpg",
+      "sections": [
+        {
+          "heading": "Aqualith",
+          "credits": [
+            "2018. With Sagan Yee and Len Predko. Designer, fabricator, developer.",
+            "Winterlights Festival, Ontario Place, Toronto."
+          ],
+          "paragraphs": [
+            "A capacitive rock sculpture installed outdoors through the Toronto winter. Lines of light run through the surface of the stone, and explode brightly in response to touch. This project maintained capacitance in highly variable humidity through an original sampling algorithm that recorded weather patterns and interactions over time.",
+            "Original sketches by Sagan Yee",
+            "Supported by an Ontario Place Winterlights Festival grant."
+          ],
+          "layout": "inset",
+          "images": [
+            {
+              "file": "aq_1.jpg",
+              "alt": "Aqualith: a rock at night with blue and violet lines of light in its surface"
+            },
+            {
+              "file": "aq_2.jpg",
+              "alt": "The team with the unfinished rock in the workshop",
+              "caption": "In the workshop, before installation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "hothouse",
+      "title": "Hothouse",
+      "years": "2017",
+      "thumbnail": "ho_1.jpg",
+      "sections": [
+        {
+          "heading": "Hothouse",
+          "credits": [
+            "2017. With Y. Shaik. Install team Lee Wilkins, Nadine Lessio, Derek Quenneville, Dave Cox, Sagan Yee. Lead designer, developer, fabricator.",
+            "Come Up To My Room, Gladstone Hotel, Toronto; Toronto Design Offsite Festival."
+          ],
+          "paragraphs": [
+            "A walled garden of mechanical flowers that respond to people as they enter the space. Like hothouses, walled gardens let some things bloom where they could never grow without the help.",
+            "Produced for Come Up To My Room at the Gladstone Hotel as part of Toronto Design Offsite Festival 2017, and made entirely of laser-cut plywood and cardboard. The flowers worked by waving your hands at water-filled bottles, which we were asked to remove for the final install. Water on wood.",
+            "Supported by a Toronto Arts Council Media Arts grant."
+          ],
+          "layout": "side",
+          "images": [
+            {
+              "file": "ho_1v.jpg",
+              "alt": "Three plywood flower towers with translucent petals on a glowing white base, lit in a hotel room"
+            },
+            {
+              "file": "ho_2.jpg",
+              "alt": "Close view of a lit plywood flower head"
+            },
+            {
+              "file": "ho_4.jpg",
+              "alt": "Laser-cut plywood pieces on the cutter bed"
+            },
+            {
+              "file": "ho_5_crop.jpg",
+              "alt": "Hands holding the plywood flower mechanism beside a laptop, with wiring on the floor"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "mechanism-screenperfect",
+      "title": "Mechanism / ScreenPerfect",
+      "years": "2014",
+      "thumbnail": "me_pi.jpg",
+      "sections": [
+        {
+          "heading": "Mechanism / ScreenPerfect",
+          "credits": [
+            "2014. Software and hardware.",
+            "game::play lab, OCAD University; Digital Futures Graduate Exhibition, Toronto."
+          ],
+          "paragraphs": [
+            "ScreenPerfect was an early phone-to-server-to-display control system written for websockets.io over node.js. It took advantage of node-webkit to provide real-time control over second-party monitors in local space through a captive portal. This project was written for OCAD University’s game::play lab. With it, a user can run mobile video controls that directly target a client window for FMV video games in isolated spaces.",
+            "ScreenPerfect then became Mechanism, a suite of software for installations in small or limited spaces, designed to be hosted by a Raspberry Pi with an ISO burn. Mechanism was designed to provide a generic game controller for a variety of FMV games that ran on multiple projectors in a single space.",
+            "This became my master’s thesis, *Mechanism: An artist-led, feminist design process for open technology tools*. My thesis advisor was Emma Westecott of OCADu, Toronto."
+          ],
+          "layout": "even",
+          "images": [
+            {
+              "file": "me_pi.jpg",
+              "alt": "A Raspberry Pi in a ridged purple printed case on a concrete floor",
+              "caption": "Mechanism on a Raspberry Pi"
+            },
+            {
+              "file": "me_arcade.png",
+              "alt": "Mechanism menu screen titled Choose Your Game, with five game tiles",
+              "caption": "Choosing a game"
+            },
+            {
+              "file": "me_diagram.png",
+              "alt": "Diagram of the ScreenPerfect server-to-user model, from studio and internet to a local art server and a phone",
+              "fit": "contain",
+              "caption": "Server-to-user model"
+            },
+            {
+              "file": "me_outline.jpg",
+              "alt": "Diagram of a three-stage framework for artist-led research: artist-led research, community-based research, prototype development",
+              "fit": "contain",
+              "caption": "A framework for artist-led research"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "psxxyborg",
+      "title": "PsXXYborg",
+      "years": "2013",
+      "thumbnail": "px_van.jpg",
+      "sections": [
+        {
+          "heading": "PsXXYborg",
+          "credits": [
+            "2013. With Hannah Epstein and Sagan Yee. Software."
+          ],
+          "paragraphs": [
+            "Hannah Epstein's epic work with Sagan Yee, where a video installed in a van is controlled through your own cell phone. The van serves as a shrine to the elevation of your soul into The Cloud, to be free of their flesh and achieve the singularity. The game investigates the promise of the singularity as held against the reality of the human body.",
+            "PsXXYborg's software was my first serious javascript project. It was built using an early version of websockets and node-webkit. The browser offered two endpoints: one on the phone which side-loaded gifs under contact points to escape constraints against video playback, and one on a secondary laptop that played back videos in a full browser when users chose their path. Videos were connected by hand-coding their routes out of a [Twine](https://twinery.org) graph.",
+            "PsXXYborg's core software went on to become ScreenPerfect, the library which became [Mechanism](#mechanism-screenperfect); this was its first exhibition, without the mechanism's game-development interface."
+          ],
+          "images": [
+            {
+              "file": "px_van.jpg",
+              "alt": "A van painted yellow and pink with a huge toothed mouth, parked on a street with a sandwich board beside it"
+            },
+            {
+              "file": "px_interior.jpg",
+              "alt": "Inside the van: a video projection glowing through gauzy fabric"
+            },
+            {
+              "file": "px_clip.jpg",
+              "alt": "Frame from the game: swirling magenta energy on black"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "psychlepath",
+      "title": "Psychlepath",
+      "years": "2012",
+      "thumbnail": "py_game.png",
+      "sections": [
+        {
+          "heading": "Psychlepath",
+          "credits": [
+            "2012. Illustration.",
+            "Difference Engine / TIFF Nexus, Toronto."
+          ],
+          "paragraphs": [
+            "My short game about what it's like to be a cyclist in Toronto in the autumn. Programmed in Construct 2 by Scirra. The goal is to get all the way to work in the wet, dangerous, beautiful leaves without being killed by green-and-orange cabs, curb cuts, or transit logos. You're given a bell (ineffective) and a giant u-lock attack (very hostile). My favourite part of this is the helmet illustration, used to show progressive increase in the damage you've take.",
+            "Produced as part of The Difference Engine workshop, sponsored by TIFF Nexus."
+          ],
+          "layout": "even",
+          "images": [
+            {
+              "file": "py_game.png",
+              "alt": "Top-down game screen: a courier on a bike and an orange and green cab on a road lined with autumn leaves"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "flame-effects",
+      "title": "Flame effects",
+      "years": "2010–12",
+      "thumbnail": "fl_fireball.jpg",
+      "thumbnailPosition": "center 22%",
+      "sections": [
+        {
+          "heading": "Flame effects",
+          "credits": [
+            "2010–2012. Design, fabrication, welding, installation.",
+            "Firefly Festival, Vermont; Burning Man, Black Rock City; Nuit Blanche, Toronto."
+          ],
+          "paragraphs": [
+            "The Rainbow Gun (Flamin’ Rainbows, 2012) is a tripod-mounted, multi-coloured propane flame effect, using a liquid-water colourant injection system to shoot fire in six colours. It works best set to green or red. I used fuel injectors at first, and they clogged badly; it was a whole thing. Built for Firefly Festival in Vermont, with support from Firefly Festival and the Awesome Foundation Toronto.",
+            "Before that, I did welding, hand fabrication and installation on *The Heart Machine* (2010) by Christine Irving, with a team of twelve, shown at Burning Man and later at Nuit Blanche Toronto. I also designed the logo and initial colour system for *Super Street Fire* (2012).",
+            "I was able to do work on the Heart Machine thanks to my early gig doing prop fabrication at Cameron Watt Design, where I helped build out the fibreglass fish waterfalls and steamlodge props at Casino Rama in 2002."
+          ],
+          "layout": "side",
+          "images": [
+            {
+              "file": "fl_fireball.jpg",
+              "alt": "A large fireball rises from the Rainbow Gun in an alley while Alex Leitch operates it from below",
+              "caption": "Testing the Rainbow Gun"
+            },
+            {
+              "file": "fl_rig.jpg",
+              "alt": "Alex Leitch at the controls of the tripod-mounted flame effect, with a flame rising above",
+              "caption": "The rig under test"
+            },
+            {
+              "file": "fl_reservoirs.jpg",
+              "alt": "Green colourant reservoirs and plumbing mounted on a metal rail on a workbench",
+              "caption": "Colourant reservoirs"
+            },
+            {
+              "file": "hm_1.jpg",
+              "alt": "Crowd silhouetted at night around The Heart Machine",
+              "credit": "Photo: Chris Cheung",
+              "caption": "*The Heart Machine* by Christine Irving, Nuit Blanche Toronto, 2011"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

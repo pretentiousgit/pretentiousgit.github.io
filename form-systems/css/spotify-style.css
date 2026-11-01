@@ -1,0 +1,209 @@
+/* A Spotify-style skin over stock Bootstrap.
+   A style study for class, not Spotify's code or assets. It imitates the
+   look of Spotify's own design system: near-black panels, one bright green,
+   heavy tight headings, pill buttons. Loaded after bootstrap.min.css, with
+   the same markup and the same 12-column grid classes as bootstrap.html.
+   The typeface is Figtree, a free stand-in for Spotify's proprietary one. */
+
+/* ---- 1. Bootstrap's own variables: the cheap part of a reskin ---- */
+:root {
+  --green: #1ed760;
+  --green-bright: #3be477;
+  --panel: #121212;
+  --raised: #2a2a2a;
+  --line: #7c7c7c;
+  --subdued: #b3b3b3;
+
+  --bs-body-bg: #000;
+  --bs-body-color: #fff;
+  --bs-body-font-family: 'Figtree', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --bs-secondary-color: var(--subdued);
+  --bs-border-color: var(--line);
+  --bs-border-radius: 4px;
+  --bs-primary: var(--green);
+  --bs-primary-rgb: 30, 215, 96;
+}
+
+/* ---- 2. The page: a rounded panel on black, with a color wash on top ---- */
+body {
+  padding: 8px;
+}
+
+main.container {
+  min-height: calc(100vh - 16px);
+  /* Page margins; grid-overlay.css reads this when "Show grids" is on */
+  --grid-margin: 32px;
+
+  padding: 72px var(--grid-margin) 48px !important;
+  border-radius: 8px;
+  background: linear-gradient(#5038a0, var(--panel) 300px) var(--panel);
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.lead {
+  margin-bottom: 40px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+/* ---- 3. The controls: where a reskin stops being cheap.
+   Bootstrap hard-codes its blue in several components, so each one has to
+   be overridden by hand. ---- */
+
+.form-label {
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+/* The legends carry Bootstrap's fs-6 utility, which is marked !important */
+legend.form-label {
+  font-size: 0.875rem !important;
+}
+
+.form-control,
+.form-select {
+  padding: 12px 14px;
+  border: 0;
+  background-color: var(--panel);
+  box-shadow: inset 0 0 0 1px var(--line);
+  color: #fff;
+}
+
+.form-control:hover,
+.form-select:hover {
+  box-shadow: inset 0 0 0 1px #fff;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--panel);
+  box-shadow: inset 0 0 0 3px #fff;
+  color: #fff;
+}
+
+.form-control[type='file'] {
+  padding: 8px 14px;
+  color: var(--subdued);
+}
+
+.form-control[type='file']::file-selector-button {
+  margin: 0 12px 0 0;
+  padding: 4px 16px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--raised);
+  color: #fff;
+  font-weight: 700;
+}
+
+.form-control[type='file']:hover:not(:disabled):not([readonly])::file-selector-button {
+  background: #3f3f3f;
+}
+
+.form-check-input {
+  border-color: var(--line);
+  background-color: transparent;
+}
+
+.form-check-input:checked {
+  border-color: var(--green);
+  background-color: var(--green);
+}
+
+/* Black tick and dot instead of Bootstrap's white ones, for contrast on green */
+.form-check-input:checked[type='checkbox'] {
+  --bs-form-check-bg-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3E%3C/svg%3E");
+}
+
+.form-check-input:checked[type='radio'] {
+  --bs-form-check-bg-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='2' fill='%23000'/%3E%3C/svg%3E");
+}
+
+.form-check-input:focus {
+  border-color: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+}
+
+/* Slider: thin gray track, white thumb, like a playback bar */
+.form-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: #4d4d4d;
+}
+
+.form-range::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  background: #fff;
+}
+
+.form-range::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: #4d4d4d;
+}
+
+.form-range::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--green);
+}
+
+.form-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: #fff;
+}
+
+.form-range:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+}
+
+/* Buttons: pills, bold, green with black text */
+.btn {
+  --bs-btn-padding-x: 32px;
+  --bs-btn-padding-y: 12px;
+  --bs-btn-border-radius: 9999px;
+  --bs-btn-font-weight: 700;
+
+  transition: transform 0.1s;
+}
+
+.btn:hover {
+  transform: scale(1.04);
+}
+
+.btn-primary {
+  --bs-btn-color: #000;
+  --bs-btn-bg: var(--green);
+  --bs-btn-border-color: var(--green);
+  --bs-btn-hover-color: #000;
+  --bs-btn-hover-bg: var(--green-bright);
+  --bs-btn-hover-border-color: var(--green-bright);
+  --bs-btn-active-color: #000;
+  --bs-btn-active-bg: #1abc54;
+  --bs-btn-active-border-color: #1abc54;
+  --bs-btn-focus-shadow-rgb: 255, 255, 255;
+}
+
+.btn-outline-secondary {
+  --bs-btn-color: #fff;
+  --bs-btn-border-color: var(--line);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: transparent;
+  --bs-btn-hover-border-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: transparent;
+  --bs-btn-active-border-color: #fff;
+  --bs-btn-focus-shadow-rgb: 255, 255, 255;
+}

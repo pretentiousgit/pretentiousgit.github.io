@@ -1,0 +1,154 @@
+{
+  "subtitle": "sociology & interaction design",
+  "sections": {
+    "init": [
+      {
+        "p": "I build interactive installations and study how people's use of tools impacts their technical imaginary, their idea of what might or should happen in the future."
+      },
+      {
+        "p": "At UMD, I collaborate with [Dr. Jen Golbeck's lab on AI and social media research.](#writing) This work explores how we shape, and are shaped by, our uncertain [tools](#tools)."
+      },
+      {
+        "p": "This website was written to show off weird design possibilities with CSS, HTML, and JS. It may change based on how you are seeing it."
+      }
+    ],
+    "tools": [
+      {
+        "p": "Code toys I keep alive to help run my classes."
+      },
+      {
+        "list": [
+          "[Gamestorming](./gamestorming/)",
+          "[Small Solutions App Generator](./small-solutions/)",
+          "[STL Model previewer using Three.js](./stl-viewer/)",
+          "[Base page for a Twine visual novel exported with Twison](./twison-base/)"
+        ]
+      },
+      {
+        "p": "Useful tools by other people:"
+      },
+      {
+        "list": [
+          "[HTML Periodic Table](https://websitesetup.org/html5-periodical-table/)",
+          "[Cubic Bezier dot com](https://cubic-bezier.com/#.17,.67,.83,.67)"
+        ]
+      }
+    ],
+    "teaching": [
+      {
+        "p": "This is a list of classes I have designed for UMD. I have previously taught independent workshops at ITP-NYU, OCADu, and for a variety of private clients."
+      },
+      {
+        "h4": "Interaction Design"
+      },
+      {
+        "p": "A graduate-level design course that takes students through how to think about what an \"app\" actually is, using introductory STS texts as conversation and design prompts. Students work in small groups to design a speculative future where we can see one person's phone screen and all the applications they use in the course of a day. I have been teaching this class for various institutions since 2015."
+      },
+      {
+        "h4": "Programming Human-Centered Interfaces"
+      },
+      {
+        "p": "A mixed-level creative-code approach to interface programming. Students learn about javascript frameworks, data storage, data privacy, and the history of the surveillance internet while building an HTML5/CSS/JS interface they design in Figma. Students learn the business history of the web along the way."
+      },
+      {
+        "p": "This course runs every semester. The software I use to teach has shut down or substantially changed every six months since the course started in 2019."
+      },
+      {
+        "h4": "Game Design"
+      },
+      {
+        "p": "A mixed-level, paper-based course built from Tracey Fullerton's Game Design Workshop. Students produce a different game every two weeks for a full semester. They learn about the trade-offs between paper prototyping, software development, user testing, and the shortcuts used to get to launch. Readings look at behaviourism, gambling, visualisation of dynamic data, deceptive patterns, mass online games, and focus on how game environments push HCI research. I have delivered versions of this class since 2015."
+      },
+      {
+        "h4": "Technology and Spectacle"
+      },
+      {
+        "p": "Drone shows, projection mapping, LED panels, live code, flamethrowers and concert support: how do public art installations work? What are these large public spectacles *for?* This mixed-level course takes students through how to use contemporary live-code and public installation software such as Hydra, Strudel, and TouchDesigner to build showcase installations. This class has been delivered since 2025."
+      },
+      {
+        "h4": "Makerspaces"
+      },
+      {
+        "p": "What is piracy, anyway? Why is it different than DIY, or manufacturing? This graduate-level course looks at what dupes and counterfeits are while teaching students to use digital fabrication tools to produce physical objects. This class has been delivered since 2021."
+      }
+    ],
+    "writing": [
+      {
+        "p": "Below is a selection of my recent publications. Please feel free to reach out if you cannot access something and would like a copy."
+      },
+      {
+        "h4": "Publications with the ACM"
+      },
+      {
+        "p": "[Alex Leitch at the ACM Digital Library](https://dl.acm.org/profile/99659701105)"
+      },
+      {
+        "p": "Work published through ACM conference proceedings."
+      },
+      {
+        "h4": "Preprints at arxiv.org"
+      },
+      {
+        "p": "[Alex Leitch at arxiv.org](https://arxiv.org/search/?query=Leitch%2C+Alex&searchtype=author&abstracts=show&order=-announced_date_first&size=50)"
+      },
+      {
+        "p": "These are all preprints, some of which have become publications elsewhere."
+      },
+      {
+        "h4": "Other Writing"
+      },
+      {
+        "entry": {
+          "title": "Ephemeral Myographic Motion: Repurposing the Myo Armband to Control Disposable Pneumatic Sculptures. 2024.",
+          "url": "https://doi.org/10.48550/arXiv.2404.08065",
+          "also": [
+            {
+              "title": "Related talk at CCC 2024.",
+              "url": "https://media.ccc.de/v/37c3-57905-encapsulated-electromyography-with-myo-and-raspi"
+            }
+          ],
+          "text": "This paper covers the reverse engineering and development of an interactive pneumatic sculpture that responds to the Myo armband, support defunct since 2014."
+        }
+      },
+      {
+        "h4": "Older Writing"
+      },
+      {
+        "p": "This writing happened during my first career, organizing not-for-profit creative technology spaces in Toronto while working as a senior javascript developer."
+      },
+      {
+        "entry": {
+          "title": "Truth, Post-Truth, and Subscriptions: Consensus, Truth, and Social Norms in Algorithmic Media. 2017.",
+          "url": "https://www.torrossa.com/en/resources/an/5524562#page=152",
+          "text": "This book chapter is about how when you can't consistently see someone else's lunch on the timeline, the timeline makes you more lonely and more prone to believing things that might not necessarily be the most truthful."
+        }
+      },
+      {
+        "entry": {
+          "title": "Exclusive Spaces. 2016.",
+          "url": "https://www.bloomsbury.com/us/social-media-and-your-brain-9781440854538/",
+          "text": "This chapter is on how mild appearance of risk will result in overcommitment from target user populations, which makes it really easy to develop a strong sense of inclusive fellow-feeling."
+        }
+      },
+      {
+        "entry": {
+          "title": "The King is Dead, Long Live The King. 2015.",
+          "url": "https://medium.com/@aeleitch/the-king-is-dead-long-live-the-king-cd3f917734a5",
+          "text": "This essay on how difficult it is to catch a break in Canadian retail did something like 225,000 views in an hour when it went live just after the closure of Target in Canada. Canada's now seen the Hudson Bay itself close; retail is very difficult in Canada. It is much *more* difficult when hedge fund debts get involved, but the distances, population gap, and centralization of the fashion industry in Quebec - and China - hasn't changed much in ten years."
+        }
+      },
+      {
+        "entry": {
+          "title": "Viridian Design versus the Culture Industry. 2013.",
+          "url": "https://medium.com/@aeleitch/17b9503969ff",
+          "text": "This polemic adequately expresses my dislike, even at the time, for how people close to the tech industry handle the culture industry."
+        }
+      }
+    ],
+    "bio": [
+      {
+        "p": "Alex Leitch is a senior lecturer and PhD candidate at the University of Maryland, College Park. They teach courses on how computers interact with people and vice-versa. Alex's current research is on how people's use of tools impacts their understanding and acceptance of differing visions of the technical future."
+      }
+    ]
+  }
+}

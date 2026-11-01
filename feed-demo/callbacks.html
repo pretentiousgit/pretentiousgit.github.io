@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3. Callbacks - Information objects</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/shell.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="js/tweets.js" defer></script>
+  <script src="js/callbacks.js" defer></script>
+</head>
+<body>
+  <nav class="sidebar" aria-label="Examples">
+    <h1>Information objects</h1>
+    <ul class="nav nav-pills flex-column">
+      <li class="nav-item"><a class="nav-link" href="0-compose.html">0. Write a post</a></li>
+      <li class="nav-item"><a class="nav-link" href="1-object.html">1. One object, one post</a></li>
+      <li class="nav-item"><a class="nav-link" href="2-collection.html">2. An array of posts</a></li>
+      <li class="nav-item"><a class="nav-link active" aria-current="page" href="callbacks.html">3. Callbacks</a></li>
+      <li class="nav-item"><a class="nav-link" href="3-fave.html">4. Fave: fast or slow?</a></li>
+      <li class="nav-item"><a class="nav-link" href="4-pop-in.html">5. Pop in over time</a></li>
+    </ul>
+  </nav>
+
+  <main class="stage">
+    <div class="example">
+      <!-- Same phone as the Bootstrap tab in form-systems: 412 wide, grey bezel -->
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="container py-4">
+            <h1>Social feed app</h1>
+            <p class="lead">Check on your phone friends.</p>
+            <ul id="tweets" class="tweets"></ul>
+          </div>
+        </div>
+        <div id="toasts" class="toasts" role="status"></div>
+      </div>
+
+      <div class="panel">
+        <p class="intro-text">A <strong>callback</strong> is a function you hand to another function, so that function can call it: right away, or later.</p>
+
+        <div class="accordion" id="code-panels">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panel-toast" aria-expanded="true" aria-controls="panel-toast">The toast: two callbacks</button>
+            </h2>
+            <div id="panel-toast" class="accordion-collapse collapse show" data-bs-parent="#code-panels">
+              <div class="accordion-body">
+                <p class="try-line">Click <strong>Save</strong> on three posts, quickly.</p>
+                <div class="toast-controls">
+                  <label><input type="radio" name="toast-version" id="toast-own" autocomplete="off" checked> Each call has its own toast</label>
+                  <label><input type="radio" name="toast-version" id="toast-shared" autocomplete="off"> One shared toast variable</label>
+                  <button id="clear-toasts" class="btn btn-outline-primary btn-sm" type="button">Clear toasts</button>
+                </div>
+                <p class="code-label">Called 3 seconds later, by setTimeout</p>
+                <pre id="code-toast" class="code"></pre>
+                <p class="code-label">Called when you click, by the browser</p>
+                <pre id="code-click" class="code"></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panel-now-later" aria-expanded="false" aria-controls="panel-now-later">Now or later</button>
+            </h2>
+            <div id="panel-now-later" class="accordion-collapse collapse" data-bs-parent="#code-panels">
+              <div class="accordion-body">
+                <div class="callback-demos">
+                  <div>
+                    <button id="run-foreach" class="btn btn-primary btn-lg" type="button">Run forEach</button>
+                    <ol id="log-foreach" class="event-log"></ol>
+                    <pre id="code-foreach" class="code"></pre>
+                  </div>
+                  <div>
+                    <button id="run-timeout" class="btn btn-primary btn-lg" type="button">Run setTimeout</button>
+                    <ol id="log-timeout" class="event-log"></ol>
+                    <pre id="code-timeout" class="code"></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panel-later-limits" aria-expanded="false" aria-controls="panel-later-limits">What a later callback can't do</button>
+            </h2>
+            <div id="panel-later-limits" class="accordion-collapse collapse" data-bs-parent="#code-panels">
+              <div class="accordion-body">
+                <div class="callback-demos">
+                  <div>
+                    <button id="run-reads" class="btn btn-primary btn-lg" type="button">It reads variables when it runs</button>
+                    <ol id="log-reads" class="event-log"></ol>
+                    <pre id="code-reads" class="code"></pre>
+                  </div>
+                  <div>
+                    <button id="run-return" class="btn btn-primary btn-lg" type="button">Its return goes nowhere</button>
+                    <ol id="log-return" class="event-log"></ol>
+                    <pre id="code-return" class="code"></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

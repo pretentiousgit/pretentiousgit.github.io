@@ -1,0 +1,332 @@
+/* Page-specific layout only. Colours, type and tabs come from ../styles.css. */
+
+.portfolio {
+    --gap: 0.5rem;
+    /* Content stops growing past this width and stays on the left. */
+    --limit: 90rem;
+    --gutter-right: max(var(--gutter), calc(100% - var(--limit) + var(--gutter)));
+    min-height: 100vh;
+}
+
+.portfolio img {
+    width: 100%;
+    height: auto;
+}
+
+.portfolio .top-block {
+    padding-right: var(--gutter-right);
+}
+
+.portfolio main.sheet {
+    padding: 2rem var(--gutter-right) 3rem var(--gutter);
+    border-top: 1px solid var(--fade-color);
+}
+
+/* PHOTOS: a tiny placeholder shows until the real image has loaded */
+.frame {
+    background: var(--ph) center / cover no-repeat;
+    overflow: hidden;
+}
+
+.frame.contain {
+    background: white;
+}
+
+.js .frame img {
+    opacity: 0;
+    transition: opacity 0.35s ease-out;
+}
+
+.js .frame.loaded img {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js .frame img {
+        transition: none;
+    }
+}
+
+/* CONTACT SHEET */
+.statement {
+    max-width: 44rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 2.5rem;
+}
+
+.portfolio main .lede {
+    font-size: var(--text-lede);
+    line-height: var(--leading-heading);
+    font-weight: 700;
+}
+
+.contact {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    gap: 1.5rem 1rem;
+}
+
+.contact a {
+    display: block;
+    text-decoration: none;
+}
+
+.contact .frame {
+    aspect-ratio: 4 / 3 !important;
+    background-color: white;
+}
+
+.contact .frame img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.contact .frame.contain img {
+    object-fit: contain;
+}
+
+.contact a:hover .name,
+.contact a:focus-visible .name {
+    text-decoration: underline;
+}
+
+.name {
+    /* Long titles can break rather than push the page wider when text is enlarged. */
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.slug {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.6rem;
+    padding-top: 0.35rem;
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+}
+
+.no,
+.yr {
+    font-variant-numeric: tabular-nums;
+}
+
+/* WORK PAGES */
+.work {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.6fr);
+    gap: 1rem var(--gutter);
+    padding-bottom: 3rem;
+}
+
+.words > * + * {
+    margin-top: 0.8rem;
+}
+
+.words h3 {
+    font-size: var(--text-h3);
+    line-height: var(--leading-heading);
+    font-weight: 800;
+}
+
+.words h4 {
+    font-size: var(--text-h4);
+    line-height: var(--leading-heading);
+    font-weight: 800;
+}
+
+.portfolio main .meta,
+.portfolio figcaption {
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+}
+
+.portfolio figcaption {
+    padding-top: 0.3rem;
+}
+
+.video {
+    display: block;
+    width: 100%;
+    max-width: 20rem;
+    aspect-ratio: 9 / 16;
+    border: 0;
+}
+
+.photos {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--gap);
+    align-content: start;
+}
+
+.photos .group {
+    grid-column: 1 / -1;
+}
+
+/* lead: the first photo runs full width, the rest share a row */
+.layout-lead figure {
+    grid-column: span 2;
+}
+
+.layout-lead figure:first-child {
+    grid-column: 1 / -1;
+}
+
+.layout-lead.rest-2 figure:not(:first-child) {
+    grid-column: span 3;
+}
+
+.layout-lead figure:not(:first-child) .frame {
+    aspect-ratio: 4 / 3 !important;
+}
+
+.layout-lead figure:not(:first-child) img {
+    height: 100%;
+    object-fit: cover;
+}
+
+/* strip: video stills in a row */
+.layout-strip {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+/* side: a tall photo beside a column of details */
+.layout-side figure {
+    grid-column: 4 / -1;
+}
+
+.layout-side figure:first-child {
+    grid-column: 1 / 4;
+    grid-row: 1 / span 3;
+}
+
+/* process: two photos above a drawing */
+.layout-process figure {
+    grid-column: span 3;
+}
+
+.layout-process figure:last-of-type {
+    grid-column: 1 / -1;
+}
+
+/* even: photos of equal size */
+.layout-even figure {
+    grid-column: span 2;
+}
+
+.layout-even.rest-1 figure {
+    grid-column: span 3;
+}
+
+.layout-even.rest-0 figure {
+    grid-column: span 4;
+}
+
+/* Four photos sit two by two rather than stranding one on a second row. */
+.layout-even.rest-3 figure {
+    grid-column: span 3;
+}
+
+/* inset: one large photo and a small one beside it */
+/* 5fr + 4fr: the main photo at 2/3 of its old width (5 of 6 columns), the rest going to the second. */
+.layout-inset {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+}
+
+/* embed: a running sketch in place of photos */
+.layout-embed {
+    display: block;
+}
+
+.app {
+    display: block;
+    width: 100%;
+    max-width: 22rem;
+    aspect-ratio: 340 / 700;
+    border: 1px solid var(--fade-color);
+    background: white;
+}
+
+.contain {
+    padding: 0;
+}
+
+.contain img {
+    object-fit: contain;
+}
+
+.pager {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--fade-color);
+    font-size: var(--text-small);
+}
+
+@media (width < 47.375rem) {
+    .work {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .words:empty {
+        display: none;
+    }
+
+    .photos figure,
+    .layout-lead figure,
+    .layout-lead.rest-2 figure:not(:first-child),
+    .layout-side figure,
+    .layout-side figure:first-child,
+    .layout-process figure,
+    .layout-even figure,
+    .layout-even.rest-1 figure,
+    .layout-even.rest-0 figure,
+    .layout-even.rest-3 figure,
+    .layout-inset figure:first-child,
+    .layout-inset figure:not(:first-child) {
+        grid-column: 1 / -1;
+        grid-row: auto;
+    }
+
+    .layout-strip {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .layout-strip figure {
+        grid-column: span 1;
+    }
+
+    .contact {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .slug {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .yr {
+        grid-column: 2;
+    }
+
+    .video,
+    .app {
+        margin-inline: auto;
+    }
+}
+
+/* CREDITS */
+.credits {
+    padding: 0 var(--gutter-right) 2rem var(--gutter);
+}
+
+.portfolio .credits p {
+    font-size: var(--text-fine);
+}
+
+.problem {
+    max-width: 44rem;
+}
